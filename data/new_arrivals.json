@@ -1,0 +1,92 @@
+{
+  "products": [
+    {
+      "name": "Lil Firecracker",
+      "alt": "Firecracker",
+      "image": "/img/ts/shirt1.png",
+      "price": "$24.95",
+      "sizes": {
+        "xs": "25",
+        "s": "25",
+        "m": "25",
+        "l": "25",
+        "xl": "30",
+        "xxl": "30"
+      },
+      "colors": [
+        "Black",
+        "White",
+        "Soft Pink"
+      ]
+    },
+    {
+      "name": "Born to Sparkle",
+      "alt": "Born to Sparkle",
+      "image": "/img/ts/Born to Sparkle_ American Pride.png",
+      "price": "$25.00",
+      "sizes": {
+        "xs": "25",
+        "s": "25",
+        "m": "25",
+        "l": "25",
+        "xl": "25",
+        "xxl": "30"
+      },
+      "colors": [
+        "Black",
+        "White"
+      ]
+    },
+    {
+      "image": "/img/ts/Patriotic Brew Celebration.png",
+      "name": "Red, White, and Brew",
+      "alt": "Red, White, and Brew",
+      "sizes": {
+        "xs": "25",
+        "s": "25",
+        "m": "25",
+        "l": "25",
+        "xl": "25",
+        "xxl": "30"
+      },
+      "colors": [
+        "Black",
+        "White",
+        "Soft Pink"
+      ]
+    },
+    {
+      "image": "/img/ts/Patriotic Eagle in Sunglasses.png",
+      "name": "Eagle",
+      "alt": "Eagle",
+      "sizes": {
+        "xs": "25",
+        "s": "25",
+        "m": "25",
+        "l": "25",
+        "xl": "25",
+        "xxl": "30"
+      },
+      "colors": [
+        "Black",
+        "White"
+      ]
+    },
+    {
+      "image": "/img/ts/Pinball Art Streetwear Design.png",
+      "name": "Pinball is Not a Crime",
+      "alt": "Pinball is Not a Crime",
+      "sizes": {
+        "xs": "25",
+        "s": "25",
+        "m": "25",
+        "l": "25",
+        "xl": "25",
+        "xxl": "30"
+      },
+      "colors": [
+        "Black"
+      ]
+    }
+  ]
+}

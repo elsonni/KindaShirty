@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>4th of July Collection | KindaShirty</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&family=Open+Sans&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div data-include="/partials/header.html"></div>
+
+  <section class="hero">
+    <h1>4th of July Collection</h1>
+    <p>Celebrate with our 4th of July inspired designs.</p>
+  </section>
+
+  <section id="collection" class="section" data-theme="4th_of_july">
+    <div class="products" id="product-list"></div>
+  </section>
+
+  <div id="productModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal-content">
+    <span id="closeModal" class="close" aria-label="Close Modal">&times;</span>
+    <div style="position: relative; width: 100%; text-align: center;">
+      <img id="shirtBase" src="/img/sb/shirt-black.png" alt="Shirt Color Preview" style="width: 100%; height: auto;">
+      <img id="modalImg" src="" alt="Graphic Preview">
+    </div>
+    <h3 id="modalTitle"></h3>
+
+    <div class="form-group">
+      <label for="modalSize">Size</label>
+      <select id="modalSize" aria-label="Select shirt size"></select>
+    </div>
+
+    <div style="position: relative; display: inline-block; margin-top: 0.5rem;">
+      <span id="sizeChartHover" style="text-decoration: underline; color: #006aff; cursor: pointer;">View Sizing Chart</span>
+      <div id="sizeChartTooltip" style="display: none; position: absolute; top: 1.5rem; left: 0; z-index: 10; background: white; padding: 0.5rem; border: 1px solid #ccc; border-radius: 6px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); width: 300px;">
+        <img src="/img/prd/mens-unisex-size-chart.svg" alt="Sizing Chart" style="width: 100%; height: auto;" />
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="colorSwatches">Color</label>
+      <div id="colorSwatches" class="swatch-grid" role="radiogroup" aria-label="Select shirt color"></div>
+      <input type="hidden" id="selectedColor" value="">
+    </div>
+
+    <input type="hidden" id="modalProductName" value="">
+    <input type="hidden" id="selectedSize" value="">
+
+    <div class="form-group">
+      <label>Quantity</label>
+      <div class="qty-controls">
+        <button type="button" class="qty-btn" onclick="adjustModalQty(-1)">−</button>
+        <span id="modalQtyDisplay">1</span>
+        <button type="button" class="qty-btn" onclick="adjustModalQty(1)">+</button>
+      </div>
+      <input type="hidden" id="modalQuantity" value="1">
+      <p id="modalText">$24.99</p>
+    </div>
+
+    <button type="button" class="button" onclick="addToCart()">Add to Cart</button>
+  </div>
+</div>
+
+<script type="module">
+  import { initializeModals, adjustModalQty, addToCart } from '/js/modal-handler.js';
+
+  window.initializeModals = initializeModals;
+  window.adjustModalQty = adjustModalQty;
+  window.addToCart = addToCart;
+</script>
+<script type="module" src="/js/main.js"></script>
+
+<script src="/js/theme-loader.js" defer></script>
+
+  <div data-include="/partials/footer.html"></div>
+</body>
+</html>

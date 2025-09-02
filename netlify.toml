@@ -1,0 +1,17 @@
+[build]
+  publish = "."
+  functions = "netlify/functions"
+
+[functions]
+  node_bundler = "esbuild"
+
+[functions.check-promo]
+  included_files = [
+    "data/discount_requests/*.md",
+    "data/promo-usage-log.json"
+  ]
+
+[[redirects]]
+  from = "/*"
+  to = "/index2.html"
+  status = 200

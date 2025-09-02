@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Your Cart | KindaShirty</title>
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+  <style>
+    :root {
+      --square-blue: #006aff;
+      --gray-light: #f5f7f9;
+      --gray-border: #e1e4e8;
+      --font-primary: 'Inter', sans-serif;
+    }
+
+    body {
+      font-family: var(--font-primary);
+      background: var(--gray-light);
+      color: #111;
+      margin: 0;
+    }
+
+    .cart-container {
+      max-width: 800px;
+      margin: 4rem auto;
+      padding: 2rem;
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    .cart-item {
+      display: flex;
+      gap: 1rem;
+      padding: 1rem 0;
+      border-bottom: 1px solid #eee;
+      align-items: center;
+    }
+
+    .cart-item img {
+      width: 80px;
+      height: 80px;
+      object-fit: contain;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      background: #fafafa;
+    }
+
+    .cart-item .details {
+      flex: 1;
+    }
+
+    .cart-total {
+      text-align: right;
+      margin-top: 2rem;
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+
+    .cart-controls {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 2rem;
+    }
+
+    .checkout-btn, .clear-btn, .btn-small {
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 5px;
+      font-weight: 600;
+      text-align: center;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-family: var(--font-primary);
+    }
+
+    .checkout-btn {
+      background: var(--square-blue);
+      color: white;
+      transition: background 0.3s ease;
+    }
+
+    .checkout-btn:hover {
+      background: #0051cc;
+    }
+
+    .clear-btn {
+      background: #ccc;
+      color: #000;
+    }
+
+    .btn-small.remove {
+      background: #e74c3c;
+      margin-top: 0.5rem;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+
+  <div data-include="/partials/header.html"></div>
+
+  <div class="cart-container">
+    <h1>Your Cart</h1>
+    <div id="cartItems"></div>
+    <div class="cart-total" id="cartTotal">Total: $0.00</div>
+    <div class="cart-controls">
+      <button class="clear-btn" onclick="clearCart()">Clear Cart</button>
+      <a href="/enhanced-checkout.html" class="checkout-btn" id="checkoutBtn">Pay Securely with Square</a>
+    </div>
+  </div>
+
+  <div data-include="/partials/footer.html"></div>
+
+  <script>
+    document.querySelectorAll('[data-include]').forEach(el => {
+      fetch(el.getAttribute('data-include'))
+        .then(res => res.text())
+        .then(html => { el.innerHTML = html });
+    });
+
+    const cartItemsEl = document.getElementById('cartItems');
+    const cartTotalEl = document.getElementById('cartTotal');
+    const checkoutBtn = document.getElementById('checkoutBtn');
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+    function updateCart() {
+      cartItemsEl.innerHTML = '';
+      let total = 0;
+
+      cart.forEach((item, index) => {
+        const unitPrice = parseFloat(item.price.replace('$', ''));
+        const quantity = parseInt(item.quantity);
+        const lineTotal = unitPrice * quantity;
+        total += lineTotal;
+
+        const itemEl = document.createElement('div');
+        itemEl.className = 'cart-item';
+        itemEl.innerHTML = `
+          <img src="${item.image}" alt="${item.product}" />
+          <div class="details">
+            <strong>${item.product}</strong><br>
+            Size: ${item.size} | Color: ${item.color}<br>
+            Qty: <input type="number" min="1" value="${item.quantity}" data-index="${index}" class="qty-input" style="width: 50px;"> @ ${item.price}<br>
+            <button class="btn-small remove" onclick="removeItem(${index})">Remove</button>
+          </div>
+        `;
+        cartItemsEl.appendChild(itemEl);
+      });
+
+      cartTotalEl.textContent = `Total: $${total.toFixed(2)}`;
+      localStorage.setItem('cart', JSON.stringify(cart));
+
+      document.querySelectorAll('.qty-input').forEach(input => {
+        input.addEventListener('change', e => {
+          const idx = parseInt(e.target.dataset.index);
+          const val = Math.max(1, parseInt(e.target.value));
+          cart[idx].quantity = val;
+          localStorage.setItem('cart', JSON.stringify(cart));
+          updateCart();
+        });
+      });
+
+      checkoutBtn.disabled = cart.length === 0;
+    }
+
+    function removeItem(index) {
+      cart.splice(index, 1);
+      updateCart();
+    }
+
+    function clearCart() {
+      if (confirm('Clear all items from cart?')) {
+        cart = [];
+        updateCart();
+      }
+    }
+
+    updateCart();
+  </script>
+</body>
+</html>

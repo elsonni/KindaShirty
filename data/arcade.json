@@ -1,0 +1,341 @@
+{
+  "products": [
+    {
+      "image": "/img/ts/Dungeon Master.png",
+      "name": "Dungeon Master",
+      "alt": "Dungeon Master",
+      "sizes": {
+        "xs": "25",
+        "s": "25",
+        "m": "25",
+        "l": "25",
+        "xl": "30",
+        "xxl": "30"
+      },
+      "colors": [
+        "Black",
+        "Dark Grey"
+      ]
+    },
+    {
+      "image": "/img/ts/Dungeon of the Mimic.png",
+      "name": "Mimic Dungeon",
+      "alt": "Mimic Dungeon",
+      "sizes": {
+        "xs": "25",
+        "s": "25",
+        "m": "25",
+        "l": "25",
+        "xl": "30",
+        "xxl": "30"
+      },
+      "colors": [
+        "Black",
+        "Dark Grey"
+      ]
+    },
+    {
+      "image": "/img/ts/Dungeons and Pinball.png",
+      "name": "Dungeons and Pinball",
+      "alt": "Dungeons and Pinball",
+      "sizes": {
+        "xs": "25",
+        "s": "25",
+        "m": "25",
+        "l": "25",
+        "xl": "30",
+        "xxl": "30"
+      },
+      "colors": [
+        "Black",
+        "Dark Grey"
+      ]
+    },
+    {
+      "image": "/img/ts/Mistress of the Dark.png",
+      "name": "Mistress of the Dark",
+      "alt": "Mistress of the Dark",
+      "sizes": {
+        "xs": "25",
+        "s": "25",
+        "m": "25",
+        "l": "25",
+        "xl": "30",
+        "xxl": "30"
+      },
+      "colors": [
+        "Black"
+      ]
+    },
+    {
+      "image": "/img/ts/Feeding Frenzy Pinball Adventure.png",
+      "name": "Feeding Frenzy",
+      "alt": "Feeding Frenzy",
+      "sizes": {
+        "xs": "25",
+        "s": "25",
+        "m": "25",
+        "l": "25",
+        "xl": "30",
+        "xxl": "30"
+      },
+      "colors": [
+        "Black"
+      ]
+    },
+    {
+      "image": "/img/ts/Godzilla in the Danger Zone.png",
+      "name": "Godzilla",
+      "alt": "Godzilla",
+      "sizes": {
+        "xs": "25",
+        "s": "25",
+        "m": "25",
+        "l": "25",
+        "xl": "30",
+        "xxl": "30"
+      },
+      "colors": [
+        "Black"
+      ]
+    },
+    {
+      "image": "/img/ts/House of Horrors 2.png",
+      "name": "House of Horrors",
+      "alt": "House of Horrors Parlor",
+      "sizes": {
+        "xs": "25",
+        "s": "25",
+        "m": "25",
+        "l": "25",
+        "xl": "30",
+        "xxl": "30"
+      },
+      "colors": [
+        "Black",
+        "Dark Lavender"
+      ]
+    },
+    {
+      "image": "/img/ts/House of Horrors.png",
+      "name": "House of Horrors",
+      "alt": "House of Horrors",
+      "sizes": {
+        "xs": "25",
+        "s": "25",
+        "m": "25",
+        "l": "25",
+        "xl": "30",
+        "xxl": "30"
+      },
+      "colors": [
+        "Black",
+        "Military Green"
+      ]
+    },
+    {
+      "image": "/img/ts/Keepers of the Magic Emblem.png",
+      "name": "Keepers of the Magic",
+      "alt": "Keepers of the Magic",
+      "sizes": {
+        "xs": "25",
+        "s": "25",
+        "m": "25",
+        "l": "25",
+        "xl": "30",
+        "xxl": "30"
+      },
+      "colors": [
+        "Black",
+        "Dark Grey",
+        "New Pink Gravel",
+        "Vintage White"
+      ]
+    },
+    {
+      "image": "/img/ts/King of the Rampage.png",
+      "name": "King of the Rampage",
+      "alt": "King of the Rampage",
+      "sizes": {
+        "xs": "25",
+        "s": "25",
+        "m": "25",
+        "l": "25",
+        "xl": "30",
+        "xxl": "30"
+      },
+      "colors": [
+        "Black",
+        "Dark Grey"
+      ]
+    },
+    {
+      "image": "/img/ts/Lumos Maximus Emblem.png",
+      "name": "Lumos Maximus",
+      "alt": "Lumos Maximus",
+      "sizes": {
+        "xs": "25",
+        "s": "25",
+        "m": "25",
+        "l": "25",
+        "xl": "30",
+        "xxl": "30"
+      },
+      "colors": [
+        "Black",
+        "Dark Grey",
+        "New Pink Gravel",
+        "Vintage White"
+      ]
+    },
+    {
+      "image": "/img/ts/Magical Harry Potter Pinball Adventure.png",
+      "name": "Potters Pin",
+      "alt": "Potters Pin",
+      "sizes": {
+        "xs": "25",
+        "s": "25",
+        "m": "25",
+        "l": "25",
+        "xl": "30",
+        "xxl": "30"
+      },
+      "colors": [
+        "Black"
+      ]
+    },
+    {
+      "image": "/img/ts/Magical Pinball Adventure.png",
+      "name": "Magic Pinball",
+      "alt": "Magic Pinball",
+      "sizes": {
+        "xs": "25",
+        "s": "25",
+        "m": "25",
+        "l": "25",
+        "xl": "30",
+        "xxl": "30"
+      },
+      "colors": [
+        "Black"
+      ]
+    },
+    {
+      "image": "/img/ts/Mimic Pinball.png",
+      "name": "Pinball Mimic",
+      "alt": "Pinball Mimic",
+      "sizes": {
+        "xs": "25",
+        "s": "25",
+        "m": "25",
+        "l": "25",
+        "xl": "30",
+        "xxl": "30"
+      },
+      "colors": [
+        "Black"
+      ]
+    },
+    {
+      "image": "/img/ts/Pinball is Not a Crime.png",
+      "name": "Pinball is not a Crime",
+      "alt": "Pinball is not a Crime",
+      "sizes": {
+        "xs": "25",
+        "s": "25",
+        "m": "25",
+        "l": "25",
+        "xl": "30",
+        "xxl": "30"
+      },
+      "colors": [
+        "Black"
+      ]
+    },
+    {
+      "image": "/img/ts/Multiball Mayhem.png",
+      "name": "Multiball Mayhem",
+      "alt": "Multiball Mayhem",
+      "sizes": {
+        "xs": "25",
+        "s": "25",
+        "m": "25",
+        "l": "25",
+        "xl": "30",
+        "xxl": "30"
+      },
+      "colors": [
+        "Black",
+        "Dark Grey"
+      ]
+    },
+    {
+      "image": "/img/ts/Protego Emblem.png",
+      "name": "Protego",
+      "alt": "Protego",
+      "sizes": {
+        "xs": "25",
+        "s": "25",
+        "m": "25",
+        "l": "25",
+        "xl": "30",
+        "xxl": "30"
+      },
+      "colors": [
+        "Black",
+        "Asphalt",
+        "New Pink Gravel"
+      ]
+    },
+    {
+      "image": "/img/ts/Quest for the Extra Ball.png",
+      "name": "Quest for the Extra Ball",
+      "alt": "Quest for the Extra Ball",
+      "sizes": {
+        "xs": "25",
+        "s": "25",
+        "m": "25",
+        "l": "25",
+        "xl": "30",
+        "xxl": "30"
+      },
+      "colors": [
+        "Black"
+      ]
+    },
+    {
+      "image": "/img/ts/Quiddich Pinball.png",
+      "name": "Magic Pinball",
+      "alt": "Magic Pinball",
+      "sizes": {
+        "xs": "25",
+        "s": "25",
+        "m": "25",
+        "l": "25",
+        "xl": "30",
+        "xxl": "30"
+      },
+      "colors": [
+        "Black",
+        "Dark Grey",
+        "Vintage White"
+      ]
+    },
+    {
+      "image": "/img/ts/Raptor Rampage.png",
+      "name": "Raptor Rampage",
+      "alt": "Raptor Rampage",
+      "sizes": {
+        "xs": "25",
+        "s": "25",
+        "m": "25",
+        "l": "25",
+        "xl": "30",
+        "xxl": "30"
+      },
+      "colors": [
+        "Black"
+      ]
+    }
+  ]
+}

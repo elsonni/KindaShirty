@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thank You | KindaShirty</title>
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+  <style>
+    :root {
+      --square-blue: #006aff;
+      --gray-light: #f5f7f9;
+      --gray-border: #e1e4e8;
+      --font-primary: 'Inter', sans-serif;
+    }
+
+    body {
+      font-family: var(--font-primary);
+      background: var(--gray-light);
+      color: #111;
+      margin: 0;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 4rem auto;
+      padding: 2rem;
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    .page-title {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      color: var(--square-blue);
+    }
+
+    .summary {
+      margin-top: 2rem;
+      padding: 1.5rem;
+      border: 1px solid var(--gray-border);
+      border-radius: 8px;
+      background-color: #fdfdfd;
+    }
+
+    .summary p {
+      margin: 0.5rem 0;
+    }
+
+    .items {
+      margin-top: 1.5rem;
+    }
+
+    .item {
+      border-top: 1px solid #eaeaea;
+      padding-top: 1rem;
+      margin-top: 1rem;
+    }
+
+    .btn.back-home {
+      display: inline-block;
+      margin-top: 2rem;
+      padding: 0.75rem 1.5rem;
+      background: var(--square-blue);
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      border-radius: 6px;
+      transition: background 0.3s ease;
+    }
+
+    .btn.back-home:hover {
+      background: #0051cc;
+    }
+  </style>
+</head>
+<body>
+
+  <div data-include="/partials/header.html"></div>
+
+  <main class="container">
+    <h1 class="page-title">Thank You for Your Order!</h1>
+    <p id="thank-you-message">We're processing your payment and will notify you soon.</p>
+
+    <div class="summary" id="order-summary" style="display: none;">
+      <h2>Order Summary</h2>
+      <p><strong>Reference ID:</strong> <span id="order-ref"></span></p>
+      <p><strong>Name:</strong> <span id="customer-name"></span></p>
+      <p><strong>Email:</strong> <span id="customer-email"></span></p>
+      <p><strong>Tax:</strong> $<span id="tax-amount">0.00</span></p>
+      <p><strong>Shipping:</strong> $<span id="shipping"></span></p>
+      <p><strong>Total Charged:</strong> $<span id="order-total"></span></p>
+
+      <div class="items" id="items-list"></div>
+    </div>
+
+    <a href="/" class="btn back-home">Back to Home</a>
+  </main>
+
+  <div data-include="/partials/footer.html"></div>
+
+  <script>
+    document.querySelectorAll('[data-include]').forEach(el => {
+      fetch(el.getAttribute('data-include'))
+        .then(res => res.text())
+        .then(html => { el.innerHTML = html });
+    });
+
+    const data = JSON.parse(sessionStorage.getItem('orderSummary'));
+    if (data) {
+      document.getElementById('order-summary').style.display = 'block';
+      document.getElementById('thank-you-message').textContent = `Thanks, ${(data.customer.firstName ? data.customer.firstName + ' ' : '') + data.customer.name}! We’ve received your payment.`;
+      document.getElementById('customer-name').textContent = (data.customer.firstName ? data.customer.firstName + ' ' : '') + data.customer.name;
+      document.getElementById('customer-email').textContent = data.customer.email;
+      document.getElementById('order-total').textContent = data.total.toFixed(2);
+      document.getElementById('shipping').textContent = data.shipping.toFixed(2);
+      document.getElementById('order-ref').textContent = data.referenceId;
+
+      // Show tax amount if present
+      if (typeof data.taxAmount === 'number') {
+        const taxDollars = (data.taxAmount / 100).toFixed(2);
+        document.getElementById('tax-amount').textContent = taxDollars;
+      }
+
+      const itemsList = document.getElementById('items-list');
+      data.cart.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'item';
+        div.innerHTML = `
+          <p><strong>${item.product}</strong></p>
+          <p>Size: ${item.size}, Color: ${item.color}, Qty: ${item.quantity}, Price: ${item.price}</p>
+        `;
+        itemsList.appendChild(div);
+      });
+
+      sessionStorage.removeItem('orderSummary');
+      localStorage.removeItem('cart');
+    }
+  </script>
+</body>
+</html>

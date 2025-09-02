@@ -1,0 +1,212 @@
+{
+  "products": [
+    {
+      "image": "/img/ts/4th-of-july-celebration.png",
+      "name": "4th Of July",
+      "alt": "4th of July",
+      "sizes": {
+        "xs": "25",
+        "s": "25",
+        "m": "25",
+        "l": "25",
+        "xl": "30",
+        "xxl": "30"
+      },
+      "colors": [
+        "Black",
+        "Baby Blue",
+        "New Pink Gravel",
+        "Vintage White"
+      ]
+    },
+    {
+      "image": "/img/ts/about-that-baste.png",
+      "name": "All About That Baste",
+      "alt": "All About That Baste",
+      "sizes": {
+        "xs": "25",
+        "s": "25",
+        "m": "25",
+        "l": "25",
+        "xl": "30",
+        "xxl": "30"
+      },
+      "colors": [
+        "Black",
+        "Baby Blue",
+        "New Pink Gravel"
+      ]
+    },
+    {
+      "image": "/img/ts/born-to-sparkle.png",
+      "name": "Born to Sparkle",
+      "alt": "Born to Sparkle",
+      "sizes": {
+        "xs": "25",
+        "s": "25",
+        "m": "25",
+        "l": "25",
+        "xl": "30",
+        "xxl": "30"
+      },
+      "colors": [
+        "Black",
+        "Baby Blue",
+        "New Pink Gravel",
+        "Vintage White"
+      ]
+    },
+    {
+      "image": "/img/ts/grill-sergeant.png",
+      "name": "Grill Sergeant",
+      "alt": "Grill Sergeant",
+      "sizes": {
+        "xs": "25",
+        "s": "25",
+        "m": "25",
+        "l": "25",
+        "xl": "30",
+        "xxl": "30"
+      },
+      "colors": [
+        "Black",
+        "Baby Blue",
+        "New Pink Gravel",
+        "Vintage White"
+      ]
+    },
+    {
+      "image": "/img/ts/little-firecracker.png",
+      "name": "Little Firecracker",
+      "alt": "Little Firecracker",
+      "sizes": {
+        "xs": "25",
+        "s": "25",
+        "m": "25",
+        "l": "25",
+        "xl": "30",
+        "xxl": "30"
+      },
+      "colors": [
+        "Black",
+        "Baby Blue",
+        "New Pink Gravel",
+        "Vintage White"
+      ]
+    },
+    {
+      "image": "/img/ts/alcatraz.png",
+      "name": "Make Alcatraz Great Again",
+      "alt": "Make Alcatraz Great Again",
+      "sizes": {
+        "xs": "25",
+        "s": "25",
+        "m": "25",
+        "l": "25",
+        "xl": "30",
+        "xxl": "30"
+      },
+      "colors": [
+        "Black",
+        "Baby Blue",
+        "New Pink Gravel",
+        "Vintage White"
+      ]
+    },
+    {
+      "image": "/img/ts/patriotic-eagle.png",
+      "name": "Patriotic Eagle",
+      "alt": "Patriotic Eagle",
+      "sizes": {
+        "xs": "25",
+        "s": "25",
+        "m": "25",
+        "l": "25",
+        "xl": "30",
+        "xxl": "30"
+      },
+      "colors": [
+        "Black",
+        "Baby Blue",
+        "Charity Pink",
+        "Vintage White"
+      ]
+    },
+    {
+      "image": "/img/ts/party-like-it-s-1776.png",
+      "name": "Party Like it's 1776",
+      "alt": "Party Like it's 1776",
+      "sizes": {
+        "xs": "25",
+        "s": "25",
+        "m": "25",
+        "l": "25",
+        "xl": "30",
+        "xxl": "30"
+      },
+      "colors": [
+        "Black",
+        "Baby Blue",
+        "New Pink Gravel",
+        "Vintage White"
+      ]
+    },
+    {
+      "image": "/img/ts/patriotic-brew.png",
+      "name": "Red, White, & Brew",
+      "alt": "Red, White, & Brew",
+      "sizes": {
+        "xs": "25",
+        "s": "25",
+        "m": "25",
+        "l": "25",
+        "xl": "30",
+        "xxl": "30"
+      },
+      "colors": [
+        "Black",
+        "Baby Blue",
+        "New Pink Gravel",
+        "Vintage White"
+      ]
+    },
+    {
+      "image": "/img/ts/star-spangled.png",
+      "name": "Star Spangled Hammered",
+      "alt": "Star Spangled Hammered",
+      "sizes": {
+        "xs": "25",
+        "s": "25",
+        "m": "25",
+        "l": "25",
+        "xl": "30",
+        "xxl": "30"
+      },
+      "colors": [
+        "Black",
+        "Baby Blue",
+        "Charity Pink",
+        "Vintage White"
+      ]
+    },
+    {
+      "image": "/img/ts/too-cool-for-british-rule.png",
+      "name": "Too Cool For British Rule",
+      "alt": "Too Cool For British Rule",
+      "sizes": {
+        "xs": "25",
+        "s": "25",
+        "m": "25",
+        "l": "25",
+        "xl": "30",
+        "xxl": "30"
+      },
+      "colors": [
+        "Black",
+        "Baby Blue",
+        "New Pink Gravel",
+        "Vintage White"
+      ]
+    }
+  ]
+}
