@@ -29,6 +29,9 @@ collections:
         name: sizes
         widget: object
         fields:
+        - label: XXS
+          name: xxs
+          required: false
         - label: XS
           name: xs
           widget: string
@@ -182,6 +185,9 @@ collections:
         name: sizes
         widget: object
         fields:
+        - label: XXS
+          name: xxs
+          required: false
         - label: XS
           name: xs
           widget: string
@@ -335,6 +341,9 @@ collections:
         name: sizes
         widget: object
         fields:
+        - label: XXS
+          name: xxs
+          required: false
         - label: XS
           name: xs
           widget: string
@@ -488,6 +497,9 @@ collections:
         name: sizes
         widget: object
         fields:
+        - label: XXS
+          name: xxs
+          required: false
         - label: XS
           name: xs
           widget: string

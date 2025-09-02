@@ -20,6 +20,7 @@ exports.handler = async function(event) {
 
 // --- size mapping: add 2XL/3XL/4XL synonyms ---
 const sizeToCatalogId = {
+  XXS: "ZUPGPO2XVL5VHZ2I37XQ5IDJ",
   XS: "RU5HBYNBGC5YI76B6HRQFQN3",
   S:  "IXRI3WJS6XGP7IQSASXA6KCA",
   M:  "4WJEKSK7CDRSMFHV6UEZTPCT",
