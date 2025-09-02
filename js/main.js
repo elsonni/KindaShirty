@@ -33,6 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function initAfterIncludes() {
   updateCartCount();
+  window.updateCartCount = updateCartCount;
   setupSizingChartTooltip();
   setupMobileMenu();
   showFloatingCart();

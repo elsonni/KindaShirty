@@ -43,10 +43,10 @@ exports.handler = async (event) => {
         (storedEmail === '' || storedEmail === emailParam)
       ) {
         console.log("? Promo valid and applied.");
-        return {
-          statusCode: 200,
-          body: JSON.stringify({ valid: true, amount: discount })
-        };
+	return {
+	  statusCode: 200,
+	  body: JSON.stringify({ valid: true, amount: discount, usageEnforced: false })
+	};
       }
     }
 

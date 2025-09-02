@@ -5,13 +5,33 @@
 [functions]
   node_bundler = "esbuild"
 
-[functions.check-promo]
-  included_files = [
-    "data/discount_requests/*.md",
-    "data/promo-usage-log.json"
-  ]
+# Only ship what you read in check-promo
+[functions."check-promo"]
+  included_files = ["data/discount_requests/*.md"]
+
+# --- Route exceptions (before the catch-all) ---
+[[redirects]]
+  from = "/admin/*"
+  to = "/admin/index.html"
+  status = 200
 
 [[redirects]]
+  from = "/cart"
+  to = "/cart.html"
+  status = 200
+
+[[redirects]]
+  from = "/enhanced-checkout"
+  to = "/enhanced-checkout.html"
+  status = 200
+
+[[redirects]]
+  from = "/thank-you"
+  to = "/thank-you.html"
+  status = 200
+
+# --- SPA fallback for everything else ---
+[[redirects]]
   from = "/*"
-  to = "/index2.html"
+  to = "/error.html"
   status = 200

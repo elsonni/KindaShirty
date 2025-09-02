@@ -124,7 +124,7 @@ export function addToCart() {
   alert('Added to cart!');
   document.getElementById('productModal').style.display = 'none';
 
-  updateCartCount(); // shared update
+  window.updateCartCount?.(); // shared update (global-safe)
 }
 
 // Color hex map
