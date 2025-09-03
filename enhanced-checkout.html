@@ -14,6 +14,7 @@
       --gray-light: #f5f7f9;
       --gray-border: #e1e4e8;
       --font-primary: 'Inter', sans-serif;
+      --ok: #16a34a;
     }
     body { font-family: var(--font-primary); background: var(--gray-light); color: #111; margin: 0; }
     .checkout-container { max-width: 800px; margin: 4rem auto; padding: 2rem; background: #fff; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
@@ -31,12 +32,40 @@
       font-weight: 600; text-transform: uppercase; border: none; border-radius: 6px; cursor: pointer; transition: background .3s ease;
     }
     #pay-button:hover { background: #0051cc; }
+    #pay-button[disabled] { opacity: .7; cursor: not-allowed; }
     #status { margin-top: 1rem; color: red; }
     .square-footer { margin-top: 2rem; font-size: .875rem; text-align: center; color: #555; }
     .square-footer p { margin-top: 1rem; }
     .square-footer a { color: var(--square-blue); text-decoration: underline; }
     .promo-row { display:flex; gap:.5rem; align-items:center; margin-top: .75rem; }
     .promo-row input { flex: 1 1 auto; }
+
+    /* === Progress overlay with step badges === */
+    .busy-overlay {
+      position: fixed; inset: 0; display: flex; align-items: center; justify-content: center;
+      background: rgba(17,17,17,0.45); z-index: 9999;
+    }
+    .busy-overlay[hidden] { display: none !important; }
+    .busy-box {
+      width: min(92vw, 520px);
+      background: #fff; padding: 16px 18px; border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.18);
+    }
+    .busy-head { display:flex; align-items:center; gap:12px; font-weight:700; margin-bottom:10px; }
+    .spinner { width: 20px; height: 20px; border-radius: 50%; border: 3px solid #e5e7eb; border-top-color: var(--square-blue); animation: spin .8s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .steps { display:flex; flex-direction:column; gap:8px; margin-top:6px; }
+    .step { display:flex; align-items:center; gap:10px; font-weight:600; }
+    .dot {
+      width: 12px; height: 12px; border-radius: 50%;
+      background: #e5e7eb; border: 1px solid #e5e7eb;
+      flex: 0 0 12px;
+    }
+    .step.is-current .dot { background: var(--square-blue); border-color: var(--square-blue); animation: pulse 1.2s ease-in-out infinite; }
+    .step.is-done .dot { background: var(--ok); border-color: var(--ok); }
+    .step .txt { color: #111; }
+    @keyframes pulse { 0%,100%{ transform: scale(1) } 50%{ transform: scale(1.2) } }
   </style>
 </head>
 <body>
@@ -121,6 +150,22 @@
     </div>
   </div>
 
+  <!-- Progress overlay with step badges -->
+  <div id="busy" class="busy-overlay" aria-live="polite" aria-atomic="true" hidden>
+    <div class="busy-box">
+      <div class="busy-head">
+        <div class="spinner" aria-hidden="true"></div>
+        <div>Processing your order…</div>
+      </div>
+      <div id="busySteps" class="steps" role="status" aria-live="polite">
+        <div class="step" data-step="validate"><span class="dot"></span><span class="txt">Card Validating</span></div>
+        <div class="step" data-step="tokenize"><span class="dot"></span><span class="txt">Order Create</span></div>
+        <div class="step" data-step="submit"><span class="dot"></span><span class="txt">Submitting Payment</span></div>
+        <div class="step" data-step="done"><span class="dot"></span><span class="txt">Payment Complete! (redirecting)</span></div>
+      </div>
+    </div>
+  </div>
+
   <div data-include="/partials/footer.html"></div>
 
   <script>
@@ -195,8 +240,6 @@
           total      = Number(data.total ?? (itemsGross - discount + shipping + tax));
         } catch (e) {
           console.warn('Totals calc fallback (local):', e);
-          // Leave local subtotal; shipping/tax 0 as a fallback
-
         }
       }
 
@@ -261,8 +304,46 @@
       await updateSummaryDisplay(lastStateInput, lastZipInput);
     });
 
+    /* ---------- Progress helpers & step badges ---------- */
+    const STEP_FLOW = ['validate','tokenize','submit','done'];
+    let processingPayment = false;
+
+    function setBusy(on) {
+      const overlay = document.getElementById('busy');
+      const btn = document.getElementById('pay-button');
+      if (!overlay || !btn) return;
+      overlay.hidden = !on;
+      btn.disabled = !!on;
+      if (on) {
+        if (!btn.dataset.orig) btn.dataset.orig = btn.textContent;
+        btn.textContent = 'Processing…';
+        resetSteps();
+        setStep('validate');
+      } else {
+        btn.textContent = btn.dataset.orig || '🔒 Pay Now';
+      }
+    }
+    function setStep(stepName) {
+      const steps = [...document.querySelectorAll('#busySteps .step')];
+      const idx = STEP_FLOW.indexOf(stepName);
+      steps.forEach((el) => {
+        const key = el.getAttribute('data-step');
+        const k = STEP_FLOW.indexOf(key);
+        el.classList.toggle('is-current', k === idx);
+        el.classList.toggle('is-done', k !== -1 && k < idx);
+      });
+    }
+    function resetSteps() {
+      document.querySelectorAll('#busySteps .step').forEach(el => {
+        el.classList.remove('is-current','is-done');
+      });
+    }
+
     // --- Pay button ---
     document.getElementById('pay-button').addEventListener('click', async () => {
+      if (processingPayment) return;           // ✅ prevent double click
+      processingPayment = true;
+
       const form = document.getElementById('checkout-form');
       const statusEl = document.getElementById('status');
       statusEl.textContent = '';
@@ -280,15 +361,21 @@
       if (firstError) {
         statusEl.textContent = 'Please complete all required fields.';
         firstError.scrollIntoView({ behavior: 'smooth', block: 'center' }); firstError.focus();
+        processingPayment = false;
         return;
       }
+
+      setBusy(true);                    // show overlay + set first step
+      setStep('validate');
 
       const formData = Object.fromEntries(new FormData(form).entries());
       const { estimatedTax, total, shipping } = await updateSummaryDisplay(formData.state, formData.zip);
 
       try {
+        setStep('tokenize');
         const token = await tokenizeCard();
 
+        setStep('submit');
         const payload = {
           token,
           cart,
@@ -320,6 +407,8 @@
         const result = await res.json();
 
         if (res.ok && result.success) {
+          setStep('done');
+
           // Store summary for thank-you page
           const checkoutResult = {
             referenceId: result.referenceId,
@@ -341,6 +430,8 @@
           throw new Error(result.error || 'Payment failed.');
         }
       } catch (err) {
+        setBusy(false);
+        processingPayment = false;      // allow retry
         statusEl.textContent = err.message;
         console.error(err);
       }
