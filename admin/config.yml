@@ -640,15 +640,83 @@ collections:
       name: body
       widget: markdown
       
-- name: discount-requests
-  label: Discount Requests
-  folder: data/discount_requests
-  create: true
-  slug: "{{slug}}"
-  fields:
-    - { label: "Requester Name", name: "name", widget: "string" }
-    - { label: "Email", name: "email", widget: "string" }
-    - { label: "Reason for Discount", name: "reason", widget: "text" }
-    - { label: "Requested Code", name: "requested_code", widget: "string" }
-    - { label: "Requested Amount (%)", name: "requested_amount", widget: "number", min: 1, max: 100 }
-    - { label: "Status", name: "status", widget: "select", options: ["Pending", "Approved", "Denied"], default: "Pending" }
+- name: "promos"
+    label: "Promo Codes"
+    label_singular: "Promo Code"
+    folder: "data/discount_requests"
+    create: true
+    extension: "md"
+    format: "frontmatter"
+    slug: "{{code}}"                # filename becomes the code, e.g., SUMMER10.md
+    identifier_field: "code"
+    summary: "{{code}} — {{amount}}% ({{status}})"
+    editor:
+      preview: false                # data-only; no site preview needed
+    sortable_fields: ["code", "status", "amount", "starts", "expires"]
+    fields:
+      - label: "Code"
+        name: "code"
+        widget: "string"
+        hint: "Uppercase letters/numbers, dash/underscore (e.g., SUMMER10)"
+        pattern: ['^[A-Z0-9_-]+$', "Use A–Z, 0–9, dash or underscore"]
+      - label: "Amount (%)"
+        name: "amount"
+        widget: "number"
+        value_type: "int"
+        min: 1
+        max: 100
+        step: 1
+        hint: "Percent off (e.g., 10)"
+      - label: "Status"
+        name: "status"
+        widget: "select"
+        options: ["Approved", "Pending", "Rejected"]
+        default: "Approved"
+      - label: "Starts"
+        name: "starts"
+        widget: "datetime"
+        required: false
+        date_format: "YYYY-MM-DD"
+        time_format: "HH:mm:ssZZ"
+        hint: "Optional start date/time"
+      - label: "Expires"
+        name: "expires"
+        widget: "datetime"
+        required: false
+        date_format: "YYYY-MM-DD"
+        time_format: "HH:mm:ssZZ"
+        hint: "Optional end date/time"
+      - label: "Minimum Subtotal ($)"
+        name: "minSubtotal"
+        widget: "number"
+        value_type: "float"
+        min: 0
+        step: 1
+        required: false
+        hint: "Order must be at least this amount (before discount)"
+      - label: "Restrict to Email"
+        name: "email"
+        widget: "string"
+        required: false
+        hint: "If set, only this email can use the code"
+      - label: "Restrict to Emails (list)"
+        name: "emails"
+        widget: "list"
+        required: false
+        field:
+          label: "Email"
+          name: "email"
+          widget: "string"
+      - label: "Restrict to Domains"
+        name: "allowedDomains"
+        widget: "list"
+        required: false
+        field:
+          label: "Domain"
+          name: "domain"
+          widget: "string"
+          hint: "e.g., company.com"
+      - label: "Internal Notes"
+        name: "body"
+        widget: "markdown"
+        required: false
