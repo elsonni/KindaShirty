@@ -7,7 +7,11 @@
 
 # Only ship what you read in check-promo
 [functions."check-promo"]
-  included_files = ["data/discount_requests/*.md"]
+  # include both underscore and hyphen folder names (in case one was used)
+  included_files = [
+    "data/discount_requests/**",
+    "data/discount-requests/**"
+  ]
 
 # --- Route exceptions (before the catch-all) ---
 [[redirects]]
