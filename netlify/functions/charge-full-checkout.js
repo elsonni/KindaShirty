@@ -14,30 +14,36 @@ exports.handler = async function(event) {
     }
 
     const accessToken = process.env.SQUARE_ACCESS_TOKEN;
-    const locationId = process.env.SQUARE_LOCATION_ID;
+    const locationId  = process.env.SQUARE_LOCATION_ID;
     const senderEmail = process.env.CONTACT_EMAIL2;
-    const senderPass = process.env.CONTACT_APP_PASS2;
+    const senderPass  = process.env.CONTACT_APP_PASS2;
 
-// --- size mapping: add 2XL/3XL/4XL synonyms ---
-const sizeToCatalogId = {
-  XXS: "ZUPGPO2XVL5VHZ2I37XQ5IDJ",
-  XS: "RU5HBYNBGC5YI76B6HRQFQN3",
-  S:  "IXRI3WJS6XGP7IQSASXA6KCA",
-  M:  "4WJEKSK7CDRSMFHV6UEZTPCT",
-  L:  "IX5L6VC7ZS3NJJDNURYBVVWS",
-  XL: "ZIFH4HBYWZLWPI46NRGJAA3V",
-  XXL:  "2S3ZUOKTXQ62YCJNHQQK4GRM", "2XL": "2S3ZUOKTXQ62YCJNHQQK4GRM",
-  XXXL: "53V5JSWYNGTTLZ7W4B6NWQUZ", "3XL": "53V5JSWYNGTTLZ7W4B6NWQUZ",
-  XXXXL:"IM53XVOCJMFYENLXPHWNMLXS", "4XL": "IM53XVOCJMFYENLXPHWNMLXS"
-};
+    // --- size mapping: add 2XL/3XL/4XL synonyms ---
+    const sizeToCatalogId = {
+      XXS: "ZUPGPO2XVL5VHZ2I37XQ5IDJ",
+      XS:  "RU5HBYNBGC5YI76B6HRQFQN3",
+      S:   "IXRI3WJS6XGP7IQSASXA6KCA",
+      M:   "4WJEKSK7CDRSMFHV6UEZTPCT",
+      L:   "IX5L6VC7ZS3NJJDNURYBVVWS",
+      XL:  "ZIFH4HBYWZLWPI46NRGJAA3V",
+      XXL: "2S3ZUOKTXQ62YCJNHQQK4GRM", "2XL": "2S3ZUOKTXQ62YCJNHQQK4GRM",
+      XXXL:"53V5JSWYNGTTLZ7W4B6NWQUZ", "3XL": "53V5JSWYNGTTLZ7W4B6NWQUZ",
+      XXXXL:"IM53XVOCJMFYENLXPHWNMLXS", "4XL": "IM53XVOCJMFYENLXPHWNMLXS"
+    };
 
     const client = new Client({ accessToken, environment: Environment.Production });
 
-    const subtotal = cart.reduce((sum, item) => sum + parseFloat(item.price.replace('$', '')) * parseInt(item.quantity), 0);
-    const TAX_RATE_CA = 0.0825;
-    const estimatedTax = customer.state.toUpperCase() === 'CA' ? subtotal * TAX_RATE_CA : 0;
+    // Subtotal (kept for reference; not used in Option B tax logic)
+    const subtotal = cart.reduce(
+      (sum, item) => sum + parseFloat(item.price.replace('$', '')) * parseInt(item.quantity), 0
+    );
+
     const quantity = cart.reduce((q, item) => q + parseInt(item.quantity), 0);
-    const shippingAmount = quantity <= 1 ? 5.95 : quantity === 2 ? 8.95 : quantity === 3 ? 11.95 : quantity === 4 ? 14.95 : 17.95;
+    const shippingAmount =
+      quantity <= 1 ? 5.95 :
+      quantity === 2 ? 8.95 :
+      quantity === 3 ? 11.95 :
+      quantity === 4 ? 14.95 : 17.95;
 
     const lineItems = cart.map(item => {
       const catalogObjectId = sizeToCatalogId[item.size?.toUpperCase()];
@@ -97,7 +103,11 @@ const sizeToCatalogId = {
       customerId = created.result.customer.id;
     }
 
-    // Create order
+    // Decide if taxes should auto-apply (CA only)
+    const shippingState = (shipping?.state || customer?.state || '').trim().toUpperCase();
+    const isCA = shippingState === 'CA';
+
+    // Create order (Option B: rely on catalog taxes via autoApplyTaxes for CA only)
     const orderResult = await client.ordersApi.createOrder({
       idempotencyKey: crypto.randomUUID(),
       order: {
@@ -106,27 +116,20 @@ const sizeToCatalogId = {
         referenceId,
         lineItems,
         fulfillments: [fulfillment],
-        taxes: [
-          {
-            uid: 'california-tax',
-            name: 'CA Sales Tax',
-            scope: 'ORDER',
-            catalogObjectId: '54WR3GPFARRMBNAXDOCG4QQZ'
-          }
-        ],
+        pricingOptions: { autoApplyTaxes: isCA },
         serviceCharges: [
           {
             name: 'Shipping',
             amountMoney: { amount: Math.round(shippingAmount * 100), currency: 'USD' },
             calculationPhase: 'TOTAL_PHASE',
-            taxable: false
+            taxable: false // leave shipping untaxed (no applied_taxes)
           }
         ]
       }
     });
 
     const order = orderResult.result.order;
-    const taxCents = Number(order.totalTaxMoney?.amount || 0);
+    const taxCents   = Number(order.totalTaxMoney?.amount || 0);
     const totalCents = Number(order.totalMoney?.amount || 0);
 
     const paymentResult = await client.paymentsApi.createPayment({
