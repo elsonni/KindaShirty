@@ -1,16 +1,15 @@
+// netlify/functions/charge-full-checkout.js
 const { Client, Environment } = require('square');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 
-exports.handler = async function(event) {
+exports.handler = async function (event) {
   try {
-    const { token, cart, customer, shipping } = JSON.parse(event.body);
+    const body = JSON.parse(event.body || '{}');
+    const { token, cart, customer, shipping: shippingFromClient, promoPercent, promoCode } = body;
 
-    if (!token || !cart?.length || !customer?.email || !customer?.zip || !customer?.state) {
-      return {
-        statusCode: 400,
-        body: JSON.stringify({ error: 'Missing or invalid payment or customer info.' }),
-      };
+    if (!token || !Array.isArray(cart) || !cart.length || !customer?.email || !customer?.zip || !customer?.state) {
+      return { statusCode: 400, body: JSON.stringify({ error: 'Missing or invalid payment or customer info.' }) };
     }
 
     const accessToken = process.env.SQUARE_ACCESS_TOKEN;
@@ -18,7 +17,7 @@ exports.handler = async function(event) {
     const senderEmail = process.env.CONTACT_EMAIL2;
     const senderPass  = process.env.CONTACT_APP_PASS2;
 
-    // --- size mapping: add 2XL/3XL/4XL synonyms ---
+    // --- variation mapping (synced with calc-totals) ---
     const sizeToCatalogId = {
       XXS: "ZUPGPO2XVL5VHZ2I37XQ5IDJ",
       XS:  "RU5HBYNBGC5YI76B6HRQFQN3",
@@ -33,36 +32,33 @@ exports.handler = async function(event) {
 
     const client = new Client({ accessToken, environment: Environment.Production });
 
-    // Subtotal (kept for reference; not used in Option B tax logic)
-    const subtotal = cart.reduce(
-      (sum, item) => sum + parseFloat(item.price.replace('$', '')) * parseInt(item.quantity), 0
-    );
-
-    const quantity = cart.reduce((q, item) => q + parseInt(item.quantity), 0);
+    // --- shipping (server-authoritative) ---
+    const quantity = cart.reduce((q, item) => q + (parseInt(item.quantity) || 0), 0);
     const shippingAmount =
       quantity <= 1 ? 5.95 :
       quantity === 2 ? 8.95 :
       quantity === 3 ? 11.95 :
       quantity === 4 ? 14.95 : 17.95;
 
-    const lineItems = cart.map(item => {
-      const catalogObjectId = sizeToCatalogId[item.size?.toUpperCase()];
+    // --- line items from catalog variations (Square will use catalog prices) ---
+    const lineItems = cart.map((item) => {
+      const catalogObjectId = sizeToCatalogId[(item.size || '').toUpperCase()];
       if (!catalogObjectId) throw new Error(`Missing catalogObjectId for size: ${item.size}`);
       return {
         catalogObjectId,
-        quantity: String(item.quantity),
-        note: `${item.product}  Size: ${item.size}, Color: ${item.color}`
+        quantity: String(item.quantity || 1),
+        note: `${item.product}  Size: ${item.size}, Color: ${item.color || ''}`.trim()
       };
     });
 
+    // --- order + fulfillment metadata ---
     const referenceId = `KS-${Date.now().toString().slice(-6)}`;
-
     const fulfillment = {
       type: 'SHIPMENT',
       state: 'PROPOSED',
       shipmentDetails: {
         recipient: {
-          displayName: `${customer.firstName || ''} ${customer.name}`.trim(),
+          displayName: `${customer.firstName || ''} ${customer.name || ''}`.trim(),
           address: {
             addressLine1: customer.address,
             addressLine2: customer.address2,
@@ -75,17 +71,14 @@ exports.handler = async function(event) {
       }
     };
 
-    // Lookup or create customer
+    // --- lookup or create customer ---
     let customerId;
     try {
       const search = await client.customersApi.searchCustomers({
-        query: { filter: { emailAddress: { exact: customer.email } } }
+        query: { filter: { emailAddress: { exact: String(customer.email).trim() } } }
       });
-      if (search.result.customers?.length) {
-        customerId = search.result.customers[0].id;
-      }
+      if (search.result.customers?.length) customerId = search.result.customers[0].id;
     } catch {}
-
     if (!customerId) {
       const created = await client.customersApi.createCustomer({
         givenName: customer.firstName || customer.name,
@@ -103,35 +96,66 @@ exports.handler = async function(event) {
       customerId = created.result.customer.id;
     }
 
-    // Decide if taxes should auto-apply (CA only)
-    const shippingState = (shipping?.state || customer?.state || '').trim().toUpperCase();
+    // --- tax toggle for Option B (CA only) ---
+    const shippingState = (customer?.state || '').trim().toUpperCase(); // you can prefer a separate 'shipping.state' if provided
     const isCA = shippingState === 'CA';
 
-    // Create order (Option B: rely on catalog taxes via autoApplyTaxes for CA only)
+    // --- promo: validate and compute %
+    let discountPercent = Number(promoPercent) || 0;
+    if (promoCode && customer?.email) {
+      // server-side validation against your check-promo function (best-effort)
+      try {
+        const host  = event.headers?.['x-forwarded-host'] || event.headers?.host;
+        const proto = event.headers?.['x-forwarded-proto'] || 'https';
+        const url = `${proto}://${host}/.netlify/functions/check-promo?code=${encodeURIComponent(promoCode)}&email=${encodeURIComponent(customer.email)}`;
+        const resp = await fetch(url);
+        const json = await resp.json();
+        if (resp.ok && json.valid && Number(json.amount) > 0) {
+          discountPercent = Number(json.amount);
+        } else {
+          discountPercent = 0; // invalid/expired code
+        }
+      } catch { /* ignore and use client-provided or 0 */ }
+    }
+    if (!Number.isFinite(discountPercent) || discountPercent < 0) discountPercent = 0;
+    if (discountPercent > 100) discountPercent = 100;
+
+    // --- build order (Option B: auto-apply catalog taxes only for CA; explicit ORDER discount if any) ---
+    const orderPayload = {
+      locationId,
+      customerId,
+      referenceId,
+      lineItems,
+      fulfillments: [fulfillment],
+      pricingOptions: { autoApplyTaxes: isCA, autoApplyDiscounts: false },
+      serviceCharges: [{
+        name: 'Shipping',
+        amountMoney: { amount: Math.round(shippingAmount * 100), currency: 'USD' },
+        calculationPhase: 'TOTAL_PHASE',
+        taxable: false
+      }]
+    };
+    if (discountPercent > 0) {
+      orderPayload.discounts = [{
+        uid: 'promo',
+        name: promoCode ? `Promo ${promoCode}` : 'Promo',
+        scope: 'ORDER',
+        percentage: String(discountPercent) // e.g., "10" for 10%
+      }];
+    }
+
+    // --- create order ---
     const orderResult = await client.ordersApi.createOrder({
       idempotencyKey: crypto.randomUUID(),
-      order: {
-        locationId,
-        customerId,
-        referenceId,
-        lineItems,
-        fulfillments: [fulfillment],
-        pricingOptions: { autoApplyTaxes: isCA },
-        serviceCharges: [
-          {
-            name: 'Shipping',
-            amountMoney: { amount: Math.round(shippingAmount * 100), currency: 'USD' },
-            calculationPhase: 'TOTAL_PHASE',
-            taxable: false // leave shipping untaxed (no applied_taxes)
-          }
-        ]
-      }
+      order: orderPayload
     });
-
     const order = orderResult.result.order;
-    const taxCents   = Number(order.totalTaxMoney?.amount || 0);
-    const totalCents = Number(order.totalMoney?.amount || 0);
 
+    const taxCents       = Number(order.totalTaxMoney?.amount || 0);
+    const discountCents  = Number(order.totalDiscountMoney?.amount || 0);
+    const totalCents     = Number(order.totalMoney?.amount || 0);
+
+    // --- pay the order ---
     const paymentResult = await client.paymentsApi.createPayment({
       sourceId: token,
       idempotencyKey: crypto.randomUUID(),
@@ -144,7 +168,7 @@ exports.handler = async function(event) {
       note: `KindaShirty order ${referenceId}`
     });
 
-    // Email
+    // --- email confirmation ---
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: { user: senderEmail, pass: senderPass }
@@ -153,17 +177,22 @@ exports.handler = async function(event) {
     const itemHtml = cart.map(item => `
       <li>
         <strong>${item.product}</strong><br>
-        Size: ${item.size} | Color: ${item.color}<br>
-        Qty: ${item.quantity} @ ${parseFloat(item.price?.replace?.('$', '') || '0').toFixed(2)}
+        Size: ${item.size} | Color: ${item.color || ''}<br>
+        Qty: ${item.quantity} @ ${parseFloat(String(item.price || '0').replace('$','')).toFixed(2)}
       </li>
     `).join('');
+
+    const discountHtml = discountCents > 0
+      ? `<p><strong>Promo Discount:</strong> -$${(discountCents / 100).toFixed(2)}</p>`
+      : '';
 
     const htmlBody = `
       <h2>Thank you for your order!</h2>
       <p><strong>Order ID:</strong> ${referenceId}</p>
-      <p><strong>Name:</strong> ${customer.firstName || ''} ${customer.name}</p>
+      <p><strong>Name:</strong> ${customer.firstName || ''} ${customer.name || ''}</p>
       <p><strong>Email:</strong> ${customer.email}</p>
       <ul>${itemHtml}</ul>
+      ${discountHtml}
       <p><strong>Shipping:</strong> $${shippingAmount.toFixed(2)}</p>
       <p><strong>Tax:</strong> $${(taxCents / 100).toFixed(2)}</p>
       <p><strong>Total Charged:</strong> $${(totalCents / 100).toFixed(2)}</p>
@@ -188,8 +217,11 @@ exports.handler = async function(event) {
         orderId: order.id,
         referenceId,
         taxAmount: taxCents,
+        discount: discountCents / 100,
+        shipping: shippingAmount,
         total: totalCents / 100,
-        status: paymentResult.result.payment.status
+        status: paymentResult.result.payment.status,
+        receiptUrl: paymentResult.result.payment?.receiptUrl || null
       })
     };
 
@@ -197,7 +229,7 @@ exports.handler = async function(event) {
     console.error('❌ Checkout Error:', err);
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: err.message, details: err.body || err.errors || 'Unknown error' }),
+      body: JSON.stringify({ error: err.message, details: err.body || err.errors || 'Unknown error' })
     };
   }
 };

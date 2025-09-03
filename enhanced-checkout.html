@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="/css/style.css"/>
   <link rel="preconnect" href="https://rsms.me" crossorigin>
   <link rel="stylesheet" href="https://rsms.me/inter/inter.css"/>
-  <script type="text/javascript" src="https://web.squarecdn.com/v1/square.js"></script>
+  <script src="https://web.squarecdn.com/v1/square.js" type="text/javascript"></script>
   <style>
     :root {
       --square-blue: #006aff;
@@ -35,6 +35,8 @@
     .square-footer { margin-top: 2rem; font-size: .875rem; text-align: center; color: #555; }
     .square-footer p { margin-top: 1rem; }
     .square-footer a { color: var(--square-blue); text-decoration: underline; }
+    .promo-row { display:flex; gap:.5rem; align-items:center; margin-top: .75rem; }
+    .promo-row input { flex: 1 1 auto; }
   </style>
 </head>
 <body>
@@ -84,11 +86,22 @@
 
       <div id="summary">
         <p>Subtotal: <strong id="subtotal">$0.00</strong></p>
+
+        <!-- Promo UI -->
+        <div class="promo-row">
+          <input id="promoInput" type="text" placeholder="Promo code (optional)" aria-label="Promo code">
+          <button type="button" id="applyPromo" style="padding:.6rem 1rem;">Apply</button>
+        </div>
+        <small id="promoStatus" style="color:#666;"></small>
+
         <p id="discountRow" style="display:none;">Promo Discount: <strong id="discountAmount">-$0.00</strong></p>
+
         <p>Estimated Tax: <strong id="tax">$0.00</strong></p>
         <small id="tax-note" style="color:#666;">Enter your state & ZIP to see tax and shipping.</small>
+
         <p>Shipping: <strong id="shipping">$0.00</strong></p>
         <small style="color:#666;">Standard (10–14 Days)<br/>Time includes creating + shipping combined.</small>
+
         <p><strong>Total: <span id="total">$0.00</span></strong></p>
       </div>
 
@@ -117,14 +130,14 @@
 
     // --- Cart helpers ---
     const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-    function calculateSubtotal() {
-      return cart.reduce((sum, item) => sum + parseFloat(String(item.price).replace('$','')) * parseInt(item.quantity), 0);
+    function calculateLocalSubtotal() {
+      return cart.reduce((sum, item) => sum + parseFloat(String(item.price).replace('$','')) * (parseInt(item.quantity) || 0), 0);
     }
     const formatMoney = n => `$${(Number(n)||0).toFixed(2)}`;
 
-    // --- Promo (display only, not applied server-side yet) ---
+    // --- Promo state ---
     let appliedPromo = null;
-    let promoDiscountRate = 0;
+    let promoDiscountRate = 0; // percent
     let lastStateInput = '', lastZipInput = '';
 
     // --- Square Web Payments: card form ---
@@ -146,8 +159,14 @@
     }
 
     // --- Live totals via Netlify calc function (Option B) ---
-    async function fetchTotalsFromServer(state) {
-      const body = JSON.stringify({ cart, state });
+    async function fetchTotalsFromServer(state, email) {
+      const body = JSON.stringify({
+        cart,
+        state,
+        promoPercent: promoDiscountRate || 0,
+        promoCode: appliedPromo || null,
+        email: email || null
+      });
       const res = await fetch('/.netlify/functions/calc-totals', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -155,39 +174,37 @@
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Totals calculation failed');
-      return data; // {isCA, items, shipping, tax, total}
+      return data; // {isCA, itemsGross, discount, shipping, tax, total}
     }
 
     async function updateSummaryDisplay(state = '', zip = '') {
+      const emailVal = document.querySelector('input[name="email"]')?.value?.trim() || '';
       const hasAddress = state.trim().length > 1 && (zip.trim().length >= 5);
-      let items = calculateSubtotal();
-      let shipping = 0;
-      let tax = 0;
-      let total = items + shipping + tax;
-      let isCA = false;
+
+      let itemsGross = calculateLocalSubtotal();
+      let discount = 0, shipping = 0, tax = 0, total = itemsGross;
 
       if (hasAddress && cart.length) {
         try {
-          const data = await fetchTotalsFromServer(state);
-          isCA = !!data.isCA;
-          items = Number(data.items ?? items);
-          shipping = Number(data.shipping ?? shipping);
-          tax = Number(data.tax ?? tax);
-          total = Number(data.total ?? (items + shipping + tax));
+          const data = await fetchTotalsFromServer(state, emailVal);
+          window.__lastCalc = data;
+          itemsGross = Number(data.itemsGross ?? itemsGross);
+          discount   = Number(data.discount ?? 0);
+          shipping   = Number(data.shipping ?? 0);
+          tax        = Number(data.tax ?? 0);
+          total      = Number(data.total ?? (itemsGross - discount + shipping + tax));
         } catch (e) {
           console.warn('Totals calc fallback (local):', e);
-          // Fall back to local subtotal, shipping=0, tax=0
+          // Leave local subtotal; shipping/tax 0 as a fallback
+
         }
       }
 
-      // Promo shown but NOT subtracted from "Total" (server currently charges full total)
-      const discount = appliedPromo ? (items * (promoDiscountRate/100)) : 0;
-
       // Render
-      document.getElementById('subtotal').textContent = formatMoney(items);
-      document.getElementById('tax').textContent = formatMoney(tax);
-      document.getElementById('shipping').textContent = formatMoney(shipping);
-      document.getElementById('total').textContent = formatMoney(total);
+      document.getElementById('subtotal').textContent      = formatMoney(itemsGross);
+      document.getElementById('tax').textContent           = formatMoney(tax);
+      document.getElementById('shipping').textContent      = formatMoney(shipping);
+      document.getElementById('total').textContent         = formatMoney(total);
 
       const discountRow = document.getElementById('discountRow');
       const discountAmountEl = document.getElementById('discountAmount');
@@ -203,20 +220,19 @@
       const note = document.getElementById('tax-note');
       if (note) {
         if (!hasAddress) note.textContent = 'Enter your state & ZIP to see tax and shipping.';
-        else note.textContent = isCA ? 'CA sales tax applies (calculated by Square).' : 'No sales tax for this destination.';
+        else note.textContent = (window.__lastCalc?.isCA ? 'CA sales tax applies (calculated by Square).' : 'No sales tax for this destination.');
       }
 
-      // Keep return shape compatible with existing click handler
       return { estimatedTax: tax, total, shipping, discount };
     }
 
-    // --- Promo code (display-only preview) ---
+    // --- Promo code (validate via server and refresh totals) ---
     document.getElementById('applyPromo')?.addEventListener('click', async () => {
       const promoCode = document.getElementById('promoInput')?.value.trim();
-      const statusEl = document.getElementById('promoStatus');
+      const statusEl  = document.getElementById('promoStatus');
       const email = document.querySelector('input[name="email"]')?.value.trim().toLowerCase();
       const stateInput = document.querySelector('input[name="state"]')?.value.trim();
-      const zipInput = document.querySelector('input[name="zip"]')?.value.trim();
+      const zipInput   = document.querySelector('input[name="zip"]')?.value.trim();
 
       if (!promoCode) { statusEl.textContent = 'Please enter a promo code.'; return; }
       if (!email || !stateInput || !zipInput) {
@@ -224,14 +240,13 @@
       }
 
       lastStateInput = stateInput; lastZipInput = zipInput;
-      await updateSummaryDisplay(stateInput, zipInput);
 
       try {
         const res = await fetch('/.netlify/functions/check-promo?code=' + encodeURIComponent(promoCode) + '&email=' + encodeURIComponent(email));
         const result = await res.json();
         if (res.ok && result.valid) {
           appliedPromo = promoCode;
-          promoDiscountRate = result.amount || 0;
+          promoDiscountRate = Number(result.amount || 0);
           statusEl.textContent = `Applied: ${promoDiscountRate}% off`;
         } else {
           appliedPromo = null; promoDiscountRate = 0;
@@ -242,14 +257,17 @@
         console.error('Promo check error:', err);
         statusEl.textContent = 'Error validating code.';
       }
+
       await updateSummaryDisplay(lastStateInput, lastZipInput);
     });
 
     // --- Pay button ---
     document.getElementById('pay-button').addEventListener('click', async () => {
       const form = document.getElementById('checkout-form');
-      document.getElementById('status').textContent = '';
+      const statusEl = document.getElementById('status');
+      statusEl.textContent = '';
 
+      // simple validation
       form.querySelectorAll('input').forEach(input => input.style.borderColor = '');
       let firstError = null;
       ['name','email','address','city','state','zip'].forEach(field => {
@@ -260,7 +278,7 @@
         }
       });
       if (firstError) {
-        document.getElementById('status').textContent = 'Please complete all required fields.';
+        statusEl.textContent = 'Please complete all required fields.';
         firstError.scrollIntoView({ behavior: 'smooth', block: 'center' }); firstError.focus();
         return;
       }
@@ -270,6 +288,7 @@
 
       try {
         const token = await tokenizeCard();
+
         const payload = {
           token,
           cart,
@@ -285,9 +304,12 @@
             address2: formData.address2,
             phone: formData.phone
           },
+          // mirror preview inputs so server can apply the same logic
           shipping,
           total: Number(parseFloat(total).toFixed(2)),
-          estimatedTax: Number(parseFloat(estimatedTax).toFixed(2))
+          estimatedTax: Number(parseFloat(estimatedTax).toFixed(2)),
+          promoPercent: promoDiscountRate || 0,
+          promoCode: appliedPromo || null
         };
 
         const res = await fetch('/.netlify/functions/charge-full-checkout', {
@@ -297,22 +319,29 @@
         });
         const result = await res.json();
 
-        if (res.ok) {
-          sessionStorage.setItem('orderSummary', JSON.stringify({
-            customer: payload.customer,
-            cart: payload.cart,
-            total: payload.total,
-            shipping: payload.shipping,
-            taxAmount: result.taxAmount,
-            referenceId: result.referenceId
-          }));
+        if (res.ok && result.success) {
+          // Store summary for thank-you page
+          const checkoutResult = {
+            referenceId: result.referenceId,
+            orderId: result.orderId,
+            paymentId: result.paymentId,
+            receiptUrl: result.receiptUrl || null,
+            items: cart,
+            tax: (result.taxAmount || 0) / 100,
+            shipping: result.shipping || shipping,
+            discount: result.discount || 0,
+            total: result.total || total
+          };
+          localStorage.setItem('checkoutResult', JSON.stringify(checkoutResult));
+
+          // Clear cart and go
           localStorage.removeItem('cart');
           window.location.href = '/thank-you.html';
         } else {
           throw new Error(result.error || 'Payment failed.');
         }
       } catch (err) {
-        document.getElementById('status').textContent = err.message;
+        statusEl.textContent = err.message;
         console.error(err);
       }
     });
@@ -320,15 +349,14 @@
     // --- Boot ---
     document.addEventListener('DOMContentLoaded', () => {
       const stateInput = document.querySelector('input[name="state"]');
-      const zipInput = document.querySelector('input[name="zip"]');
+      const zipInput   = document.querySelector('input[name="zip"]');
 
       async function refreshSummary() {
         await updateSummaryDisplay(stateInput?.value || '', zipInput?.value || '');
       }
       if (stateInput) stateInput.addEventListener('input', refreshSummary);
-      if (zipInput) zipInput.addEventListener('input', refreshSummary);
+      if (zipInput)   zipInput.addEventListener('input', refreshSummary);
 
-      // Initial render
       refreshSummary();
       initializeCardForm();
     });
