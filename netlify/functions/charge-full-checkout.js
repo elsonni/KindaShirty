@@ -174,30 +174,69 @@ exports.handler = async function (event) {
       auth: { user: senderEmail, pass: senderPass }
     });
 
-    const itemHtml = cart.map(item => `
-      <li>
-        <strong>${item.product}</strong><br>
-        Size: ${item.size} | Color: ${item.color || ''}<br>
-        Qty: ${item.quantity} @ ${parseFloat(String(item.price || '0').replace('$','')).toFixed(2)}
-      </li>
-    `).join('');
+// Build item list for email
+const itemHtml = cart.map(item => `
+  <li style="margin:0 0 10px;">
+    <strong>${(item.product || 'Item')}</strong><br>
+    ${item.size ? `Size: ${item.size}` : ''}${item.color ? ` | Color: ${item.color}` : ''}<br>
+    Qty: ${item.quantity} @ ${parseFloat(String(item.price || '0').replace('$','')).toFixed(2)}
+  </li>
+`).join('');
 
-    const discountHtml = discountCents > 0
-      ? `<p><strong>Promo Discount:</strong> -$${(discountCents / 100).toFixed(2)}</p>`
-      : '';
+// Compute pieces so email equals Square totals
+const shippingCents      = Math.round(shippingAmount * 100);
+const discountCents      = Number(order.totalDiscountMoney?.amount || 0);
+const taxCents           = Number(order.totalTaxMoney?.amount || 0);
+const totalCents         = Number(order.totalMoney?.amount || 0);
+const itemsGrossCents    = Math.max(0, totalCents + discountCents - taxCents - shippingCents);
 
-    const htmlBody = `
-      <h2>Thank you for your order!</h2>
-      <p><strong>Order ID:</strong> ${referenceId}</p>
-      <p><strong>Name:</strong> ${customer.firstName || ''} ${customer.name || ''}</p>
-      <p><strong>Email:</strong> ${customer.email}</p>
-      <ul>${itemHtml}</ul>
-      ${discountHtml}
-      <p><strong>Shipping:</strong> $${shippingAmount.toFixed(2)}</p>
-      <p><strong>Tax:</strong> $${(taxCents / 100).toFixed(2)}</p>
-      <p><strong>Total Charged:</strong> $${(totalCents / 100).toFixed(2)}</p>
-      <p>If you have any questions, reply to this email or contact us at support@thekinda.co.</p>
-    `;
+// OPTIONAL: if you still have `discountPercent` from earlier in this file,
+// use it for the label; otherwise omit the "(10%)".
+const discountLabel = discountCents > 0
+  ? `<tr><td style="padding:6px 0;">Promo Discount</td><td style="padding:6px 0; text-align:right;">- $${(discountCents/100).toFixed(2)}</td></tr>`
+  : '';
+
+const receiptUrl = paymentResult.result.payment?.receiptUrl || null;
+
+// Email body (simple, robust HTML)
+const htmlBody = `
+  <div style="font-family:Inter,Segoe UI,Arial,sans-serif; color:#111; line-height:1.4;">
+    <h2 style="margin:0 0 12px;">Thank you for your order!</h2>
+    <p style="margin:0 0 8px;"><strong>Order ID:</strong> ${referenceId}</p>
+    <p style="margin:0 0 16px;"><strong>Email:</strong> ${customer.email}</p>
+
+    <h3 style="margin:16px 0 8px;">Items</h3>
+    <ul style="padding-left:18px; margin:8px 0 16px;">
+      ${itemHtml}
+    </ul>
+
+    <table role="presentation" cellspacing="0" cellpadding="0" style="width:100%; max-width:520px;">
+      <tr>
+        <td style="padding:6px 0;">Subtotal</td>
+        <td style="padding:6px 0; text-align:right;">$${(itemsGrossCents/100).toFixed(2)}</td>
+      </tr>
+      ${discountLabel}
+      <tr>
+        <td style="padding:6px 0;">Shipping</td>
+        <td style="padding:6px 0; text-align:right;">$${shippingAmount.toFixed(2)}</td>
+      </tr>
+      <tr>
+        <td style="padding:6px 0;">Tax</td>
+        <td style="padding:6px 0; text-align:right;">$${(taxCents/100).toFixed(2)}</td>
+      </tr>
+      <tr>
+        <td style="border-top:1px solid #eee; padding:8px 0;"><strong>Total Charged</strong></td>
+        <td style="border-top:1px solid #eee; padding:8px 0; text-align:right;"><strong>$${(totalCents/100).toFixed(2)}</strong></td>
+      </tr>
+    </table>
+
+    ${receiptUrl ? `<p style="margin:16px 0;">
+      <a href="${receiptUrl}" target="_blank" rel="noopener" style="color:#006aff; text-decoration:underline;">View Square Receipt</a>
+    </p>` : ''}
+
+    <p style="margin-top:24px;">If you have any questions, reply to this email or contact us at support@thekinda.co.</p>
+  </div>
+`;
 
     await transporter.sendMail({
       from: `"KindaShirty Orders" <${senderEmail}>`,

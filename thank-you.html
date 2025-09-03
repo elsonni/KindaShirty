@@ -1,143 +1,135 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Thank You | KindaShirty</title>
-  <link rel="stylesheet" href="/css/style.css" />
-  <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+  <link rel="stylesheet" href="/css/style.css"/>
+  <link rel="preconnect" href="https://rsms.me" crossorigin>
+  <link rel="stylesheet" href="https://rsms.me/inter/inter.css"/>
   <style>
-    :root {
-      --square-blue: #006aff;
-      --gray-light: #f5f7f9;
-      --gray-border: #e1e4e8;
-      --font-primary: 'Inter', sans-serif;
-    }
-
-    body {
-      font-family: var(--font-primary);
-      background: var(--gray-light);
-      color: #111;
-      margin: 0;
-    }
-
-    .container {
-      max-width: 800px;
-      margin: 4rem auto;
-      padding: 2rem;
-      background: #ffffff;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    }
-
-    .page-title {
-      font-size: 2rem;
-      font-weight: 700;
-      margin-bottom: 1rem;
-      color: var(--square-blue);
-    }
-
-    .summary {
-      margin-top: 2rem;
-      padding: 1.5rem;
-      border: 1px solid var(--gray-border);
-      border-radius: 8px;
-      background-color: #fdfdfd;
-    }
-
-    .summary p {
-      margin: 0.5rem 0;
-    }
-
-    .items {
-      margin-top: 1.5rem;
-    }
-
-    .item {
-      border-top: 1px solid #eaeaea;
-      padding-top: 1rem;
-      margin-top: 1rem;
-    }
-
-    .btn.back-home {
-      display: inline-block;
-      margin-top: 2rem;
-      padding: 0.75rem 1.5rem;
-      background: var(--square-blue);
-      color: white;
-      text-decoration: none;
-      font-weight: bold;
-      border-radius: 6px;
-      transition: background 0.3s ease;
-    }
-
-    .btn.back-home:hover {
-      background: #0051cc;
-    }
+    :root{ --font: 'Inter',system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto; --gray:#6b7280; }
+    body{ font-family:var(--font); margin:0; color:#111; background:#f5f7f9; }
+    .wrap{ max-width:900px; margin:3rem auto; background:#fff; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,.06); padding:2rem; }
+    h1{ margin:.5rem 0 1rem; font-weight:800; }
+    .lead{ color:var(--gray); margin:.25rem 0 1.25rem; }
+    .grid{ display:grid; grid-template-columns: 1fr 320px; gap:2rem; }
+    @media (max-width: 860px){ .grid{ grid-template-columns: 1fr; } }
+    .items ul{ list-style: none; padding:0; margin:0; }
+    .items li{ padding:.75rem 0; border-bottom:1px solid #eee; }
+    .muted{ color:var(--gray); font-size:.95rem; }
+    .summary{ background:#fafafa; border:1px solid #eee; border-radius:10px; padding:1rem; }
+    .row{ display:flex; justify-content:space-between; margin:.35rem 0; }
+    .row.total{ margin-top:.5rem; padding-top:.5rem; border-top:1px solid #e5e7eb; font-weight:800; }
+    .row.discount{ color:#0b7; }
+    .actions{ margin-top:1.25rem; display:flex; gap:.75rem; flex-wrap:wrap; }
+    .btn{ display:inline-block; padding:.7rem 1rem; border-radius:8px; border:1px solid transparent; cursor:pointer; text-decoration:none; }
+    .btn-primary{ background:#006aff; color:#fff; }
+    .btn-outline{ background:#fff; border-color:#d1d5db; color:#111; }
+    .hidden{ display:none!important; }
+    code.small{ font-family: ui-monospace,Menlo,Consolas,monospace; font-size:.95rem; color:#111; background:#f3f4f6; padding:.15rem .35rem; border-radius:6px; }
   </style>
 </head>
 <body>
-
   <div data-include="/partials/header.html"></div>
 
-  <main class="container">
-    <h1 class="page-title">Thank You for Your Order!</h1>
-    <p id="thank-you-message">We're processing your payment and will notify you soon.</p>
+  <div class="wrap">
+    <h1>Thank you! 🎉</h1>
+    <p class="lead">Your order <strong><code class="small" id="ref">—</code></strong> is confirmed.</p>
 
-    <div class="summary" id="order-summary" style="display: none;">
-      <h2>Order Summary</h2>
-      <p><strong>Reference ID:</strong> <span id="order-ref"></span></p>
-      <p><strong>Name:</strong> <span id="customer-name"></span></p>
-      <p><strong>Email:</strong> <span id="customer-email"></span></p>
-      <p><strong>Tax:</strong> $<span id="tax-amount">0.00</span></p>
-      <p><strong>Shipping:</strong> $<span id="shipping"></span></p>
-      <p><strong>Total Charged:</strong> $<span id="order-total"></span></p>
+    <div class="grid">
+      <!-- Left: Items -->
+      <section class="items">
+        <h2>Order items</h2>
+        <ul id="items"></ul>
+        <p class="muted" id="addrNote"></p>
+      </section>
 
-      <div class="items" id="items-list"></div>
+      <!-- Right: Summary -->
+      <aside class="summary">
+        <div class="row"><span>Subtotal</span><span id="subtotal">$0.00</span></div>
+        <div class="row discount hidden" id="discountRow"><span>Promo Discount</span><span>−$<span id="discount">0.00</span></span></div>
+        <div class="row"><span>Shipping</span><span id="ship">$0.00</span></div>
+        <div class="row"><span>Tax</span><span id="tax">$0.00</span></div>
+        <div class="row total"><span>Total</span><span id="total">$0.00</span></div>
+
+        <div class="actions">
+          <a id="receipt-link" href="#" target="_blank" rel="noopener" class="btn btn-primary hidden">View Square receipt</a>
+          <button class="btn btn-outline" onclick="window.print()">Print</button>
+          <a class="btn btn-outline" href="/">Continue shopping</a>
+        </div>
+      </aside>
     </div>
-
-    <a href="/" class="btn back-home">Back to Home</a>
-  </main>
+  </div>
 
   <div data-include="/partials/footer.html"></div>
 
   <script>
+    (function () {
+      // Read result from checkout page
+      const data = JSON.parse(localStorage.getItem('checkoutResult') || 'null');
+      if (!data) { window.location.replace('/'); return; }
+
+      // Basic fields
+      const fmt = (n) => `$${(Number(n)||0).toFixed(2)}`;
+      document.getElementById('ref').textContent = data.referenceId || '—';
+      document.getElementById('tax').textContent  = fmt(data.tax || 0);
+      document.getElementById('ship').textContent = fmt(data.shipping || 0);
+      document.getElementById('total').textContent= fmt(data.total || 0);
+
+      // Discount (if any)
+      const discount = Number(data.discount || 0);
+      if (discount > 0) {
+        document.getElementById('discount').textContent = discount.toFixed(2);
+        document.getElementById('discountRow').classList.remove('hidden');
+      }
+
+      // Subtotal reconstructed so email/page/Square all agree:
+      // total = itemsGross - discount + tax + shipping  => itemsGross = total + discount - tax - shipping
+      const subtotal = (Number(data.total||0) + discount - Number(data.tax||0) - Number(data.shipping||0));
+      document.getElementById('subtotal').textContent = fmt(subtotal);
+
+      // Items list
+      const items = Array.isArray(data.items) ? data.items : [];
+      const esc = (s)=>String(s||'').replace(/[&<>"']/g, c=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;', "'":'&#39;'}[c]));
+      const lines = items.map(it => {
+        const name = esc(it.product || 'Item');
+        const size = esc(it.size || '');
+        const color= esc(it.color || '');
+        const qty  = esc(it.quantity || 1);
+        const extra = [size, color].filter(Boolean).join(' / ');
+        return `<li><strong>${name}</strong>${extra ? ` — ${extra}`:''} × ${qty}</li>`;
+      });
+      document.getElementById('items').innerHTML = lines.join('') || '<li class="muted">No items found.</li>';
+
+      // Receipt link
+      if (data.receiptUrl) {
+        const a = document.getElementById('receipt-link');
+        a.href = data.receiptUrl;
+        a.classList.remove('hidden');
+      }
+
+      // Optional: address echo (if you stored it in sessionStorage earlier)
+      try {
+        const os = JSON.parse(sessionStorage.getItem('orderSummary') || 'null');
+        if (os?.customer) {
+          const c = os.customer;
+          const addr = [c.address, c.address2, c.city, c.state, c.zip].filter(Boolean).join(', ');
+          if (addr) document.getElementById('addrNote').textContent = `Shipping to: ${addr}`;
+        }
+      } catch {}
+
+      // Housekeeping
+      localStorage.removeItem('cart'); // ensure cart is empty after purchase
+      // Keep checkoutResult for print/back; clear it after a few minutes if you want.
+    })();
+
+    // load header/footer
     document.querySelectorAll('[data-include]').forEach(el => {
       fetch(el.getAttribute('data-include'))
         .then(res => res.text())
-        .then(html => { el.innerHTML = html });
+        .then(html => { el.innerHTML = html; });
     });
-
-    const data = JSON.parse(sessionStorage.getItem('orderSummary'));
-    if (data) {
-      document.getElementById('order-summary').style.display = 'block';
-      document.getElementById('thank-you-message').textContent = `Thanks, ${(data.customer.firstName ? data.customer.firstName + ' ' : '') + data.customer.name}! We’ve received your payment.`;
-      document.getElementById('customer-name').textContent = (data.customer.firstName ? data.customer.firstName + ' ' : '') + data.customer.name;
-      document.getElementById('customer-email').textContent = data.customer.email;
-      document.getElementById('order-total').textContent = data.total.toFixed(2);
-      document.getElementById('shipping').textContent = data.shipping.toFixed(2);
-      document.getElementById('order-ref').textContent = data.referenceId;
-
-      // Show tax amount if present
-      if (typeof data.taxAmount === 'number') {
-        const taxDollars = (data.taxAmount / 100).toFixed(2);
-        document.getElementById('tax-amount').textContent = taxDollars;
-      }
-
-      const itemsList = document.getElementById('items-list');
-      data.cart.forEach(item => {
-        const div = document.createElement('div');
-        div.className = 'item';
-        div.innerHTML = `
-          <p><strong>${item.product}</strong></p>
-          <p>Size: ${item.size}, Color: ${item.color}, Qty: ${item.quantity}, Price: ${item.price}</p>
-        `;
-        itemsList.appendChild(div);
-      });
-
-      sessionStorage.removeItem('orderSummary');
-      localStorage.removeItem('cart');
-    }
   </script>
 </body>
 </html>
