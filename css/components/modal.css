@@ -1,0 +1,126 @@
+/* Overlay; site.js toggles .is-open. We also honor style.display for backwards compat. */
+#productModal {
+  position: fixed;
+  inset: 0;
+  display: none;
+  place-items: center;
+  background: rgba(17,17,17,0.55);
+  z-index: 1000;
+}
+#productModal.is-open { display: grid; }
+#productModal[style*="display: block"] { display: grid; } /* fallback if style is used */
+
+/* Uniform modal box */
+#productModal .ks-modal {
+  width: clamp(320px, 92vw, 880px);
+  max-height: min(88vh, 760px);
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+  padding: 24px;
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* media | body */
+  gap: 24px;
+  overflow: hidden;
+}
+
+/* Stack on small screens */
+@media (max-width: 780px) {
+  #productModal .ks-modal {
+    grid-template-columns: 1fr;
+    width: min(94vw, 520px);
+    max-height: 92vh;
+  }
+}
+
+/* Fixed-ratio media well so images don't change the modal size */
+#productModal .ks-modal-media {
+  aspect-ratio: 1 / 1;         /* change to 4/5 if you prefer a taller frame */
+  width: 100%;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background: #fff;
+  overflow: hidden;
+
+  /* Layer base tee + design art */
+  position: relative;
+}
+#productModal .ks-modal-media img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+#productModal #shirtBase { z-index: 1; }
+#productModal #modalImg  { z-index: 2; }
+
+/* Right column scrolls if needed; box size stays fixed */
+#productModal .ks-modal-body {
+  min-height: 0;
+  overflow: auto;
+  padding-right: 2px; /* scrollbar clearance */
+}
+
+/* Close button */
+#productModal .ks-modal-close {
+  position: sticky; top: 0; float: right;
+  width: 34px; height: 34px;
+  border: 1px solid #e5e7eb; border-radius: 50%;
+  background: #fff;
+  font-size: 18px; line-height: 34px; text-align: center;
+  cursor: pointer;
+}
+
+/* Title & price area */
+#productModal #modalTitle { margin: 0 0 8px; font-size: 1.25rem; font-weight: 700; }
+#productModal #modalText small { color: #6b7280; }
+
+/* Size row */
+#productModal .ks-size-row {
+  display: flex; align-items: center; gap: 12px; margin: 12px 0;
+}
+#productModal #modalSize {
+  min-width: 130px; padding: 8px 10px; border: 1px solid #e5e7eb; border-radius: 6px;
+}
+
+/* Swatches */
+#productModal .ks-swatches #colorSwatches {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(28px, 1fr));
+  gap: 8px;
+  max-height: 124px;
+  overflow: auto;
+  margin: 6px 0 12px;
+}
+#productModal .color-swatch {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  border: 2px solid #e5e7eb;
+  cursor: pointer;
+}
+#productModal .color-swatch.selected {
+  outline: 2px solid #111; outline-offset: 2px; border-color: #111;
+}
+
+/* Quantity */
+#productModal .ks-qty-row {
+  display: inline-flex; align-items: center; gap: 10px;
+  border: 1px solid #e5e7eb; border-radius: 8px; padding: 6px 10px; margin: 6px 0 14px;
+}
+#productModal .ks-qty-row button {
+  width: 28px; height: 28px; border: 1px solid #e5e7eb; border-radius: 6px; background: #fff; cursor: pointer;
+}
+
+/* CTA */
+#productModal .ks-buy {
+  display: inline-block; padding: 10px 16px;
+  background: #111827; color: #fff; border: 0; border-radius: 8px; font-weight: 600; cursor: pointer;
+}
+#productModal .ks-buy:hover { background: #0b1220; }
+
+/* Subtle entrance (respects reduced motion) */
+@media (prefers-reduced-motion: no-preference) {
+  #productModal.is-open .ks-modal { animation: ks-modal-in .18s ease-out both; }
+  @keyframes ks-modal-in { from { transform: translateY(6px); opacity: 0 } to { transform: translateY(0); opacity: 1 } }
+}

@@ -1,4 +1,4 @@
-/* /js/site.js — consolidated */
+/* /js/site.js — consolidated (updated) */
 
 /* ----------------------------- includes loader ----------------------------- */
 async function loadIncludes() {
@@ -48,7 +48,7 @@ async function loadColors() {
       });
     }
   } catch {
-    // Fallback: your current hard-coded palette (kept to avoid any breakage)
+    // Fallback: keep hard-coded palette to avoid any breakage
     COLORS = {
       "Army":"#4B5320","Asphalt":"#3E3E3C","Athletic Grey":"#A9A9A9","Atlantic":"#337EA9","Aqua":"#5BC8D1","Autumn":"#C1440E",
       "Baby Blue":"#BFE1EB","Berry":"#9B2D5D","Black":"#101820","Blue Storm":"#748E9A","Brown":"#5C4033","Burnt Orange":"#CC5500",
@@ -142,6 +142,10 @@ function initializeModals() {
   const closeBtn   = document.getElementById('closeModal');
   if (!modal || !modalImg || !modalTitle || !modalText || !closeBtn) return;
 
+  let lastActive = null;
+  let keydownHandler = null;
+  let backdropHandler = null;
+
   // Bind product cards once
   document.querySelectorAll('.product').forEach(productEl => {
     if (productEl.dataset.modalBound === '1') return;
@@ -220,23 +224,63 @@ function initializeModals() {
     });
   }
 
-  // Close behavior
+  // Close button – bind once
   if (!closeBtn.dataset.bound) {
     closeBtn.dataset.bound = '1';
     closeBtn.addEventListener('click', closeModal);
   }
-  if (!modal.dataset.bound) {
-    modal.dataset.bound = '1';
-    modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && modal.getAttribute('data-open') === '1') closeModal();
-    });
+
+  function openModal() {
+    lastActive = document.activeElement;
+    modal.classList.add('is-open');       // CSS hook for uniform styling
+    modal.style.display = 'block';        // backward compatible
+    modal.setAttribute('data-open','1');
+    modal.setAttribute('aria-hidden','false');
+    document.body.style.overflow = 'hidden'; // lock background scroll
+
+    // Scoped listeners (added per open)
+    keydownHandler = (e) => {
+      if (e.key === 'Escape') { e.preventDefault(); return closeModal(); }
+      if (e.key === 'Tab') trapFocus(e);
+    };
+    document.addEventListener('keydown', keydownHandler);
+
+    backdropHandler = (e) => { if (e.target === modal) closeModal(); };
+    modal.addEventListener('click', backdropHandler, { passive: true });
+
+    // Move focus to the close button for a11y
+    closeBtn.focus();
   }
 
-  function openModal() { modal.style.display = 'block'; modal.setAttribute('data-open','1'); }
-  function closeModal(){ modal.style.display = 'none';  modal.removeAttribute('data-open'); resetModal(); }
+  function closeModal() {
+    modal.classList.remove('is-open');
+    modal.style.display = 'none';
+    modal.removeAttribute('data-open');
+    modal.setAttribute('aria-hidden','true');
+    document.body.style.overflow = '';     // restore scroll
+
+    if (keydownHandler) document.removeEventListener('keydown', keydownHandler);
+    if (backdropHandler) modal.removeEventListener('click', backdropHandler);
+
+    resetModal();
+    if (lastActive && typeof lastActive.focus === 'function') lastActive.focus();
+  }
+
+  function trapFocus(e) {
+    const focusables = modal.querySelectorAll(
+      'a[href], button, input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    );
+    if (!focusables.length) return;
+    const first = focusables[0];
+    const last  = focusables[focusables.length - 1];
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  }
+
   function resetModal() {
-    modalImg.src = ""; modalTitle.textContent = ""; byId('modalProductName').value = "";
+    modalImg.src = "";
+    modalTitle.textContent = "";
+    byId('modalProductName').value = "";
   }
 }
 
@@ -266,7 +310,13 @@ function addToCart() {
   localStorage.setItem('cart', JSON.stringify(cart));
 
   alert('Added to cart!');
-  const modal = byId('productModal'); if (modal) modal.style.display = 'none';
+  const modal = byId('productModal'); 
+  if (modal) {
+    modal.classList.remove('is-open');
+    modal.style.display = 'none';
+    modal.setAttribute('aria-hidden','true');
+    modal.removeAttribute('data-open');
+  }
   updateCartCount();
 }
 function updateCartCount() {
@@ -331,4 +381,3 @@ function byId(id){ return document.getElementById(id); }
   // theme & product cards (if present), then modal hooks
   await initTheme();
 })();
-// JavaScript Document
