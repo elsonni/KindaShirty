@@ -269,3 +269,19 @@ collections:
         name: "body"
         widget: "markdown"
         required: false
+    - name: "site_data"
+      label: "Site Data"
+      files:
+        - name: "colors"
+          label: "Colors"
+          file: "data/colors.json"
+          format: "json"
+          editor: { preview: false }
+          fields:
+            - label: "Colors"
+              name: "colors"
+              widget: "list"
+              summary: "{{fields.name}} — {{fields.hex}}"
+              fields:
+                - { label: "Name", name: "name", widget: "string" }
+                - { label: "Hex",  name: "hex",  widget: "string", pattern: ["^#([0-9A-Fa-f]{6})$", "Use #RRGGBB"] }
