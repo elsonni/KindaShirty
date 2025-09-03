@@ -640,7 +640,7 @@ collections:
       name: body
       widget: markdown
       
-- name: "promos"
+- name: promos
     label: "Promo Codes"
     label_singular: "Promo Code"
     folder: "data/discount_requests"
