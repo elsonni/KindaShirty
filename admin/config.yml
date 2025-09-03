@@ -1,657 +1,658 @@
 backend:
   name: git-gateway
   branch: master
+
 media_folder: img/ts
 public_folder: /img/ts
+
 collections:
-- name: 4th of July
-  label: 4Th Of July
-  format: json
-  files:
-  - file: data/4th_of_july.json
-    label: 4th Of July Products
-    name: 4th_of_july_products
-    fields:
-    - label: Products
-      name: products
-      widget: list
-      fields:
-      - label: Name
-        name: name
-        widget: string
-      - label: Alt
-        name: alt
-        widget: string
-      - label: Image
-        name: image
-        widget: image
-      - label: Sizes
-        name: sizes
-        widget: object
+  - name: 4th of July
+    label: 4Th Of July
+    format: json
+    files:
+      - file: data/4th_of_july.json
+        label: 4th Of July Products
+        name: 4th_of_july_products
         fields:
-        - label: XXS
-          name: xxs
-          required: false
-        - label: XS
-          name: xs
-          widget: string
-          required: false
-        - label: S
-          name: s
-          widget: string
-          required: false
-        - label: M
-          name: m
-          widget: string
-          required: false
-        - label: L
-          name: l
-          widget: string
-          required: false
-        - label: XL
-          name: xl
-          widget: string
-          required: false
-        - label: 2XL
-          name: xxl
-          widget: string
-          required: false
-      - label: Colors
-        name: colors
-        widget: list
-        field:
-          label: Color
-          name: color
-          widget: select
-          options:
-            - { label: "Aqua", value: "Aqua" }
-            - { label: "Army", value: "Army" }
-            - { label: "Asphalt", value: "Asphalt" }
-            - { label: "Athletic Grey", value: "Athletic Grey" }
-            - { label: "Atlantic", value: "Atlantic" }
-            - { label: "Autumn", value: "Autumn" }
-            - { label: "Baby Blue", value: "Baby Blue" }
-            - { label: "Berry", value: "Berry" }
-            - { label: "Black", value: "Black" }
-            - { label: "Blue Storm", value: "Blue Storm" }
-            - { label: "Brown", value: "Brown" }
-            - { label: "Burnt Orange", value: "Burnt Orange" }
-            - { label: "Canvas Red", value: "Canvas Red" }
-            - { label: "Cardinal", value: "Cardinal" }
-            - { label: "Carolina Blue", value: "Carolina Blue" }
-            - { label: "Charity Pink", value: "Charity Pink" }
-            - { label: "Chestnut", value: "Chestnut" }
-            - { label: "Citron", value: "Citron" }
-            - { label: "Clay", value: "Clay" }
-            - { label: "Columbia Blue", value: "Columbia Blue" }
-            - { label: "Cool Blue", value: "Cool Blue" }
-            - { label: "Coral", value: "Coral" }
-            - { label: "Dark Grey", value: "Dark Grey" }
-            - { label: "Dark Lavender", value: "Dark Lavender" }
-            - { label: "Dark Olive", value: "Dark Olive" }
-            - { label: "Deep Teal", value: "Deep Teal" }
-            - { label: "Dust", value: "Dust" }
-            - { label: "Dusty Blue", value: "Dusty Blue" }
-            - { label: "Electric Blue", value: "Electric Blue" }
-            - { label: "Evergreen", value: "Evergreen" }
-            - { label: "Forest", value: "Forest" }
-            - { label: "Fuchsia", value: "Fuchsia" }
-            - { label: "Gold", value: "Gold" }
-            - { label: "Kelly", value: "Kelly" }
-            - { label: "Lavender Blue", value: "Lavender Blue" }
-            - { label: "Lavender Dust", value: "Lavender Dust" }
-            - { label: "Leaf", value: "Leaf" }
-            - { label: "Light Blue", value: "Light Blue" }
-            - { label: "Light Violet", value: "Light Violet" }
-            - { label: "Lilac", value: "Lilac" }
-            - { label: "Maize Yellow", value: "Maize Yellow" }
-            - { label: "Marine", value: "Marine" }
-            - { label: "Maroon", value: "Maroon" }
-            - { label: "Mauve", value: "Mauve" }
-            - { label: "Military Green", value: "Military Green" }
-            - { label: "Mint", value: "Mint" }
-            - { label: "Mustard", value: "Mustard" }
-            - { label: "Natural", value: "Natural" }
-            - { label: "Navy", value: "Navy" }
-            - { label: "New Cocoa", value: "New Cocoa" }
-            - { label: "New Hunter Green", value: "New Hunter Green" }
-            - { label: "New Pink Gravel", value: "New Pink Gravel" }
-            - { label: "New Purple Storm", value: "New Purple Storm" }
-            - { label: "New Vintage Denim", value: "New Vintage Denim" }
-            - { label: "New Vintage Red", value: "New Vintage Red" }
-            - { label: "Ocean Blue", value: "Ocean Blue" }
-            - { label: "Olive", value: "Olive" }
-            - { label: "Orange", value: "Orange" }
-            - { label: "Orchid", value: "Orchid" }
-            - { label: "Oxblood Black", value: "Oxblood Black" }
-            - { label: "Peach", value: "Peach" }
-            - { label: "Pebble Brown", value: "Pebble Brown" }
-            - { label: "Pine", value: "Pine" }
-            - { label: "Pink", value: "Pink" }
-            - { label: "Poppy", value: "Poppy" }
-            - { label: "Red", value: "Red" }
-            - { label: "Royal Purple", value: "Royal Purple" }
-            - { label: "Rust", value: "Rust" }
-            - { label: "Sage", value: "Sage" }
-            - { label: "Sand Dune", value: "Sand Dune" }
-            - { label: "Silver", value: "Silver" }
-            - { label: "Slate", value: "Slate" }
-            - { label: "Soft Cream", value: "Soft Cream" }
-            - { label: "Soft Pink", value: "Soft Pink" }
-            - { label: "Spring Green", value: "Spring Green" }
-            - { label: "Steel Blue", value: "Steel Blue" }
-            - { label: "Storm", value: "Storm" }
-            - { label: "Strobe", value: "Strobe" }
-            - { label: "Sunset", value: "Sunset" }
-            - { label: "Synthetic Green", value: "Synthetic Green" }
-            - { label: "Tan", value: "Tan" }
-            - { label: "Teal", value: "Teal" }
-            - { label: "Team Navy", value: "Team Navy" }
-            - { label: "Team Purple", value: "Team Purple" }
-            - { label: "Terracotta", value: "Terracotta" }
-            - { label: "Thyme", value: "Thyme" }
-            - { label: "Toast", value: "Toast" }
-            - { label: "True Royal", value: "True Royal" }
-            - { label: "Turquoise", value: "Turquoise" }
-            - { label: "Vintage Black", value: "Vintage Black" }
-            - { label: "Vintage Brown", value: "Vintage Brown" }
-            - { label: "Vintage Navy", value: "Vintage Navy" }
-            - { label: "Vintage White", value: "Vintage White" }
-            - { label: "White", value: "White" }
-            - { label: "Yellow", value: "Yellow" }
+          - label: Products
+            name: products
+            widget: list
+            fields:
+              - label: Name
+                name: name
+                widget: string
+              - label: Alt
+                name: alt
+                widget: string
+              - label: Image
+                name: image
+                widget: image
+              - label: Sizes
+                name: sizes
+                widget: object
+                fields:
+                  - label: XXS
+                    name: xxs
+                    required: false
+                  - label: XS
+                    name: xs
+                    widget: string
+                    required: false
+                  - label: S
+                    name: s
+                    widget: string
+                    required: false
+                  - label: M
+                    name: m
+                    widget: string
+                    required: false
+                  - label: L
+                    name: l
+                    widget: string
+                    required: false
+                  - label: XL
+                    name: xl
+                    widget: string
+                    required: false
+                  - label: 2XL
+                    name: xxl
+                    widget: string
+                    required: false
+              - label: Colors
+                name: colors
+                widget: list
+                field:
+                  label: Color
+                  name: color
+                  widget: select
+                  options:
+                    - { label: "Aqua", value: "Aqua" }
+                    - { label: "Army", value: "Army" }
+                    - { label: "Asphalt", value: "Asphalt" }
+                    - { label: "Athletic Grey", value: "Athletic Grey" }
+                    - { label: "Atlantic", value: "Atlantic" }
+                    - { label: "Autumn", value: "Autumn" }
+                    - { label: "Baby Blue", value: "Baby Blue" }
+                    - { label: "Berry", value: "Berry" }
+                    - { label: "Black", value: "Black" }
+                    - { label: "Blue Storm", value: "Blue Storm" }
+                    - { label: "Brown", value: "Brown" }
+                    - { label: "Burnt Orange", value: "Burnt Orange" }
+                    - { label: "Canvas Red", value: "Canvas Red" }
+                    - { label: "Cardinal", value: "Cardinal" }
+                    - { label: "Carolina Blue", value: "Carolina Blue" }
+                    - { label: "Charity Pink", value: "Charity Pink" }
+                    - { label: "Chestnut", value: "Chestnut" }
+                    - { label: "Citron", value: "Citron" }
+                    - { label: "Clay", value: "Clay" }
+                    - { label: "Columbia Blue", value: "Columbia Blue" }
+                    - { label: "Cool Blue", value: "Cool Blue" }
+                    - { label: "Coral", value: "Coral" }
+                    - { label: "Dark Grey", value: "Dark Grey" }
+                    - { label: "Dark Lavender", value: "Dark Lavender" }
+                    - { label: "Dark Olive", value: "Dark Olive" }
+                    - { label: "Deep Teal", value: "Deep Teal" }
+                    - { label: "Dust", value: "Dust" }
+                    - { label: "Dusty Blue", value: "Dusty Blue" }
+                    - { label: "Electric Blue", value: "Electric Blue" }
+                    - { label: "Evergreen", value: "Evergreen" }
+                    - { label: "Forest", value: "Forest" }
+                    - { label: "Fuchsia", value: "Fuchsia" }
+                    - { label: "Gold", value: "Gold" }
+                    - { label: "Kelly", value: "Kelly" }
+                    - { label: "Lavender Blue", value: "Lavender Blue" }
+                    - { label: "Lavender Dust", value: "Lavender Dust" }
+                    - { label: "Leaf", value: "Leaf" }
+                    - { label: "Light Blue", value: "Light Blue" }
+                    - { label: "Light Violet", value: "Light Violet" }
+                    - { label: "Lilac", value: "Lilac" }
+                    - { label: "Maize Yellow", value: "Maize Yellow" }
+                    - { label: "Marine", value: "Marine" }
+                    - { label: "Maroon", value: "Maroon" }
+                    - { label: "Mauve", value: "Mauve" }
+                    - { label: "Military Green", value: "Military Green" }
+                    - { label: "Mint", value: "Mint" }
+                    - { label: "Mustard", value: "Mustard" }
+                    - { label: "Natural", value: "Natural" }
+                    - { label: "Navy", value: "Navy" }
+                    - { label: "New Cocoa", value: "New Cocoa" }
+                    - { label: "New Hunter Green", value: "New Hunter Green" }
+                    - { label: "New Pink Gravel", value: "New Pink Gravel" }
+                    - { label: "New Purple Storm", value: "New Purple Storm" }
+                    - { label: "New Vintage Denim", value: "New Vintage Denim" }
+                    - { label: "New Vintage Red", value: "New Vintage Red" }
+                    - { label: "Ocean Blue", value: "Ocean Blue" }
+                    - { label: "Olive", value: "Olive" }
+                    - { label: "Orange", value: "Orange" }
+                    - { label: "Orchid", value: "Orchid" }
+                    - { label: "Oxblood Black", value: "Oxblood Black" }
+                    - { label: "Peach", value: "Peach" }
+                    - { label: "Pebble Brown", value: "Pebble Brown" }
+                    - { label: "Pine", value: "Pine" }
+                    - { label: "Pink", value: "Pink" }
+                    - { label: "Poppy", value: "Poppy" }
+                    - { label: "Red", value: "Red" }
+                    - { label: "Royal Purple", value: "Royal Purple" }
+                    - { label: "Rust", value: "Rust" }
+                    - { label: "Sage", value: "Sage" }
+                    - { label: "Sand Dune", value: "Sand Dune" }
+                    - { label: "Silver", value: "Silver" }
+                    - { label: "Slate", value: "Slate" }
+                    - { label: "Soft Cream", value: "Soft Cream" }
+                    - { label: "Soft Pink", value: "Soft Pink" }
+                    - { label: "Spring Green", value: "Spring Green" }
+                    - { label: "Steel Blue", value: "Steel Blue" }
+                    - { label: "Storm", value: "Storm" }
+                    - { label: "Strobe", value: "Strobe" }
+                    - { label: "Sunset", value: "Sunset" }
+                    - { label: "Synthetic Green", value: "Synthetic Green" }
+                    - { label: "Tan", value: "Tan" }
+                    - { label: "Teal", value: "Teal" }
+                    - { label: "Team Navy", value: "Team Navy" }
+                    - { label: "Team Purple", value: "Team Purple" }
+                    - { label: "Terracotta", value: "Terracotta" }
+                    - { label: "Thyme", value: "Thyme" }
+                    - { label: "Toast", value: "Toast" }
+                    - { label: "True Royal", value: "True Royal" }
+                    - { label: "Turquoise", value: "Turquoise" }
+                    - { label: "Vintage Black", value: "Vintage Black" }
+                    - { label: "Vintage Brown", value: "Vintage Brown" }
+                    - { label: "Vintage Navy", value: "Vintage Navy" }
+                    - { label: "Vintage White", value: "Vintage White" }
+                    - { label: "White", value: "White" }
+                    - { label: "Yellow", value: "Yellow" }
 
-- name: arcade
-  label: Arcade
-  format: json
-  files:
-  - file: data/arcade.json
-    label: Arcade Products
-    name: arcade_products
-    fields:
-    - label: Products
-      name: products
-      widget: list
-      fields:
-      - label: Name
-        name: name
-        widget: string
-      - label: Alt
-        name: alt
-        widget: string
-      - label: Image
-        name: image
-        widget: image
-      - label: Sizes
-        name: sizes
-        widget: object
+  - name: arcade
+    label: Arcade
+    format: json
+    files:
+      - file: data/arcade.json
+        label: Arcade Products
+        name: arcade_products
         fields:
-        - label: XXS
-          name: xxs
-          required: false
-        - label: XS
-          name: xs
-          widget: string
-          required: false
-        - label: S
-          name: s
-          widget: string
-          required: false
-        - label: M
-          name: m
-          widget: string
-          required: false
-        - label: L
-          name: l
-          widget: string
-          required: false
-        - label: XL
-          name: xl
-          widget: string
-          required: false
-        - label: 2XL
-          name: xxl
-          widget: string
-          required: false
-      - label: Colors
-        name: colors
-        widget: list
-        field:
-          label: Color
-          name: color
-          widget: select
-          options:
-            - { label: "Aqua", value: "Aqua" }
-            - { label: "Army", value: "Army" }
-            - { label: "Asphalt", value: "Asphalt" }
-            - { label: "Athletic Grey", value: "Athletic Grey" }
-            - { label: "Atlantic", value: "Atlantic" }
-            - { label: "Autumn", value: "Autumn" }
-            - { label: "Baby Blue", value: "Baby Blue" }
-            - { label: "Berry", value: "Berry" }
-            - { label: "Black", value: "Black" }
-            - { label: "Blue Storm", value: "Blue Storm" }
-            - { label: "Brown", value: "Brown" }
-            - { label: "Burnt Orange", value: "Burnt Orange" }
-            - { label: "Canvas Red", value: "Canvas Red" }
-            - { label: "Cardinal", value: "Cardinal" }
-            - { label: "Carolina Blue", value: "Carolina Blue" }
-            - { label: "Charity Pink", value: "Charity Pink" }
-            - { label: "Chestnut", value: "Chestnut" }
-            - { label: "Citron", value: "Citron" }
-            - { label: "Clay", value: "Clay" }
-            - { label: "Columbia Blue", value: "Columbia Blue" }
-            - { label: "Cool Blue", value: "Cool Blue" }
-            - { label: "Coral", value: "Coral" }
-            - { label: "Dark Grey", value: "Dark Grey" }
-            - { label: "Dark Lavender", value: "Dark Lavender" }
-            - { label: "Dark Olive", value: "Dark Olive" }
-            - { label: "Deep Teal", value: "Deep Teal" }
-            - { label: "Dust", value: "Dust" }
-            - { label: "Dusty Blue", value: "Dusty Blue" }
-            - { label: "Electric Blue", value: "Electric Blue" }
-            - { label: "Evergreen", value: "Evergreen" }
-            - { label: "Forest", value: "Forest" }
-            - { label: "Fuchsia", value: "Fuchsia" }
-            - { label: "Gold", value: "Gold" }
-            - { label: "Kelly", value: "Kelly" }
-            - { label: "Lavender Blue", value: "Lavender Blue" }
-            - { label: "Lavender Dust", value: "Lavender Dust" }
-            - { label: "Leaf", value: "Leaf" }
-            - { label: "Light Blue", value: "Light Blue" }
-            - { label: "Light Violet", value: "Light Violet" }
-            - { label: "Lilac", value: "Lilac" }
-            - { label: "Maize Yellow", value: "Maize Yellow" }
-            - { label: "Marine", value: "Marine" }
-            - { label: "Maroon", value: "Maroon" }
-            - { label: "Mauve", value: "Mauve" }
-            - { label: "Military Green", value: "Military Green" }
-            - { label: "Mint", value: "Mint" }
-            - { label: "Mustard", value: "Mustard" }
-            - { label: "Natural", value: "Natural" }
-            - { label: "Navy", value: "Navy" }
-            - { label: "New Cocoa", value: "New Cocoa" }
-            - { label: "New Hunter Green", value: "New Hunter Green" }
-            - { label: "New Pink Gravel", value: "New Pink Gravel" }
-            - { label: "New Purple Storm", value: "New Purple Storm" }
-            - { label: "New Vintage Denim", value: "New Vintage Denim" }
-            - { label: "New Vintage Red", value: "New Vintage Red" }
-            - { label: "Ocean Blue", value: "Ocean Blue" }
-            - { label: "Olive", value: "Olive" }
-            - { label: "Orange", value: "Orange" }
-            - { label: "Orchid", value: "Orchid" }
-            - { label: "Oxblood Black", value: "Oxblood Black" }
-            - { label: "Peach", value: "Peach" }
-            - { label: "Pebble Brown", value: "Pebble Brown" }
-            - { label: "Pine", value: "Pine" }
-            - { label: "Pink", value: "Pink" }
-            - { label: "Poppy", value: "Poppy" }
-            - { label: "Red", value: "Red" }
-            - { label: "Royal Purple", value: "Royal Purple" }
-            - { label: "Rust", value: "Rust" }
-            - { label: "Sage", value: "Sage" }
-            - { label: "Sand Dune", value: "Sand Dune" }
-            - { label: "Silver", value: "Silver" }
-            - { label: "Slate", value: "Slate" }
-            - { label: "Soft Cream", value: "Soft Cream" }
-            - { label: "Soft Pink", value: "Soft Pink" }
-            - { label: "Spring Green", value: "Spring Green" }
-            - { label: "Steel Blue", value: "Steel Blue" }
-            - { label: "Storm", value: "Storm" }
-            - { label: "Strobe", value: "Strobe" }
-            - { label: "Sunset", value: "Sunset" }
-            - { label: "Synthetic Green", value: "Synthetic Green" }
-            - { label: "Tan", value: "Tan" }
-            - { label: "Teal", value: "Teal" }
-            - { label: "Team Navy", value: "Team Navy" }
-            - { label: "Team Purple", value: "Team Purple" }
-            - { label: "Terracotta", value: "Terracotta" }
-            - { label: "Thyme", value: "Thyme" }
-            - { label: "Toast", value: "Toast" }
-            - { label: "True Royal", value: "True Royal" }
-            - { label: "Turquoise", value: "Turquoise" }
-            - { label: "Vintage Black", value: "Vintage Black" }
-            - { label: "Vintage Brown", value: "Vintage Brown" }
-            - { label: "Vintage Navy", value: "Vintage Navy" }
-            - { label: "Vintage White", value: "Vintage White" }
-            - { label: "White", value: "White" }
-            - { label: "Yellow", value: "Yellow" }
+          - label: Products
+            name: products
+            widget: list
+            fields:
+              - label: Name
+                name: name
+                widget: string
+              - label: Alt
+                name: alt
+                widget: string
+              - label: Image
+                name: image
+                widget: image
+              - label: Sizes
+                name: sizes
+                widget: object
+                fields:
+                  - label: XXS
+                    name: xxs
+                    required: false
+                  - label: XS
+                    name: xs
+                    widget: string
+                    required: false
+                  - label: S
+                    name: s
+                    widget: string
+                    required: false
+                  - label: M
+                    name: m
+                    widget: string
+                    required: false
+                  - label: L
+                    name: l
+                    widget: string
+                    required: false
+                  - label: XL
+                    name: xl
+                    widget: string
+                    required: false
+                  - label: 2XL
+                    name: xxl
+                    widget: string
+                    required: false
+              - label: Colors
+                name: colors
+                widget: list
+                field:
+                  label: Color
+                  name: color
+                  widget: select
+                  options:
+                    - { label: "Aqua", value: "Aqua" }
+                    - { label: "Army", value: "Army" }
+                    - { label: "Asphalt", value: "Asphalt" }
+                    - { label: "Athletic Grey", value: "Athletic Grey" }
+                    - { label: "Atlantic", value: "Atlantic" }
+                    - { label: "Autumn", value: "Autumn" }
+                    - { label: "Baby Blue", value: "Baby Blue" }
+                    - { label: "Berry", value: "Berry" }
+                    - { label: "Black", value: "Black" }
+                    - { label: "Blue Storm", value: "Blue Storm" }
+                    - { label: "Brown", value: "Brown" }
+                    - { label: "Burnt Orange", value: "Burnt Orange" }
+                    - { label: "Canvas Red", value: "Canvas Red" }
+                    - { label: "Cardinal", value: "Cardinal" }
+                    - { label: "Carolina Blue", value: "Carolina Blue" }
+                    - { label: "Charity Pink", value: "Charity Pink" }
+                    - { label: "Chestnut", value: "Chestnut" }
+                    - { label: "Citron", value: "Citron" }
+                    - { label: "Clay", value: "Clay" }
+                    - { label: "Columbia Blue", value: "Columbia Blue" }
+                    - { label: "Cool Blue", value: "Cool Blue" }
+                    - { label: "Coral", value: "Coral" }
+                    - { label: "Dark Grey", value: "Dark Grey" }
+                    - { label: "Dark Lavender", value: "Dark Lavender" }
+                    - { label: "Dark Olive", value: "Dark Olive" }
+                    - { label: "Deep Teal", value: "Deep Teal" }
+                    - { label: "Dust", value: "Dust" }
+                    - { label: "Dusty Blue", value: "Dusty Blue" }
+                    - { label: "Electric Blue", value: "Electric Blue" }
+                    - { label: "Evergreen", value: "Evergreen" }
+                    - { label: "Forest", value: "Forest" }
+                    - { label: "Fuchsia", value: "Fuchsia" }
+                    - { label: "Gold", value: "Gold" }
+                    - { label: "Kelly", value: "Kelly" }
+                    - { label: "Lavender Blue", value: "Lavender Blue" }
+                    - { label: "Lavender Dust", value: "Lavender Dust" }
+                    - { label: "Leaf", value: "Leaf" }
+                    - { label: "Light Blue", value: "Light Blue" }
+                    - { label: "Light Violet", value: "Light Violet" }
+                    - { label: "Lilac", value: "Lilac" }
+                    - { label: "Maize Yellow", value: "Maize Yellow" }
+                    - { label: "Marine", value: "Marine" }
+                    - { label: "Maroon", value: "Maroon" }
+                    - { label: "Mauve", value: "Mauve" }
+                    - { label: "Military Green", value: "Military Green" }
+                    - { label: "Mint", value: "Mint" }
+                    - { label: "Mustard", value: "Mustard" }
+                    - { label: "Natural", value: "Natural" }
+                    - { label: "Navy", value: "Navy" }
+                    - { label: "New Cocoa", value: "New Cocoa" }
+                    - { label: "New Hunter Green", value: "New Hunter Green" }
+                    - { label: "New Pink Gravel", value: "New Pink Gravel" }
+                    - { label: "New Purple Storm", value: "New Purple Storm" }
+                    - { label: "New Vintage Denim", value: "New Vintage Denim" }
+                    - { label: "New Vintage Red", value: "New Vintage Red" }
+                    - { label: "Ocean Blue", value: "Ocean Blue" }
+                    - { label: "Olive", value: "Olive" }
+                    - { label: "Orange", value: "Orange" }
+                    - { label: "Orchid", value: "Orchid" }
+                    - { label: "Oxblood Black", value: "Oxblood Black" }
+                    - { label: "Peach", value: "Peach" }
+                    - { label: "Pebble Brown", value: "Pebble Brown" }
+                    - { label: "Pine", value: "Pine" }
+                    - { label: "Pink", value: "Pink" }
+                    - { label: "Poppy", value: "Poppy" }
+                    - { label: "Red", value: "Red" }
+                    - { label: "Royal Purple", value: "Royal Purple" }
+                    - { label: "Rust", value: "Rust" }
+                    - { label: "Sage", value: "Sage" }
+                    - { label: "Sand Dune", value: "Sand Dune" }
+                    - { label: "Silver", value: "Silver" }
+                    - { label: "Slate", value: "Slate" }
+                    - { label: "Soft Cream", value: "Soft Cream" }
+                    - { label: "Soft Pink", value: "Soft Pink" }
+                    - { label: "Spring Green", value: "Spring Green" }
+                    - { label: "Steel Blue", value: "Steel Blue" }
+                    - { label: "Storm", value: "Storm" }
+                    - { label: "Strobe", value: "Strobe" }
+                    - { label: "Sunset", value: "Sunset" }
+                    - { label: "Synthetic Green", value: "Synthetic Green" }
+                    - { label: "Tan", value: "Tan" }
+                    - { label: "Teal", value: "Teal" }
+                    - { label: "Team Navy", value: "Team Navy" }
+                    - { label: "Team Purple", value: "Team Purple" }
+                    - { label: "Terracotta", value: "Terracotta" }
+                    - { label: "Thyme", value: "Thyme" }
+                    - { label: "Toast", value: "Toast" }
+                    - { label: "True Royal", value: "True Royal" }
+                    - { label: "Turquoise", value: "Turquoise" }
+                    - { label: "Vintage Black", value: "Vintage Black" }
+                    - { label: "Vintage Brown", value: "Vintage Brown" }
+                    - { label: "Vintage Navy", value: "Vintage Navy" }
+                    - { label: "Vintage White", value: "Vintage White" }
+                    - { label: "White", value: "White" }
+                    - { label: "Yellow", value: "Yellow" }
 
-- name: pop-culture
-  label: Pop Culture
-  format: json
-  files:
-  - file: data/pop_culture.json
-    label: Pop Culture Products
-    name: pop_culture_products
-    fields:
-    - label: Products
-      name: products
-      widget: list
-      fields:
-      - label: Name
-        name: name
-        widget: string
-      - label: Alt
-        name: alt
-        widget: string
-      - label: Image
-        name: image
-        widget: image
-      - label: Sizes
-        name: sizes
-        widget: object
+  - name: pop-culture
+    label: Pop Culture
+    format: json
+    files:
+      - file: data/pop_culture.json
+        label: Pop Culture Products
+        name: pop_culture_products
         fields:
-        - label: XXS
-          name: xxs
-          required: false
-        - label: XS
-          name: xs
-          widget: string
-          required: false
-        - label: S
-          name: s
-          widget: string
-          required: false
-        - label: M
-          name: m
-          widget: string
-          required: false
-        - label: L
-          name: l
-          widget: string
-          required: false
-        - label: XL
-          name: xl
-          widget: string
-          required: false
-        - label: 2XL
-          name: xxl
-          widget: string
-          required: false
-      - label: Colors
-        name: colors
-        widget: list
-        field:
-          label: Color
-          name: color
-          widget: select
-          options:
-            - { label: "Aqua", value: "Aqua" }
-            - { label: "Army", value: "Army" }
-            - { label: "Asphalt", value: "Asphalt" }
-            - { label: "Athletic Grey", value: "Athletic Grey" }
-            - { label: "Atlantic", value: "Atlantic" }
-            - { label: "Autumn", value: "Autumn" }
-            - { label: "Baby Blue", value: "Baby Blue" }
-            - { label: "Berry", value: "Berry" }
-            - { label: "Black", value: "Black" }
-            - { label: "Blue Storm", value: "Blue Storm" }
-            - { label: "Brown", value: "Brown" }
-            - { label: "Burnt Orange", value: "Burnt Orange" }
-            - { label: "Canvas Red", value: "Canvas Red" }
-            - { label: "Cardinal", value: "Cardinal" }
-            - { label: "Carolina Blue", value: "Carolina Blue" }
-            - { label: "Charity Pink", value: "Charity Pink" }
-            - { label: "Chestnut", value: "Chestnut" }
-            - { label: "Citron", value: "Citron" }
-            - { label: "Clay", value: "Clay" }
-            - { label: "Columbia Blue", value: "Columbia Blue" }
-            - { label: "Cool Blue", value: "Cool Blue" }
-            - { label: "Coral", value: "Coral" }
-            - { label: "Dark Grey", value: "Dark Grey" }
-            - { label: "Dark Lavender", value: "Dark Lavender" }
-            - { label: "Dark Olive", value: "Dark Olive" }
-            - { label: "Deep Teal", value: "Deep Teal" }
-            - { label: "Dust", value: "Dust" }
-            - { label: "Dusty Blue", value: "Dusty Blue" }
-            - { label: "Electric Blue", value: "Electric Blue" }
-            - { label: "Evergreen", value: "Evergreen" }
-            - { label: "Forest", value: "Forest" }
-            - { label: "Fuchsia", value: "Fuchsia" }
-            - { label: "Gold", value: "Gold" }
-            - { label: "Kelly", value: "Kelly" }
-            - { label: "Lavender Blue", value: "Lavender Blue" }
-            - { label: "Lavender Dust", value: "Lavender Dust" }
-            - { label: "Leaf", value: "Leaf" }
-            - { label: "Light Blue", value: "Light Blue" }
-            - { label: "Light Violet", value: "Light Violet" }
-            - { label: "Lilac", value: "Lilac" }
-            - { label: "Maize Yellow", value: "Maize Yellow" }
-            - { label: "Marine", value: "Marine" }
-            - { label: "Maroon", value: "Maroon" }
-            - { label: "Mauve", value: "Mauve" }
-            - { label: "Military Green", value: "Military Green" }
-            - { label: "Mint", value: "Mint" }
-            - { label: "Mustard", value: "Mustard" }
-            - { label: "Natural", value: "Natural" }
-            - { label: "Navy", value: "Navy" }
-            - { label: "New Cocoa", value: "New Cocoa" }
-            - { label: "New Hunter Green", value: "New Hunter Green" }
-            - { label: "New Pink Gravel", value: "New Pink Gravel" }
-            - { label: "New Purple Storm", value: "New Purple Storm" }
-            - { label: "New Vintage Denim", value: "New Vintage Denim" }
-            - { label: "New Vintage Red", value: "New Vintage Red" }
-            - { label: "Ocean Blue", value: "Ocean Blue" }
-            - { label: "Olive", value: "Olive" }
-            - { label: "Orange", value: "Orange" }
-            - { label: "Orchid", value: "Orchid" }
-            - { label: "Oxblood Black", value: "Oxblood Black" }
-            - { label: "Peach", value: "Peach" }
-            - { label: "Pebble Brown", value: "Pebble Brown" }
-            - { label: "Pine", value: "Pine" }
-            - { label: "Pink", value: "Pink" }
-            - { label: "Poppy", value: "Poppy" }
-            - { label: "Red", value: "Red" }
-            - { label: "Royal Purple", value: "Royal Purple" }
-            - { label: "Rust", value: "Rust" }
-            - { label: "Sage", value: "Sage" }
-            - { label: "Sand Dune", value: "Sand Dune" }
-            - { label: "Silver", value: "Silver" }
-            - { label: "Slate", value: "Slate" }
-            - { label: "Soft Cream", value: "Soft Cream" }
-            - { label: "Soft Pink", value: "Soft Pink" }
-            - { label: "Spring Green", value: "Spring Green" }
-            - { label: "Steel Blue", value: "Steel Blue" }
-            - { label: "Storm", value: "Storm" }
-            - { label: "Strobe", value: "Strobe" }
-            - { label: "Sunset", value: "Sunset" }
-            - { label: "Synthetic Green", value: "Synthetic Green" }
-            - { label: "Tan", value: "Tan" }
-            - { label: "Teal", value: "Teal" }
-            - { label: "Team Navy", value: "Team Navy" }
-            - { label: "Team Purple", value: "Team Purple" }
-            - { label: "Terracotta", value: "Terracotta" }
-            - { label: "Thyme", value: "Thyme" }
-            - { label: "Toast", value: "Toast" }
-            - { label: "True Royal", value: "True Royal" }
-            - { label: "Turquoise", value: "Turquoise" }
-            - { label: "Vintage Black", value: "Vintage Black" }
-            - { label: "Vintage Brown", value: "Vintage Brown" }
-            - { label: "Vintage Navy", value: "Vintage Navy" }
-            - { label: "Vintage White", value: "Vintage White" }
-            - { label: "White", value: "White" }
-            - { label: "Yellow", value: "Yellow" }
+          - label: Products
+            name: products
+            widget: list
+            fields:
+              - label: Name
+                name: name
+                widget: string
+              - label: Alt
+                name: alt
+                widget: string
+              - label: Image
+                name: image
+                widget: image
+              - label: Sizes
+                name: sizes
+                widget: object
+                fields:
+                  - label: XXS
+                    name: xxs
+                    required: false
+                  - label: XS
+                    name: xs
+                    widget: string
+                    required: false
+                  - label: S
+                    name: s
+                    widget: string
+                    required: false
+                  - label: M
+                    name: m
+                    widget: string
+                    required: false
+                  - label: L
+                    name: l
+                    widget: string
+                    required: false
+                  - label: XL
+                    name: xl
+                    widget: string
+                    required: false
+                  - label: 2XL
+                    name: xxl
+                    widget: string
+                    required: false
+              - label: Colors
+                name: colors
+                widget: list
+                field:
+                  label: Color
+                  name: color
+                  widget: select
+                  options:
+                    - { label: "Aqua", value: "Aqua" }
+                    - { label: "Army", value: "Army" }
+                    - { label: "Asphalt", value: "Asphalt" }
+                    - { label: "Athletic Grey", value: "Athletic Grey" }
+                    - { label: "Atlantic", value: "Atlantic" }
+                    - { label: "Autumn", value: "Autumn" }
+                    - { label: "Baby Blue", value: "Baby Blue" }
+                    - { label: "Berry", value: "Berry" }
+                    - { label: "Black", value: "Black" }
+                    - { label: "Blue Storm", value: "Blue Storm" }
+                    - { label: "Brown", value: "Brown" }
+                    - { label: "Burnt Orange", value: "Burnt Orange" }
+                    - { label: "Canvas Red", value: "Canvas Red" }
+                    - { label: "Cardinal", value: "Cardinal" }
+                    - { label: "Carolina Blue", value: "Carolina Blue" }
+                    - { label: "Charity Pink", value: "Charity Pink" }
+                    - { label: "Chestnut", value: "Chestnut" }
+                    - { label: "Citron", value: "Citron" }
+                    - { label: "Clay", value: "Clay" }
+                    - { label: "Columbia Blue", value: "Columbia Blue" }
+                    - { label: "Cool Blue", value: "Cool Blue" }
+                    - { label: "Coral", value: "Coral" }
+                    - { label: "Dark Grey", value: "Dark Grey" }
+                    - { label: "Dark Lavender", value: "Dark Lavender" }
+                    - { label: "Dark Olive", value: "Dark Olive" }
+                    - { label: "Deep Teal", value: "Deep Teal" }
+                    - { label: "Dust", value: "Dust" }
+                    - { label: "Dusty Blue", value: "Dusty Blue" }
+                    - { label: "Electric Blue", value: "Electric Blue" }
+                    - { label: "Evergreen", value: "Evergreen" }
+                    - { label: "Forest", value: "Forest" }
+                    - { label: "Fuchsia", value: "Fuchsia" }
+                    - { label: "Gold", value: "Gold" }
+                    - { label: "Kelly", value: "Kelly" }
+                    - { label: "Lavender Blue", value: "Lavender Blue" }
+                    - { label: "Lavender Dust", value: "Lavender Dust" }
+                    - { label: "Leaf", value: "Leaf" }
+                    - { label: "Light Blue", value: "Light Blue" }
+                    - { label: "Light Violet", value: "Light Violet" }
+                    - { label: "Lilac", value: "Lilac" }
+                    - { label: "Maize Yellow", value: "Maize Yellow" }
+                    - { label: "Marine", value: "Marine" }
+                    - { label: "Maroon", value: "Maroon" }
+                    - { label: "Mauve", value: "Mauve" }
+                    - { label: "Military Green", value: "Military Green" }
+                    - { label: "Mint", value: "Mint" }
+                    - { label: "Mustard", value: "Mustard" }
+                    - { label: "Natural", value: "Natural" }
+                    - { label: "Navy", value: "Navy" }
+                    - { label: "New Cocoa", value: "New Cocoa" }
+                    - { label: "New Hunter Green", value: "New Hunter Green" }
+                    - { label: "New Pink Gravel", value: "New Pink Gravel" }
+                    - { label: "New Purple Storm", value: "New Purple Storm" }
+                    - { label: "New Vintage Denim", value: "New Vintage Denim" }
+                    - { label: "New Vintage Red", value: "New Vintage Red" }
+                    - { label: "Ocean Blue", value: "Ocean Blue" }
+                    - { label: "Olive", value: "Olive" }
+                    - { label: "Orange", value: "Orange" }
+                    - { label: "Orchid", value: "Orchid" }
+                    - { label: "Oxblood Black", value: "Oxblood Black" }
+                    - { label: "Peach", value: "Peach" }
+                    - { label: "Pebble Brown", value: "Pebble Brown" }
+                    - { label: "Pine", value: "Pine" }
+                    - { label: "Pink", value: "Pink" }
+                    - { label: "Poppy", value: "Poppy" }
+                    - { label: "Red", value: "Red" }
+                    - { label: "Royal Purple", value: "Royal Purple" }
+                    - { label: "Rust", value: "Rust" }
+                    - { label: "Sage", value: "Sage" }
+                    - { label: "Sand Dune", value: "Sand Dune" }
+                    - { label: "Silver", value: "Silver" }
+                    - { label: "Slate", value: "Slate" }
+                    - { label: "Soft Cream", value: "Soft Cream" }
+                    - { label: "Soft Pink", value: "Soft Pink" }
+                    - { label: "Spring Green", value: "Spring Green" }
+                    - { label: "Steel Blue", value: "Steel Blue" }
+                    - { label: "Storm", value: "Storm" }
+                    - { label: "Strobe", value: "Strobe" }
+                    - { label: "Sunset", value: "Sunset" }
+                    - { label: "Synthetic Green", value: "Synthetic Green" }
+                    - { label: "Tan", value: "Tan" }
+                    - { label: "Teal", value: "Teal" }
+                    - { label: "Team Navy", value: "Team Navy" }
+                    - { label: "Team Purple", value: "Team Purple" }
+                    - { label: "Terracotta", value: "Terracotta" }
+                    - { label: "Thyme", value: "Thyme" }
+                    - { label: "Toast", value: "Toast" }
+                    - { label: "True Royal", value: "True Royal" }
+                    - { label: "Turquoise", value: "Turquoise" }
+                    - { label: "Vintage Black", value: "Vintage Black" }
+                    - { label: "Vintage Brown", value: "Vintage Brown" }
+                    - { label: "Vintage Navy", value: "Vintage Navy" }
+                    - { label: "Vintage White", value: "Vintage White" }
+                    - { label: "White", value: "White" }
+                    - { label: "Yellow", value: "Yellow" }
 
-- name: new-arrivals
-  label: New Arrivals
-  format: json
-  files:
-  - file: data/new_arrivals.json
-    label: New Arrivals Products
-    name: new_arrivals_products
-    fields:
-    - label: Products
-      name: products
-      widget: list
-      fields:
-      - label: Name
-        name: name
-        widget: string
-      - label: Alt
-        name: alt
-        widget: string
-      - label: Image
-        name: image
-        widget: image
-      - label: Sizes
-        name: sizes
-        widget: object
+  - name: new-arrivals
+    label: New Arrivals
+    format: json
+    files:
+      - file: data/new_arrivals.json
+        label: New Arrivals Products
+        name: new_arrivals_products
         fields:
-        - label: XXS
-          name: xxs
-          required: false
-        - label: XS
-          name: xs
-          widget: string
-          required: false
-        - label: S
-          name: s
-          widget: string
-          required: false
-        - label: M
-          name: m
-          widget: string
-          required: false
-        - label: L
-          name: l
-          widget: string
-          required: false
-        - label: XL
-          name: xl
-          widget: string
-          required: false
-        - label: 2XL
-          name: xxl
-          widget: string
-          required: false
-      - label: Colors
-        name: colors
-        widget: list
-        field:
-          label: Color
-          name: color
-          widget: select
-          options:
-            - { label: "Aqua", value: "Aqua" }
-            - { label: "Army", value: "Army" }
-            - { label: "Asphalt", value: "Asphalt" }
-            - { label: "Athletic Grey", value: "Athletic Grey" }
-            - { label: "Atlantic", value: "Atlantic" }
-            - { label: "Autumn", value: "Autumn" }
-            - { label: "Baby Blue", value: "Baby Blue" }
-            - { label: "Berry", value: "Berry" }
-            - { label: "Black", value: "Black" }
-            - { label: "Blue Storm", value: "Blue Storm" }
-            - { label: "Brown", value: "Brown" }
-            - { label: "Burnt Orange", value: "Burnt Orange" }
-            - { label: "Canvas Red", value: "Canvas Red" }
-            - { label: "Cardinal", value: "Cardinal" }
-            - { label: "Carolina Blue", value: "Carolina Blue" }
-            - { label: "Charity Pink", value: "Charity Pink" }
-            - { label: "Chestnut", value: "Chestnut" }
-            - { label: "Citron", value: "Citron" }
-            - { label: "Clay", value: "Clay" }
-            - { label: "Columbia Blue", value: "Columbia Blue" }
-            - { label: "Cool Blue", value: "Cool Blue" }
-            - { label: "Coral", value: "Coral" }
-            - { label: "Dark Grey", value: "Dark Grey" }
-            - { label: "Dark Lavender", value: "Dark Lavender" }
-            - { label: "Dark Olive", value: "Dark Olive" }
-            - { label: "Deep Teal", value: "Deep Teal" }
-            - { label: "Dust", value: "Dust" }
-            - { label: "Dusty Blue", value: "Dusty Blue" }
-            - { label: "Electric Blue", value: "Electric Blue" }
-            - { label: "Evergreen", value: "Evergreen" }
-            - { label: "Forest", value: "Forest" }
-            - { label: "Fuchsia", value: "Fuchsia" }
-            - { label: "Gold", value: "Gold" }
-            - { label: "Kelly", value: "Kelly" }
-            - { label: "Lavender Blue", value: "Lavender Blue" }
-            - { label: "Lavender Dust", value: "Lavender Dust" }
-            - { label: "Leaf", value: "Leaf" }
-            - { label: "Light Blue", value: "Light Blue" }
-            - { label: "Light Violet", value: "Light Violet" }
-            - { label: "Lilac", value: "Lilac" }
-            - { label: "Maize Yellow", value: "Maize Yellow" }
-            - { label: "Marine", value: "Marine" }
-            - { label: "Maroon", value: "Maroon" }
-            - { label: "Mauve", value: "Mauve" }
-            - { label: "Military Green", value: "Military Green" }
-            - { label: "Mint", value: "Mint" }
-            - { label: "Mustard", value: "Mustard" }
-            - { label: "Natural", value: "Natural" }
-            - { label: "Navy", value: "Navy" }
-            - { label: "New Cocoa", value: "New Cocoa" }
-            - { label: "New Hunter Green", value: "New Hunter Green" }
-            - { label: "New Pink Gravel", value: "New Pink Gravel" }
-            - { label: "New Purple Storm", value: "New Purple Storm" }
-            - { label: "New Vintage Denim", value: "New Vintage Denim" }
-            - { label: "New Vintage Red", value: "New Vintage Red" }
-            - { label: "Ocean Blue", value: "Ocean Blue" }
-            - { label: "Olive", value: "Olive" }
-            - { label: "Orange", value: "Orange" }
-            - { label: "Orchid", value: "Orchid" }
-            - { label: "Oxblood Black", value: "Oxblood Black" }
-            - { label: "Peach", value: "Peach" }
-            - { label: "Pebble Brown", value: "Pebble Brown" }
-            - { label: "Pine", value: "Pine" }
-            - { label: "Pink", value: "Pink" }
-            - { label: "Poppy", value: "Poppy" }
-            - { label: "Red", value: "Red" }
-            - { label: "Royal Purple", value: "Royal Purple" }
-            - { label: "Rust", value: "Rust" }
-            - { label: "Sage", value: "Sage" }
-            - { label: "Sand Dune", value: "Sand Dune" }
-            - { label: "Silver", value: "Silver" }
-            - { label: "Slate", value: "Slate" }
-            - { label: "Soft Cream", value: "Soft Cream" }
-            - { label: "Soft Pink", value: "Soft Pink" }
-            - { label: "Spring Green", value: "Spring Green" }
-            - { label: "Steel Blue", value: "Steel Blue" }
-            - { label: "Storm", value: "Storm" }
-            - { label: "Strobe", value: "Strobe" }
-            - { label: "Sunset", value: "Sunset" }
-            - { label: "Synthetic Green", value: "Synthetic Green" }
-            - { label: "Tan", value: "Tan" }
-            - { label: "Teal", value: "Teal" }
-            - { label: "Team Navy", value: "Team Navy" }
-            - { label: "Team Purple", value: "Team Purple" }
-            - { label: "Terracotta", value: "Terracotta" }
-            - { label: "Thyme", value: "Thyme" }
-            - { label: "Toast", value: "Toast" }
-            - { label: "True Royal", value: "True Royal" }
-            - { label: "Turquoise", value: "Turquoise" }
-            - { label: "Vintage Black", value: "Vintage Black" }
-            - { label: "Vintage Brown", value: "Vintage Brown" }
-            - { label: "Vintage Navy", value: "Vintage Navy" }
-            - { label: "Vintage White", value: "Vintage White" }
-            - { label: "White", value: "White" }
-            - { label: "Yellow", value: "Yellow" }
+          - label: Products
+            name: products
+            widget: list
+            fields:
+              - label: Name
+                name: name
+                widget: string
+              - label: Alt
+                name: alt
+                widget: string
+              - label: Image
+                name: image
+                widget: image
+              - label: Sizes
+                name: sizes
+                widget: object
+                fields:
+                  - label: XXS
+                    name: xxs
+                    required: false
+                  - label: XS
+                    name: xs
+                    widget: string
+                    required: false
+                  - label: S
+                    name: s
+                    widget: string
+                    required: false
+                  - label: M
+                    name: m
+                    widget: string
+                    required: false
+                  - label: L
+                    name: l
+                    widget: string
+                    required: false
+                  - label: XL
+                    name: xl
+                    widget: string
+                    required: false
+                  - label: 2XL
+                    name: xxl
+                    widget: string
+                    required: false
+              - label: Colors
+                name: colors
+                widget: list
+                field:
+                  label: Color
+                  name: color
+                  widget: select
+                  options:
+                    - { label: "Aqua", value: "Aqua" }
+                    - { label: "Army", value: "Army" }
+                    - { label: "Asphalt", value: "Asphalt" }
+                    - { label: "Athletic Grey", value: "Athletic Grey" }
+                    - { label: "Atlantic", value: "Atlantic" }
+                    - { label: "Autumn", value: "Autumn" }
+                    - { label: "Baby Blue", value: "Baby Blue" }
+                    - { label: "Berry", value: "Berry" }
+                    - { label: "Black", value: "Black" }
+                    - { label: "Blue Storm", value: "Blue Storm" }
+                    - { label: "Brown", value: "Brown" }
+                    - { label: "Burnt Orange", value: "Burnt Orange" }
+                    - { label: "Canvas Red", value: "Canvas Red" }
+                    - { label: "Cardinal", value: "Cardinal" }
+                    - { label: "Carolina Blue", value: "Carolina Blue" }
+                    - { label: "Charity Pink", value: "Charity Pink" }
+                    - { label: "Chestnut", value: "Chestnut" }
+                    - { label: "Citron", value: "Citron" }
+                    - { label: "Clay", value: "Clay" }
+                    - { label: "Columbia Blue", value: "Columbia Blue" }
+                    - { label: "Cool Blue", value: "Cool Blue" }
+                    - { label: "Coral", value: "Coral" }
+                    - { label: "Dark Grey", value: "Dark Grey" }
+                    - { label: "Dark Lavender", value: "Dark Lavender" }
+                    - { label: "Dark Olive", value: "Dark Olive" }
+                    - { label: "Deep Teal", value: "Deep Teal" }
+                    - { label: "Dust", value: "Dust" }
+                    - { label: "Dusty Blue", value: "Dusty Blue" }
+                    - { label: "Electric Blue", value: "Electric Blue" }
+                    - { label: "Evergreen", value: "Evergreen" }
+                    - { label: "Forest", value: "Forest" }
+                    - { label: "Fuchsia", value: "Fuchsia" }
+                    - { label: "Gold", value: "Gold" }
+                    - { label: "Kelly", value: "Kelly" }
+                    - { label: "Lavender Blue", value: "Lavender Blue" }
+                    - { label: "Lavender Dust", value: "Lavender Dust" }
+                    - { label: "Leaf", value: "Leaf" }
+                    - { label: "Light Blue", value: "Light Blue" }
+                    - { label: "Light Violet", value: "Light Violet" }
+                    - { label: "Lilac", value: "Lilac" }
+                    - { label: "Maize Yellow", value: "Maize Yellow" }
+                    - { label: "Marine", value: "Marine" }
+                    - { label: "Maroon", value: "Maroon" }
+                    - { label: "Mauve", value: "Mauve" }
+                    - { label: "Military Green", value: "Military Green" }
+                    - { label: "Mint", value: "Mint" }
+                    - { label: "Mustard", value: "Mustard" }
+                    - { label: "Natural", value: "Natural" }
+                    - { label: "Navy", value: "Navy" }
+                    - { label: "New Cocoa", value: "New Cocoa" }
+                    - { label: "New Hunter Green", value: "New Hunter Green" }
+                    - { label: "New Pink Gravel", value: "New Pink Gravel" }
+                    - { label: "New Purple Storm", value: "New Purple Storm" }
+                    - { label: "New Vintage Denim", value: "New Vintage Denim" }
+                    - { label: "New Vintage Red", value: "New Vintage Red" }
+                    - { label: "Ocean Blue", value: "Ocean Blue" }
+                    - { label: "Olive", value: "Olive" }
+                    - { label: "Orange", value: "Orange" }
+                    - { label: "Orchid", value: "Orchid" }
+                    - { label: "Oxblood Black", value: "Oxblood Black" }
+                    - { label: "Peach", value: "Peach" }
+                    - { label: "Pebble Brown", value: "Pebble Brown" }
+                    - { label: "Pine", value: "Pine" }
+                    - { label: "Pink", value: "Pink" }
+                    - { label: "Poppy", value: "Poppy" }
+                    - { label: "Red", value: "Red" }
+                    - { label: "Royal Purple", value: "Royal Purple" }
+                    - { label: "Rust", value: "Rust" }
+                    - { label: "Sage", value: "Sage" }
+                    - { label: "Sand Dune", value: "Sand Dune" }
+                    - { label: "Silver", value: "Silver" }
+                    - { label: "Slate", value: "Slate" }
+                    - { label: "Soft Cream", value: "Soft Cream" }
+                    - { label: "Soft Pink", value: "Soft Pink" }
+                    - { label: "Spring Green", value: "Spring Green" }
+                    - { label: "Steel Blue", value: "Steel Blue" }
+                    - { label: "Storm", value: "Storm" }
+                    - { label: "Strobe", value: "Strobe" }
+                    - { label: "Sunset", value: "Sunset" }
+                    - { label: "Synthetic Green", value: "Synthetic Green" }
+                    - { label: "Tan", value: "Tan" }
+                    - { label: "Teal", value: "Teal" }
+                    - { label: "Team Navy", value: "Team Navy" }
+                    - { label: "Team Purple", value: "Team Purple" }
+                    - { label: "Terracotta", value: "Terracotta" }
+                    - { label: "Thyme", value: "Thyme" }
+                    - { label: "Toast", value: "Toast" }
+                    - { label: "True Royal", value: "True Royal" }
+                    - { label: "Turquoise", value: "Turquoise" }
+                    - { label: "Vintage Black", value: "Vintage Black" }
+                    - { label: "Vintage Brown", value: "Vintage Brown" }
+                    - { label: "Vintage Navy", value: "Vintage Navy" }
+                    - { label: "Vintage White", value: "Vintage White" }
+                    - { label: "White", value: "White" }
+                    - { label: "Yellow", value: "Yellow" }
 
+  - name: legal
+    label: Legal Pages
+    files:
+      - label: Terms of Use
+        name: terms
+        file: legal/terms-of-use.html
+        fields:
+          - label: Body
+            name: body
+            widget: markdown
 
-- name: legal
-  label: Legal Pages
-  files:
-  - label: Terms of Use
-    name: terms
-    file: legal/terms-of-use.html
-    fields:
-    - label: Body
-      name: body
-      widget: markdown
-      
-- name: promos
+  - name: promos
     label: "Promo Codes"
     label_singular: "Promo Code"
     folder: "data/discount_requests"
     create: true
     extension: "md"
     format: "frontmatter"
-    slug: "{{code}}"                # filename becomes the code, e.g., SUMMER10.md
+    slug: "{{code}}"
     identifier_field: "code"
     summary: "{{code}} — {{amount}}% ({{status}})"
     editor:
-      preview: false                # data-only; no site preview needed
+      preview: false
     sortable_fields: ["code", "status", "amount", "starts", "expires"]
     fields:
       - label: "Code"
@@ -703,19 +704,12 @@ collections:
         name: "emails"
         widget: "list"
         required: false
-        field:
-          label: "Email"
-          name: "email"
-          widget: "string"
+        hint: "One email per line"
       - label: "Restrict to Domains"
         name: "allowedDomains"
         widget: "list"
         required: false
-        field:
-          label: "Domain"
-          name: "domain"
-          widget: "string"
-          hint: "e.g., company.com"
+        hint: "One domain per line, e.g., company.com"
       - label: "Internal Notes"
         name: "body"
         widget: "markdown"
