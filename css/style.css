@@ -345,3 +345,24 @@ footer a {
 .floating-cart.hidden {
   display: none;
 }
+
+/* Uniform product thumbnails — no cropping */
+.products .product > img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 1;     /* all tiles are squares; change to 4/5 if you prefer */
+  object-fit: contain;      /* show full art, potentially letterboxed */
+  background: #fff;         /* behind transparent PNGs */
+}
+
+/* (Optional but nice) ensure title row height feels consistent */
+.products .product .product-details {
+  padding: 12px 14px;
+  min-height: 56px;         /* anchors title area */
+  display: flex;
+  align-items: center;
+}
+.products .product .product-details h3 {
+  margin: 0;
+}
+
