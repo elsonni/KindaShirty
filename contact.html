@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Contact Us | KindaShirty</title>
+  <link rel="stylesheet" href="/css/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&family=Open+Sans&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <!-- ✅ Header include (placed early in body) -->
+  <div data-include="/partials/header.html"></div>
+
+  <main>
+    <section class="section contact-form">
+      <h2>Get in Touch</h2>
+      <form id="contactForm">
+        <label for="name">Name</label>
+        <input type="text" name="name" id="name" required />
+
+        <label for="email">Email</label>
+        <input type="email" name="email" id="email" required />
+
+        <label for="subject">Subject</label>
+        <input type="text" name="subject" id="subject" />
+
+        <label for="message">Message</label>
+        <textarea name="message" id="message" rows="6" required></textarea>
+
+        <button type="submit" class="button">Send Message</button>
+      </form>
+      <div id="formStatus" style="margin-top: 1rem; font-weight: bold;"></div>
+    </section>
+  </main>
+
+  <!-- ✅ Footer include -->
+  <div data-include="/partials/footer.html"></div>
+
+  <!-- ✅ Script loader using type="module" -->
+  <script src="/js/site.js" defer></script>
+
+  <!-- ✅ Contact form logic -->
+  <script>
+    document.getElementById('contactForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const form = e.target;
+      const data = {
+        name: form.name.value.trim(),
+        email: form.email.value.trim(),
+        subject: form.subject.value.trim(),
+        message: form.message.value.trim(),
+      };
+
+      const statusEl = document.getElementById('formStatus');
+      statusEl.textContent = 'Sending...';
+
+      try {
+        const response = await fetch('/.netlify/functions/send-contact-email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          statusEl.textContent = 'Thank you! Your message has been sent.';
+          form.reset();
+        } else {
+          statusEl.textContent = result.error || 'Something went wrong. Please try again.';
+        }
+      } catch (err) {
+        statusEl.textContent = 'Error sending message. Please try again later.';
+        console.error(err);
+      }
+    });
+  </script>
+  <div data-include="/partials/scripts.html"></div>
+</body>
+</html>
