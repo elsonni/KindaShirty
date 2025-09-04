@@ -34,7 +34,6 @@ async function loadColors() {
     if (!res.ok) throw new Error(String(res.status));
     const json = await res.json();
 
-    // Accept either { colors:[{name,hex}...] } or a flat map { "Name":"#RRGGBB", ... }
     if (Array.isArray(json.colors)) {
       COLORS = Object.fromEntries(
         json.colors
@@ -82,6 +81,41 @@ function colorSlug(name) {
 }
 
 /* ------------------------------- theme loader ------------------------------ */
+// NEW: small helpers to avoid duplication
+function normalizeProduct(product) {
+  const sizes = Array.isArray(product.sizes)
+    ? product.sizes
+    : Object.entries(product.sizes || {}).map(([size, price]) => ({
+        size: String(size).toUpperCase(),
+        price: String(price).startsWith('$') ? String(price) : `$${price}`
+      }));
+
+  const colors = Array.isArray(product.colors)
+    ? product.colors
+        .map(c => (typeof c === 'string' ? c : c?.color || ''))
+        .map(s => String(s).trim())
+        .filter(Boolean)
+    : ['Black'];
+
+  return {
+    name:  product.name,
+    image: product.image,
+    alt:   product.alt,
+    sizes,
+    colors
+  };
+}
+function renderProductCard(container, product) {
+  const article = document.createElement('article');
+  article.className = 'product';
+  article.dataset.product = JSON.stringify(product);
+  article.innerHTML = `
+    <img src="${product.image}" alt="${product.alt || product.name || ''}">
+    <div class="product-details"><h3>${product.name}</h3></div>
+  `;
+  container.appendChild(article);
+}
+
 async function initTheme() {
   const themeSection = document.querySelector('[data-theme]');
   if (!themeSection) return;
@@ -89,47 +123,35 @@ async function initTheme() {
   if (!container) return;
 
   const themeKey = themeSection.dataset.theme;
-  const dataPath = `/data/${themeKey}.json`;
 
   try {
-    const res = await fetch(dataPath);
+    if (themeKey === 'new_arrivals') {
+      // Server-driven rotation via Netlify Function
+      const sources = (themeSection.dataset.sources || 'arcade,4th_of_july,pop_culture').trim();
+      const count   = parseInt(themeSection.dataset.count || '9', 10);
+      const seed    = new Date().toISOString().slice(0, 10); // daily-stable
+
+      const url = `/.netlify/functions/new-arrivals?sources=${encodeURIComponent(sources)}&count=${count}&seed=${encodeURIComponent(seed)}`;
+      const res = await fetch(url, { credentials: 'same-origin' });
+      const data = await res.json();
+
+      (data.products || []).forEach(p => renderProductCard(container, normalizeProduct(p)));
+      initializeModals();
+      return;
+    }
+
+    // Default: single-theme JSON (original behavior)
+    const dataPath = `/data/${themeKey}.json`;
+    const res = await fetch(dataPath, { credentials: 'same-origin' });
     const data = await res.json();
 
     (data.products || []).forEach(product => {
-      const sizes = Array.isArray(product.sizes)
-        ? product.sizes
-        : Object.entries(product.sizes || {}).map(([size, price]) => ({
-            size: String(size).toUpperCase(),
-            price: String(price).startsWith('$') ? String(price) : `$${price}`
-          }));
-
-      // Ensure colors is an array of clean strings (Decap may output objects)
-      const colors = Array.isArray(product.colors)
-        ? product.colors
-            .map(c => (typeof c === 'string' ? c : c?.color || ''))
-            .map(s => String(s).trim())
-            .filter(Boolean)
-        : ['Black'];
-
-      const article = document.createElement('article');
-      article.className = 'product';
-      article.dataset.product = JSON.stringify({
-        name: product.name,
-        image: product.image,
-        alt: product.alt,
-        sizes,
-        colors
-      });
-      article.innerHTML = `
-        <img src="${product.image}" alt="${product.alt}">
-        <div class="product-details"><h3>${product.name}</h3></div>
-      `;
-      container.appendChild(article);
+      renderProductCard(container, normalizeProduct(product));
     });
 
     initializeModals(); // after product cards exist
   } catch (err) {
-    console.error(`Error loading ${dataPath}`, err);
+    console.error('Theme init failed:', err);
   }
 }
 
@@ -232,13 +254,12 @@ function initializeModals() {
 
   function openModal() {
     lastActive = document.activeElement;
-    modal.classList.add('is-open');       // CSS hook for uniform styling
-    modal.style.display = 'block';        // backward compatible
+    modal.classList.add('is-open');
+    modal.style.display = 'block';
     modal.setAttribute('data-open','1');
     modal.setAttribute('aria-hidden','false');
-    document.body.style.overflow = 'hidden'; // lock background scroll
+    document.body.style.overflow = 'hidden';
 
-    // Scoped listeners (added per open)
     keydownHandler = (e) => {
       if (e.key === 'Escape') { e.preventDefault(); return closeModal(); }
       if (e.key === 'Tab') trapFocus(e);
@@ -248,7 +269,6 @@ function initializeModals() {
     backdropHandler = (e) => { if (e.target === modal) closeModal(); };
     modal.addEventListener('click', backdropHandler, { passive: true });
 
-    // Move focus to the close button for a11y
     closeBtn.focus();
   }
 
@@ -257,7 +277,7 @@ function initializeModals() {
     modal.style.display = 'none';
     modal.removeAttribute('data-open');
     modal.setAttribute('aria-hidden','true');
-    document.body.style.overflow = '';     // restore scroll
+    document.body.style.overflow = '';
 
     if (keydownHandler) document.removeEventListener('keydown', keydownHandler);
     if (backdropHandler) modal.removeEventListener('click', backdropHandler);
