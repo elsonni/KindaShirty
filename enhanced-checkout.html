@@ -261,6 +261,7 @@
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Totals calculation failed');
 
+
       return data;
     }
 
@@ -465,6 +466,7 @@
           },
           shipping,
           total: Number(parseFloat(total).toFixed(2)),
+
           estimatedTax: Number(parseFloat(estimatedTax).toFixed(2)),
           promoPercent: promoDiscountRate || 0,
           promoCode: appliedPromo || null
