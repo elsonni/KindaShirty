@@ -140,7 +140,7 @@ async function initTheme() {
     if (themeKey === 'new_arrivals') {
       // --- Fix B: Server-driven rotation via Netlify Function ---
       const sources = (themeSection.dataset.sources || 'arcade,4th_of_july,pop_culture').trim();
-      const count   = parseInt(themeSection.dataset.count || '6', 10);
+      const count   = parseInt(themeSection.dataset.count || '8', 10);
       // --- Fix A: Daily seed by local timezone (change TZ if desired) ---
       const seed    = dailySeedInTZ('America/Los_Angeles');
 
