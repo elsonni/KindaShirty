@@ -17,9 +17,12 @@
       --gray-border: #e1e4e8;
       --font-primary: 'Inter', sans-serif;
       --ok: #16a34a;
+      /* NEW: default header height (overridden by JS after includes load) */
+      --header-height: 64px;
     }
+
     body { font-family: var(--font-primary); background: var(--gray-light); color: #111; margin: 0; }
-    .checkout-container { max-width: 800px; margin: 4rem auto; padding: 2rem; background: #fff; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+    .checkout-container { max-width: 980px; margin: 4rem auto; padding: 2rem; background: #fff; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
     .checkout-container h1, h2 { font-weight: 700; color: #111; }
     .checkout-container label { display: block; margin-top: 1rem; font-weight: 600; }
     .checkout-container input, .checkout-container select {
@@ -27,7 +30,7 @@
       border-radius: 6px; font-family: var(--font-primary); font-size: 1.05rem;
     }
 
-    /* existing summary styling for mobile */
+    /* mobile summary */
     #summary { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #ddd; }
     #summary p { margin: 0.25rem 0; }
     #card-container { margin-top: 2rem; }
@@ -48,7 +51,7 @@
 
     .checkout-container input.invalid, .checkout-container select.invalid { border-color: #ef4444 !important; }
 
-    /* === Progress overlay with step badges (unchanged) === */
+    /* Progress overlay */
     .busy-overlay { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(17,17,17,0.45); z-index: 9999; }
     .busy-overlay[hidden] { display: none !important; }
     .busy-box { width: min(92vw, 520px); background: #fff; padding: 16px 18px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,.18); }
@@ -63,20 +66,20 @@
     .step .txt { color: #111; }
     @keyframes pulse { 0%,100%{ transform: scale(1) } 50%{ transform: scale(1.2) } }
 
-    /* === NEW: desktop two-column grid + sticky summary === */
+    /* Desktop two-column grid + sticky summary */
     @media (min-width: 900px) {
       #checkout-form.checkout-grid {
         display: grid;
-        grid-template-columns: minmax(0, 1fr) 360px; /* left | right */
+        grid-template-columns: minmax(0, 1fr) 360px;
         gap: 24px 28px;
         align-items: start;
       }
-      #checkout-form.checkout-grid > .checkout-main { grid-column: 1; }
+      #checkout-form.checkout-grid > .checkout-main { grid-column: 1; min-width: 0; }
       #checkout-form.checkout-grid > #summary {
         grid-column: 2;
         position: sticky;
-        top: 14px;
-        /* card look overrides the mobile divider */
+        /* ✅ offset sticky by header height so it never tucks under the header */
+        top: calc(var(--header-height, 64px) + 14px);
         margin-top: 0;
         border-top: 0;
         background: #fff;
@@ -84,12 +87,12 @@
         border-radius: 10px;
         padding: 16px;
         box-shadow: 0 2px 10px rgba(0,0,0,.04);
+        align-self: start;
       }
     }
   </style>
 </head>
 <body>
-  <!-- ✅ Header include placeholder -->
   <div data-include="/partials/header.html"></div>
 
   <div style="text-align:center; margin-top:2rem;">
@@ -99,9 +102,7 @@
   <div class="checkout-container">
     <h1 class="page-title">Secure Checkout</h1>
 
-    <!-- grid wrapper -->
     <form id="checkout-form" class="checkout-grid" novalidate>
-      <!-- left column -->
       <div class="checkout-main">
         <h2>Contact</h2>
         <label>Email
@@ -158,11 +159,9 @@
         <div id="status"></div>
       </div>
 
-      <!-- right column -->
       <div id="summary">
         <p>Subtotal: <strong id="subtotal">$0.00</strong></p>
 
-        <!-- Promo UI -->
         <div class="promo-row">
           <input id="promoInput" type="text" placeholder="Promo code (optional)" aria-label="Promo code">
           <button type="button" id="applyPromo" style="padding:.6rem 1rem;">Apply</button>
@@ -192,7 +191,6 @@
     </div>
   </div>
 
-  <!-- Progress overlay (unchanged) -->
   <div id="busy" class="busy-overlay" aria-live="polite" aria-atomic="true" hidden>
     <div class="busy-box">
       <div class="busy-head">
@@ -208,38 +206,24 @@
     </div>
   </div>
 
-  <!-- ✅ Footer & shared scripts includes -->
   <div data-include="/partials/footer.html"></div>
   <div data-include="/partials/scripts.html"></div>
 
-  <!-- Your existing checkout script (unchanged logic) -->
   <script>
-  // Measure header once and expose it as a CSS var for the sticky offset
-  (function setHeaderHeightVar() {
-    const h = document.querySelector('header');
-    const px = (h?.offsetHeight || 64) + 'px';
-    document.documentElement.style.setProperty('--header-height', px);
-  })();
-</script>
-
-	<script>
-    // --- Square + config ---
+    /* --- Square + checkout logic (unchanged except for the typo fix) --- */
     const SQUARE_APP_ID = 'sq0idp-48V9iV3gOtsCmqKaVnAQGg';
     const SQUARE_LOCATION_ID = 'L2D48TBFREJVA';
 
-    // --- Cart helpers ---
     const cart = JSON.parse(localStorage.getItem('cart') || '[]');
     function calculateLocalSubtotal() {
       return cart.reduce((sum, item) => sum + parseFloat(String(item.price).replace('$','')) * (parseInt(item.quantity) || 0), 0);
     }
     const formatMoney = n => `$${(Number(n)||0).toFixed(2)}`;
 
-    // --- Promo state ---
     let appliedPromo = null;
-    let promoDiscountRate = 0; // percent
+    let promoDiscountRate = 0;
     let lastStateInput = '', lastZipInput = '';
 
-    // --- Square Web Payments: card form ---
     let payments, card;
     let cardReady = false;
 
@@ -248,7 +232,6 @@
         payments = Square.payments(SQUARE_APP_ID, SQUARE_LOCATION_ID);
         card = await payments.card();
         await card.attach('#card-container');
-        // mark card as ready, re-sync button state
         cardReady = true;
         syncValidity();
       } catch (err) {
@@ -262,7 +245,6 @@
       throw new Error(result.errors?.[0]?.message || 'Card error');
     }
 
-    // --- Live totals via Netlify calc function (Option B) ---
     async function fetchTotalsFromServer(state, email) {
       const body = JSON.stringify({
         cart,
@@ -278,7 +260,8 @@
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Totals calculation failed');
-      return data; // {isCA, itemsGross, discount, shipping, tax, total}
+
+      return data;
     }
 
     async function updateSummaryDisplay(state = '', zip = '') {
@@ -302,7 +285,6 @@
         }
       }
 
-      // Render
       document.getElementById('subtotal').textContent      = formatMoney(itemsGross);
       document.getElementById('tax').textContent           = formatMoney(tax);
       document.getElementById('shipping').textContent      = formatMoney(shipping);
@@ -321,25 +303,28 @@
 
       const note = document.getElementById('tax-note');
       if (note) {
-        if (!hasAddress) note.textContent = 'Enter your state & ZIP to see tax and shipping.';
-        else note textContent = (window.__lastCalc?.isCA ? 'CA sales tax applies (calculated by Square).' : 'No sales tax for this destination.');
+        if (!hasAddress) {
+          note.textContent = 'Enter your state & ZIP to see tax and shipping.';
+        } else {
+          /* ✅ fixed the missing dot */
+          note.textContent = (window.__lastCalc?.isCA
+            ? 'CA sales tax applies (calculated by Square).'
+            : 'No sales tax for this destination.');
+        }
       }
 
       return { estimatedTax: tax, total, shipping, discount };
     }
 
-    // --- Promo code (validate via server and refresh totals) ---
     document.getElementById('applyPromo')?.addEventListener('click', async () => {
       const promoCode = document.getElementById('promoInput')?.value.trim();
       const statusEl  = document.getElementById('promoStatus');
       const email = document.querySelector('input[name="email"]')?.value.trim().toLowerCase();
-      const stateInput = document.querySelector('[name="state"]')?.value.trim(); // works for select
+      const stateInput = document.querySelector('[name="state"]')?.value.trim();
       const zipInput   = document.querySelector('input[name="zip"]')?.value.trim();
 
       if (!promoCode) { statusEl.textContent = 'Please enter a promo code.'; return; }
-      if (!email || !stateInput || !zipInput) {
-        statusEl.textContent = 'Enter email, state, and ZIP before applying a code.'; return;
-      }
+      if (!email || !stateInput || !zipInput) { statusEl.textContent = 'Enter email, state, and ZIP before applying a code.'; return; }
 
       lastStateInput = stateInput; lastZipInput = zipInput;
 
@@ -363,7 +348,6 @@
       await updateSummaryDisplay(lastStateInput, lastZipInput);
     });
 
-    /* ---------- Progress helpers & step badges ---------- */
     const STEP_FLOW = ['validate','tokenize','submit','done'];
     let processingPayment = false;
 
@@ -398,11 +382,9 @@
       });
     }
 
-    /* ---------- Modern form enhancements ---------- */
     const formEl = document.getElementById('checkout-form');
     const payBtn = document.getElementById('pay-button');
 
-    // Phone and ZIP light formatting (US-centric)
     const phoneEl = formEl.elements['phone'];
     if (phoneEl) {
       phoneEl.addEventListener('input', () => {
@@ -419,7 +401,6 @@
       });
     }
 
-    // Realtime validity -> style + Pay button gating
     function syncValidity() {
       [...formEl.elements].forEach(el => {
         if (el.willValidate && !el.disabled) {
@@ -431,16 +412,14 @@
     formEl.addEventListener('input', syncValidity);
     formEl.addEventListener('change', syncValidity);
 
-    // --- Pay button ---
     document.getElementById('pay-button').addEventListener('click', async () => {
-      if (processingPayment) return;           // ✅ prevent double click
+      if (processingPayment) return;
       processingPayment = true;
 
       const form = document.getElementById('checkout-form');
       const statusEl = document.getElementById('status');
       statusEl.textContent = '';
 
-      // simple validation (final check)
       form.querySelectorAll('input, select').forEach(input => input.style.borderColor = '');
       let firstError = null;
       ['name','email','address','city','state','zip'].forEach(field => {
@@ -458,7 +437,7 @@
         return;
       }
 
-      setBusy(true);                    // show overlay + set first step
+      setBusy(true);
       setStep('validate');
 
       const formData = Object.fromEntries(new FormData(form).entries());
@@ -484,7 +463,6 @@
             address2: formData.address2,
             phone: formData.phone
           },
-          // mirror preview inputs so server can apply the same logic
           shipping,
           total: Number(parseFloat(total).toFixed(2)),
           estimatedTax: Number(parseFloat(estimatedTax).toFixed(2)),
@@ -502,7 +480,6 @@
         if (res.ok && result.success) {
           setStep('done');
 
-          // Store summary for thank-you page
           const checkoutResult = {
             referenceId: result.referenceId,
             orderId: result.orderId,
@@ -516,7 +493,6 @@
           };
           localStorage.setItem('checkoutResult', JSON.stringify(checkoutResult));
 
-          // Clear cart and go
           localStorage.removeItem('cart');
           window.location.href = '/thank-you.html';
         } else {
@@ -524,7 +500,7 @@
         }
       } catch (err) {
         setBusy(false);
-        processingPayment = false;      // allow retry
+        processingPayment = false;
         syncValidity();
         const statusEl = document.getElementById('status');
         statusEl.textContent = err.message;
@@ -532,9 +508,8 @@
       }
     });
 
-    // --- Boot ---
     document.addEventListener('DOMContentLoaded', () => {
-      const stateEl = document.querySelector('[name="state"]'); // works with select
+      const stateEl = document.querySelector('[name="state"]');
       const zipInput   = document.querySelector('input[name="zip"]');
 
       async function refreshSummary() {
@@ -542,7 +517,7 @@
       }
       if (stateEl) stateEl.addEventListener('input', refreshSummary);
       if (stateEl) stateEl.addEventListener('change', refreshSummary);
-      if (zipInput)   zipInput.addEventListener('input', refreshSummary);
+      if (zipInput) zipInput.addEventListener('input', refreshSummary);
 
       refreshSummary();
       initializeCardForm();
@@ -550,7 +525,25 @@
     });
   </script>
 
-  <!-- ✅ Consolidated loader: fetches and injects the header/footer partials -->
+  <!-- Shared loader (includes header/footer + product modal helpers) -->
   <script src="/js/site.js" defer></script>
+
+  <!-- NEW: set --header-height AFTER header include is injected -->
+  <script>
+    (function ensureStickyOffset(){
+      function setVar(){
+        const h = document.querySelector('header');
+        if (!h) return false;
+        document.documentElement.style.setProperty('--header-height', h.offsetHeight + 'px');
+        return true;
+      }
+      if (!setVar()) {
+        const obs = new MutationObserver(() => { if (setVar()) obs.disconnect(); });
+        obs.observe(document.documentElement, { childList: true, subtree: true });
+        // safety re-check
+        window.addEventListener('load', setVar, { once: true });
+      }
+    })();
+  </script>
 </body>
 </html>
