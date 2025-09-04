@@ -206,10 +206,7 @@
     </div>
   </div>
 
-  <div data-include="/partials/footer.html"></div>
-  <div data-include="/partials/scripts.html"></div>
-
-  <script>
+	<script>
     /* --- Square + checkout logic (unchanged except for the typo fix) --- */
     const SQUARE_APP_ID = 'sq0idp-48V9iV3gOtsCmqKaVnAQGg';
     const SQUARE_LOCATION_ID = 'L2D48TBFREJVA';
@@ -526,7 +523,7 @@
   </script>
 
   <!-- Shared loader (includes header/footer + product modal helpers) -->
-  <script src="/js/site.js" defer></script>
+ <script defer src="/js/site.js"></script>
 
   <!-- NEW: set --header-height AFTER header include is injected -->
   <script>
@@ -545,5 +542,7 @@
       }
     })();
   </script>
+	<div data-include="/partials/footer.html"></div>
+	<div data-include="/partials/scripts.html"></div>
 </body>
 </html>

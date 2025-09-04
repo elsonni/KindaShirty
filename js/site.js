@@ -1,5 +1,24 @@
 /* /js/site.js — consolidated (updated with local‑TZ seed + server-driven New Arrivals) */
-
+<script defer>
+(function () {
+  async function includePartials() {
+    const nodes = document.querySelectorAll('[data-include]');
+    await Promise.all(Array.from(nodes).map(async (n) => {
+      const path = n.getAttribute('data-include');
+      const res = await fetch(path, { cache: 'force-cache' });
+      if (!res.ok) return;
+      n.outerHTML = await res.text();
+    }));
+    // Re-dispatch DOMContentLoaded so components that depend on the includes can init.
+    document.dispatchEvent(new Event('ks:partials:ready'));
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', includePartials);
+  } else {
+    includePartials();
+  }
+})();
+</script>
 /* ----------------------------- includes loader ----------------------------- */
 async function loadIncludes() {
   const nodes = Array.from(document.querySelectorAll('[data-include]'));
