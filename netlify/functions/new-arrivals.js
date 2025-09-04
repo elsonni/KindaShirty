@@ -62,7 +62,7 @@ function normalizeProduct(product) {
 exports.handler = async (event) => {
   try {
     const qs      = event.queryStringParameters || {};
-    const count   = Math.max(1, Math.min(50, parseInt(qs.count || '9', 10)));
+    const count   = Math.max(1, Math.min(50, parseInt(qs.count || '6', 10)));
     const sources = String(qs.sources || 'arcade,4th_of_july,pop_culture')
                       .split(',').map(s => s.trim()).filter(Boolean);
     const seed    = String(qs.seed || new Date().toISOString().slice(0, 10)); // YYYY-MM-DD
