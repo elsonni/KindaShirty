@@ -1,4 +1,4 @@
-/* /js/site.js — consolidated (updated) */
+/* /js/site.js — consolidated (updated with local‑TZ seed + server-driven New Arrivals) */
 
 /* ----------------------------- includes loader ----------------------------- */
 async function loadIncludes() {
@@ -34,6 +34,7 @@ async function loadColors() {
     if (!res.ok) throw new Error(String(res.status));
     const json = await res.json();
 
+    // Accept either { colors:[{name,hex}...] } or a flat map { "Name":"#RRGGBB", ... }
     if (Array.isArray(json.colors)) {
       COLORS = Object.fromEntries(
         json.colors
@@ -80,8 +81,19 @@ function colorSlug(name) {
   return String(name).toLowerCase().replace(/\s+/g, '-');
 }
 
+/* -------------------------- local‑timezone daily seed ---------------------- */
+function dailySeedInTZ(tz = 'America/Los_Angeles') {
+  const parts = new Intl.DateTimeFormat('en-CA', {
+    timeZone: tz, year: 'numeric', month: '2-digit', day: '2-digit'
+  }).formatToParts(new Date());
+  const y = parts.find(p => p.type === 'year').value;
+  const m = parts.find(p => p.type === 'month').value;
+  const d = parts.find(p => p.type === 'day').value;
+  return `${y}-${m}-${d}-${tz}`; // e.g., 2025-09-04-America/Los_Angeles
+}
+
 /* ------------------------------- theme loader ------------------------------ */
-// NEW: small helpers to avoid duplication
+// helpers to normalize & render cards (used by both static JSON and function)
 function normalizeProduct(product) {
   const sizes = Array.isArray(product.sizes)
     ? product.sizes
@@ -126,30 +138,33 @@ async function initTheme() {
 
   try {
     if (themeKey === 'new_arrivals') {
-      // Server-driven rotation via Netlify Function
+      // --- Fix B: Server-driven rotation via Netlify Function ---
       const sources = (themeSection.dataset.sources || 'arcade,4th_of_july,pop_culture').trim();
-      const count   = parseInt(themeSection.dataset.count || '8', 10);
-      const seed    = new Date().toISOString().slice(0, 10); // daily-stable
+      const count   = parseInt(themeSection.dataset.count || '6', 10);
+      // --- Fix A: Daily seed by local timezone (change TZ if desired) ---
+      const seed    = dailySeedInTZ('America/Los_Angeles');
 
       const url = `/.netlify/functions/new-arrivals?sources=${encodeURIComponent(sources)}&count=${count}&seed=${encodeURIComponent(seed)}`;
       const res = await fetch(url, { credentials: 'same-origin' });
+      if (!res.ok) throw new Error(`new-arrivals -> ${res.status}`);
       const data = await res.json();
 
       (data.products || []).forEach(p => renderProductCard(container, normalizeProduct(p)));
-      initializeModals();
+      initializeModals?.();
       return;
     }
 
     // Default: single-theme JSON (original behavior)
     const dataPath = `/data/${themeKey}.json`;
     const res = await fetch(dataPath, { credentials: 'same-origin' });
+    if (!res.ok) throw new Error(`${dataPath} -> ${res.status}`);
     const data = await res.json();
 
     (data.products || []).forEach(product => {
       renderProductCard(container, normalizeProduct(product));
     });
 
-    initializeModals(); // after product cards exist
+    initializeModals?.(); // after product cards exist
   } catch (err) {
     console.error('Theme init failed:', err);
   }
@@ -254,12 +269,13 @@ function initializeModals() {
 
   function openModal() {
     lastActive = document.activeElement;
-    modal.classList.add('is-open');
-    modal.style.display = 'block';
+    modal.classList.add('is-open');       // CSS hook for uniform styling
+    modal.style.display = 'block';        // backward compatible
     modal.setAttribute('data-open','1');
     modal.setAttribute('aria-hidden','false');
-    document.body.style.overflow = 'hidden';
+    document.body.style.overflow = 'hidden'; // lock background scroll
 
+    // Scoped listeners (added per open)
     keydownHandler = (e) => {
       if (e.key === 'Escape') { e.preventDefault(); return closeModal(); }
       if (e.key === 'Tab') trapFocus(e);
@@ -269,6 +285,7 @@ function initializeModals() {
     backdropHandler = (e) => { if (e.target === modal) closeModal(); };
     modal.addEventListener('click', backdropHandler, { passive: true });
 
+    // Move focus to the close button for a11y
     closeBtn.focus();
   }
 
@@ -277,7 +294,7 @@ function initializeModals() {
     modal.style.display = 'none';
     modal.removeAttribute('data-open');
     modal.setAttribute('aria-hidden','true');
-    document.body.style.overflow = '';
+    document.body.style.overflow = '';     // restore scroll
 
     if (keydownHandler) document.removeEventListener('keydown', keydownHandler);
     if (backdropHandler) modal.removeEventListener('click', backdropHandler);
@@ -330,7 +347,7 @@ function addToCart() {
   localStorage.setItem('cart', JSON.stringify(cart));
 
   alert('Added to cart!');
-  const modal = byId('productModal'); 
+  const modal = byId('productModal');
   if (modal) {
     modal.classList.remove('is-open');
     modal.style.display = 'none';
