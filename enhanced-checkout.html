@@ -214,6 +214,15 @@
 
   <!-- Your existing checkout script (unchanged logic) -->
   <script>
+  // Measure header once and expose it as a CSS var for the sticky offset
+  (function setHeaderHeightVar() {
+    const h = document.querySelector('header');
+    const px = (h?.offsetHeight || 64) + 'px';
+    document.documentElement.style.setProperty('--header-height', px);
+  })();
+</script>
+
+	<script>
     // --- Square + config ---
     const SQUARE_APP_ID = 'sq0idp-48V9iV3gOtsCmqKaVnAQGg';
     const SQUARE_LOCATION_ID = 'L2D48TBFREJVA';
