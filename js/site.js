@@ -128,7 +128,7 @@ async function initTheme() {
     if (themeKey === 'new_arrivals') {
       // Server-driven rotation via Netlify Function
       const sources = (themeSection.dataset.sources || 'arcade,4th_of_july,pop_culture').trim();
-      const count   = parseInt(themeSection.dataset.count || '6', 10);
+      const count   = parseInt(themeSection.dataset.count || '8', 10);
       const seed    = new Date().toISOString().slice(0, 10); // daily-stable
 
       const url = `/.netlify/functions/new-arrivals?sources=${encodeURIComponent(sources)}&count=${count}&seed=${encodeURIComponent(seed)}`;
