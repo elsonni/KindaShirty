@@ -161,16 +161,11 @@
         <small style="color:#666;">Standard (10–14 Days)<br/>Time includes creating + shipping combined.</small>
 
 		<!-- Local Pickup (removes shipping) -->
-		<div class="pickup-row"
-			 style="display:flex;align-items:center;justify-content:flex-start;gap:.5rem;margin:.5rem 0 .25rem;text-align:left;">
-		  <input type="checkbox" id="pickupToggle" style="margin:0;flex:0 0 auto;">
-		  <label for="pickupToggle" style="display:inline-block;margin:0;flex:1 1 auto;font-weight:600;">
-			Local Pickup — remove shipping
-		  </label>
+		<div class="pickup-row">
+		  <input type="checkbox" id="pickupToggle">
+		  <label for="pickupToggle">Local Pickup — remove shipping</label>
 		</div>
-		<small id="pickupHelp" style="color:#666;display:none;">Shipping removed. We’ll email pickup details after checkout.</small>
-
-
+		<small id="pickupHelp" style="color:#666; display:none;">Shipping removed. We’ll email pickup details after checkout.</small>
 
         <p><strong>Total: <span id="total">$0.00</span></strong></p>
         <!-- pay-section moves to here on mobile -->
