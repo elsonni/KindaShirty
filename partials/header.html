@@ -1,14 +1,26 @@
 <header>
   <div style="display: flex; align-items: center; justify-content: space-between; gap: 2rem; flex-wrap: wrap; position: relative;">
+    <!-- Brand -->
     <div style="display: flex; align-items: center; gap: 1rem;">
       <img src="/img/logos/MainLogo.png" alt="KindaShirty Logo" style="height: 60px;">
       <h1 style="margin:0;"><a href="/" style="text-decoration: none; color: inherit;">KindaShirty</a></h1>
     </div>
 
-    <!-- Hamburger toggle button for mobile -->
-    <button id="hamburger" aria-label="Menu" aria-controls="mobileNav" aria-expanded="false">☰</button>
+    <!-- Mobile actions: hamburger + cart icon (mobile only via CSS) -->
+    <div class="mobile-actions">
+      <button id="hamburger" aria-label="Menu" aria-controls="mobileNav" aria-expanded="false">☰</button>
 
-    <!-- Desktop navigation (unchanged; inline display:flex retained for desktop) -->
+      <a href="/cart.html" class="mobile-cart-link" aria-label="View your cart" style="position:relative">
+        <!-- cart icon -->
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M7 18c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zm10 0c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zM7.107 14h9.986c.771 0 1.451-.442 1.793-1.14l3.103-6.342a1 1 0 0 0-.9-1.443H6.451L5.724 2.447A1 1 0 0 0 4.75 1.75H1v2h2.597l2.862 9.557A2.004 2.004 0 0 0 7.107 14z"/>
+        </svg>
+        <!-- bubble (data attribute so JS can update both desktop & mobile) -->
+        <span class="cart-bubble" data-cartcount style="display:none">0</span>
+      </a>
+    </div>
+
+    <!-- Desktop navigation (unchanged) -->
     <nav style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: center; position: relative;">
       <div class="dropdown" style="position: relative;">
         <a href="#" class="dropbtn" style="text-decoration: none; color: inherit; padding: 0.75rem 1rem; display: inline-block;">
@@ -38,22 +50,12 @@
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
           <path d="M7 18c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zm10 0c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zM7.107 14h9.986c.771 0 1.451-.442 1.793-1.14l3.103-6.342a1 1 0 0 0-.9-1.443H6.451L5.724 2.447A1 1 0 0 0 4.75 1.75H1v2h2.597l2.862 9.557A2.004 2.004 0 0 0 7.107 14z"/>
         </svg>
-        <span id="cartCount" style="
-          position: absolute;
-          top: -8px;
-          right: -8px;
-          background: red;
-          color: white;
-          font-size: 0.7rem;
-          font-weight: bold;
-          border-radius: 50%;
-          padding: 2px 6px;
-          display: none;
-        ">0</span>
+        <!-- desktop bubble gets the same data attribute (unique id not required) -->
+        <span class="cart-bubble" data-cartcount style="display:none">0</span>
       </a>
     </nav>
 
-    <!-- Mobile navigation drawer -->
+    <!-- Mobile navigation drawer (cart removed per request) -->
     <nav id="mobileNav" class="mobile-nav hidden" aria-hidden="true">
       <a href="/themes/arcade.html">Kinda Gamey</a>
       <a href="/themes/4th-of-july.html">Kinda Patriotic</a>
@@ -61,12 +63,10 @@
       <a href="/#custom">Custom</a>
       <a href="/about.html">About</a>
       <a href="/contact.html">Contact</a>
-      <a href="/cart.html">Cart</a>
     </nav>
   </div>
 </header>
 
 <style>
-  /* Keep desktop dropdown hover behavior */
-  .dropdown:hover .dropdown-content { display: block !important; }
+  .dropdown:hover .dropdown-content { display: block !important; } /* keep desktop hover */
 </style>

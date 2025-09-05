@@ -358,13 +358,15 @@ function addToCart() {
   updateCartCount();
 }
 function updateCartCount() {
-  const el = document.getElementById('cartCount');
   const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-  if (el) {
+  // Support multiple bubbles (desktop + mobile)
+  const els = document.querySelectorAll('[data-cartcount], #cartCount');
+  els.forEach(el => {
     el.textContent = cart.length;
     el.style.display = cart.length > 0 ? 'inline-block' : 'none';
-  }
+  });
 }
+
 window.adjustModalQty = adjustModalQty;
 window.addToCart      = addToCart;
 window.updateCartCount= updateCartCount;

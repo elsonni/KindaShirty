@@ -145,3 +145,26 @@ footer a { color: var(--accent); text-decoration: underline; }
   #themes .products { display: grid !important; overflow: visible !important; scroll-snap-type: none !important; -webkit-overflow-scrolling: auto !important; }
   #themes .product { flex: unset !important; min-width: 0 !important; scroll-snap-align: unset !important; }
 }
+
+/* ===== Mobile navbar cart (mobile only) ===== */
+.mobile-actions { display: none; align-items: center; gap: .5rem; }
+.mobile-cart-link {
+  display: none;                /* shown only on mobile */
+  width: 44px; height: 44px;
+  align-items: center; justify-content: center;
+  color: var(--primary); text-decoration: none;
+  position: relative;
+}
+
+/* small count bubble (re-used for desktop and mobile) */
+.cart-bubble{
+  position: absolute; transform: translate(9px,-8px);
+  background: var(--accent); color:#fff; border-radius: 999px;
+  font-size: 11px; padding: 2px 6px; line-height: 1;
+  min-width: 18px; text-align: center;
+}
+
+@media (max-width: 768px){
+  .mobile-actions { display: flex; margin-left: auto; }
+  .mobile-cart-link { display: inline-flex; }
+}
