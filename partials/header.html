@@ -5,7 +5,7 @@
       <h1 style="margin:0;"><a href="/" style="text-decoration: none; color: inherit;">KindaShirty</a></h1>
     </div>
 
-    <!-- Hamburger toggle button for mobile (ARIA wires added) -->
+    <!-- Hamburger toggle button for mobile -->
     <button id="hamburger" aria-label="Menu" aria-controls="mobileNav" aria-expanded="false">☰</button>
 
     <!-- Desktop navigation (unchanged) -->
@@ -53,7 +53,7 @@
       </a>
     </nav>
 
-    <!-- Mobile navigation drawer (already in your site) -->
+    <!-- Mobile navigation drawer -->
     <nav id="mobileNav" class="mobile-nav hidden" aria-hidden="true">
       <a href="/themes/arcade.html">Kinda Gamey</a>
       <a href="/themes/4th-of-july.html">Kinda Patriotic</a>
@@ -71,18 +71,22 @@
   .dropdown:hover .dropdown-content { display: block !important; }
 </style>
 
-<!-- Tiny script: make the hamburger toggle the existing #mobileNav -->
+<!-- Defensive: wire hamburger even if this partial is injected after DOM load -->
 <script>
 (function () {
-  function init(){
+  function wireHamburger() {
     var btn  = document.getElementById('hamburger');
     var menu = document.getElementById('mobileNav');
-    if(!btn || !menu) return;
+    if (!btn || !menu || btn.dataset.navWired === '1') return;
+    btn.dataset.navWired = '1';
     function open(){ menu.classList.remove('hidden'); btn.setAttribute('aria-expanded','true'); }
     function close(){ menu.classList.add('hidden');    btn.setAttribute('aria-expanded','false'); }
     btn.addEventListener('click', function(){ menu.classList.contains('hidden') ? open() : close(); });
     menu.querySelectorAll('a').forEach(function(a){ a.addEventListener('click', close); });
   }
-  if(document.readyState === 'loading'){ document.addEventListener('DOMContentLoaded', init); } else { init(); }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', wireHamburger);
+  } else { wireHamburger(); }
+  new MutationObserver(wireHamburger).observe(document.body, { childList: true, subtree: true });
 })();
 </script>
