@@ -2,48 +2,33 @@
 <script src="/js/site.js" defer></script>
 
 <script>
-(function(){
-  const ready = (fn) => (document.readyState.match(/loaded|interactive|complete/))
-    ? setTimeout(fn,0) : document.addEventListener('DOMContentLoaded', fn);
+(function () {
+  const onReady = (fn) => (document.readyState === 'loading')
+    ? document.addEventListener('DOMContentLoaded', fn)
+    : fn();
 
-  ready(() => {
-    function initMobileNav(){
-      const btn = document.getElementById('hamburger');
-      const menu = document.getElementById('mobileNav');
-      const overlay = document.getElementById('navOverlay');
-      if(!btn || !menu) return false;
+  function initHamburger() {
+    const btn  = document.getElementById('hamburger');
+    const menu = document.getElementById('mobileNav');
+    if (!btn || !menu) return false;
 
-      const open = () => {
-        menu.classList.remove('hidden');
-        menu.setAttribute('aria-hidden','false');
-        btn.setAttribute('aria-expanded','true');
-        document.body.classList.add('no-scroll');
-        overlay && overlay.classList.remove('hidden');
-      };
-      const close = () => {
-        menu.classList.add('hidden');
-        menu.setAttribute('aria-hidden','true');
-        btn.setAttribute('aria-expanded','false');
-        document.body.classList.remove('no-scroll');
-        overlay && overlay.classList.add('hidden');
-        btn.focus();
-      };
+    const open  = () => { menu.classList.remove('hidden'); btn.setAttribute('aria-expanded','true'); };
+    const close = () => { menu.classList.add('hidden');    btn.setAttribute('aria-expanded','false'); };
 
-      btn.addEventListener('click', () => menu.classList.contains('hidden') ? open() : close());
-      overlay && overlay.addEventListener('click', close);
-      document.addEventListener('keydown', (e) => { if(e.key === 'Escape') close(); });
-      menu.querySelectorAll('a').forEach(a => a.addEventListener('click', close));
-      return true;
-    }
+    btn.addEventListener('click', () => menu.classList.contains('hidden') ? open() : close());
+    menu.querySelectorAll('a').forEach(a => a.addEventListener('click', close));
+    return true;
+  }
 
-    if(!initMobileNav()){
-      // If header is injected later, try again when DOM changes.
-      const obs = new MutationObserver(() => { if(initMobileNav()) obs.disconnect(); });
-      obs.observe(document.body, {childList:true, subtree:true});
-    }
+  onReady(() => {
+    if (initHamburger()) return;
+    // If header is injected later, try again when it appears.
+    const obs = new MutationObserver(() => { if (initHamburger()) obs.disconnect(); });
+    obs.observe(document.body, { childList: true, subtree: true });
   });
 })();
 </script>
+
 
 
 <!-- Conditionally loaded libraries: kept here so they stay centralized -->
