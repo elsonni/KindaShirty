@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -197,14 +196,25 @@
   <div data-include="/partials/scripts.html"></div>
 
   <script>
-    /* --- Square + checkout logic from your current page (kept as-is) --- */
+    /* --- Square + checkout logic --- */
     const SQUARE_APP_ID = 'sq0idp-48V9iV3gOtsCmqKaVnAQGg';
     const SQUARE_LOCATION_ID = 'L2D48TBFREJVA';
 
+    // Pull cart
     const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+
+    // Robust subtotal calc: supports number price, "$" string, or priceCents
     function calculateLocalSubtotal(){
-      return cart.reduce((sum, item) => sum + parseFloat(String(item.price).replace('$','')) * (parseInt(item.quantity) || 0), 0);
+      return cart.reduce((sum, item) => {
+        const qty = parseInt(item.quantity) || 0;
+        const unitPrice =
+          typeof item.price === 'number' ? item.price :
+          (item?.priceCents ? item.priceCents / 100 :
+           parseFloat(String(item?.price ?? '').replace(/[^\d.]/g,'')) || 0);
+        return sum + unitPrice * qty;
+      }, 0);
     }
+
     const formatMoney = n => `$${(Number(n)||0).toFixed(2)}`;
 
     let appliedPromo = null, promoDiscountRate = 0, lastStateInput = '', lastZipInput = '';
@@ -233,7 +243,7 @@
       const res = await fetch('/.netlify/functions/calc-totals', { method:'POST', headers:{'Content-Type':'application/json'}, body });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Totals calculation failed');
-      return data;
+      return data; // {isCA, itemsGross, discount, shipping, tax, total}
     }
 
     async function updateSummaryDisplay(state='', zip=''){
@@ -241,28 +251,36 @@
       const hasAddress = state.trim().length > 1 && (zip.trim().length >= 5);
 
       let itemsGross = calculateLocalSubtotal();
-      let discount=0, shipping=0, tax=0, total=itemsGross;
+      let discountAmt = 0, shippingAmt = 0, taxAmt = 0, totalAmt = itemsGross;
 
       if (hasAddress && cart.length){
         try{
           const data = await fetchTotalsFromServer(state, emailVal);
           window.__lastCalc = data;
           itemsGross = Number(data.itemsGross ?? itemsGross);
-          discount   = Number(data.discount   ?? 0);
-          shipping   = Number(data.shipping   ?? 0);
-          tax        = Number(data.tax        ?? 0);
-          total      = Number(data.total      ?? (itemsGross - discount + shipping + tax));
+          discountAmt = Number(data.discount   ?? 0);
+          shippingAmt = Number(data.shipping   ?? 0);
+          taxAmt      = Number(data.tax        ?? 0);
+          totalAmt    = Number(data.total      ?? (itemsGross - discountAmt + shippingAmt + taxAmt));
         }catch(e){ console.warn('Totals calc fallback (local):', e); }
       }
 
-      subtotal.textContent = formatMoney(itemsGross);
-      tax.textContent      = formatMoney(tax);
-      shipping.textContent = formatMoney(shipping);
-      total.textContent    = formatMoney(total);
+      // Explicit DOM lookups (no implicit globals)
+      const subtotalEl  = document.getElementById('subtotal');
+      const taxEl       = document.getElementById('tax');
+      const shippingEl  = document.getElementById('shipping');
+      const totalEl     = document.getElementById('total');
 
-      if (discountRow && discountAmount){
-        if (discount > 0){
-          discountAmount.textContent = `-$${discount.toFixed(2)}`;
+      if (subtotalEl) subtotalEl.textContent = formatMoney(itemsGross);
+      if (taxEl)      taxEl.textContent      = formatMoney(taxAmt);
+      if (shippingEl) shippingEl.textContent = formatMoney(shippingAmt);
+      if (totalEl)    totalEl.textContent    = formatMoney(totalAmt);
+
+      const discountRow = document.getElementById('discountRow');
+      const discountAmountEl = document.getElementById('discountAmount');
+      if (discountRow && discountAmountEl){
+        if (discountAmt > 0){
+          discountAmountEl.textContent = `-$${discountAmt.toFixed(2)}`;
           discountRow.style.display = 'block';
         } else discountRow.style.display = 'none';
       }
@@ -275,17 +293,19 @@
           : 'No sales tax for this destination.');
       }
 
-      return { estimatedTax:tax, total, shipping, discount };
+      return { estimatedTax:taxAmt, total:totalAmt, shipping:shippingAmt, discount:discountAmt };
     }
 
-    applyPromo?.addEventListener('click', async () => {
-      const promoCode = promoInput?.value.trim();
+    // Promo code binding without relying on global ID variables
+    document.getElementById('applyPromo')?.addEventListener('click', async () => {
+      const promoCode = document.getElementById('promoInput')?.value.trim();
+      const statusEl  = document.getElementById('promoStatus');
       const email = document.querySelector('input[name="email"]')?.value.trim().toLowerCase();
       const stateInput = document.querySelector('[name="state"]')?.value.trim();
       const zipInput   = document.querySelector('input[name="zip"]')?.value.trim();
 
-      if (!promoCode){ promoStatus.textContent = 'Please enter a promo code.'; return; }
-      if (!email || !stateInput || !zipInput){ promoStatus.textContent = 'Enter email, state, and ZIP before applying a code.'; return; }
+      if (!promoCode){ statusEl.textContent = 'Please enter a promo code.'; return; }
+      if (!email || !stateInput || !zipInput){ statusEl.textContent = 'Enter email, state, and ZIP before applying a code.'; return; }
 
       lastStateInput = stateInput; lastZipInput = zipInput;
 
@@ -294,15 +314,15 @@
         const result = await res.json();
         if (res.ok && result.valid){
           appliedPromo = promoCode; promoDiscountRate = Number(result.amount || 0);
-          promoStatus.textContent = `Applied: ${promoDiscountRate}% off`;
+          statusEl.textContent = `Applied: ${promoDiscountRate}% off`;
         }else{
           appliedPromo = null; promoDiscountRate = 0;
-          promoStatus.textContent = result.error || 'Invalid promo code.';
+          statusEl.textContent = result.error || 'Invalid promo code.';
         }
       }catch(err){
         appliedPromo = null; promoDiscountRate = 0;
         console.error('Promo check error:', err);
-        promoStatus.textContent = 'Error validating code.';
+        statusEl.textContent = 'Error validating code.';
       }
 
       await updateSummaryDisplay(lastStateInput, lastZipInput);
