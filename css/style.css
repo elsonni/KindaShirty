@@ -228,6 +228,11 @@ article.product img {
     min-width: 75%;
   }
 
+  /* Removed modal image override for height consistency */
+  /* #modalImg {
+    max-width: 50%;
+    top: 30%;
+  } */
 }
 
 /* === Contact Form === */
@@ -408,27 +413,82 @@ footer a {
 /* optional: ensure the container never clips content at the bottom */
 .checkout-container { overflow: visible; }
 
-/* === Thumbnail captions (Themes) — centered, black === */
-/* Scope: only theme tiles that use <a class="button"> inside .product-details */
-#themes .product .product-details { 
-  text-align: center;            /* ensure centered text */
-  padding-top: 0.5rem; 
+/* ===============================
+   Product MODAL thumbnails only
+   Center caption under image + darker text
+   (Safe: does NOT change theme tiles or Add to Cart)
+   =============================== */
+
+/* 1) Common thumbnail item patterns inside the modal:
+      - <figure><img><figcaption>…</figcaption></figure>
+      - <div class="thumb"><img><span class="label">…</span></div>
+      - <div class="thumbnail">…</div>, <div class="gallery-item">…</div>, etc.
+   This block centers content and puts any caption UNDER the image.
+*/
+#productModal figure,
+#productModal .thumb,
+#productModal .thumbnail,
+#productModal .gallery-item,
+#productModal .variant-thumb {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
 }
 
-#themes .product .product-details > a.button {
-  background: none;              /* remove pill background */
-  border: 0;
-  padding: 0;                    /* remove pill padding */
-  margin: 0;
-  border-radius: 0;              /* remove rounded pill */
-  color: #000;                   /* black font */
-  font-weight: 700;
+#productModal figure > img,
+#productModal .thumb > img,
+#productModal .thumbnail > img,
+#productModal .gallery-item > img,
+#productModal .variant-thumb > img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* Captions/labels under the thumbnail image (darker, readable) */
+#productModal figure > figcaption,
+#productModal .thumb > .label,
+#productModal .thumbnail > .label,
+#productModal .gallery-item > .label,
+#productModal .variant-thumb > .label,
+#productModal .thumb > span,
+#productModal .thumbnail > span,
+#productModal .gallery-item > span,
+#productModal .variant-thumb > span {
+  margin-top: .4rem;
+  color: #111;          /* darker than var(--text) on light backgrounds */
+  font-weight: 600;
   line-height: 1.2;
-  text-decoration: none;         /* caption look */
-  display: inline-block;
 }
 
-#themes .product .product-details > a.button:hover,
-#themes .product .product-details > a.button:focus-visible {
+/* 2) If your modal thumbnails use <a class="button"> as the label (common pattern),
+      convert the bubble into a simple caption ONLY inside the modal thumbnails.
+      This does NOT affect the Add to Cart button, which isn’t inside these containers.
+*/
+#productModal :is(.thumb,.thumbnail,.gallery-item,.variant-thumb) > a.button {
+  background: none;
+  border: 0;
+  padding: 0;
+  border-radius: 0;
+  color: #111;          /* darker text */
+  font-weight: 700;
+  text-decoration: none;
+}
+#productModal :is(.thumb,.thumbnail,.gallery-item,.variant-thumb) > a.button:hover,
+#productModal :is(.thumb,.thumbnail,.gallery-item,.variant-thumb) > a.button:focus-visible {
   text-decoration: underline;    /* subtle affordance */
+}
+
+/* 3) (Optional) If your thumbnails live in a strip/grid, this makes spacing consistent.
+   If you already have layout styles for the strip, you can omit this.
+*/
+#productModal .modal-thumbs,
+#productModal .thumbnails,
+#productModal .variant-thumbs,
+#productModal .gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(84px, 1fr));
+  gap: .75rem;
+  margin-top: 0.75rem;
 }
