@@ -1,36 +1,3 @@
 <!-- /partials/scripts.html -->
-<script src="/js/site.js" defer></script>
-
-<script>
-(function () {
-  const onReady = (fn) => (document.readyState === 'loading')
-    ? document.addEventListener('DOMContentLoaded', fn)
-    : fn();
-
-  function initHamburger() {
-    const btn  = document.getElementById('hamburger');
-    const menu = document.getElementById('mobileNav');
-    if (!btn || !menu) return false;
-
-    const open  = () => { menu.classList.remove('hidden'); btn.setAttribute('aria-expanded','true'); };
-    const close = () => { menu.classList.add('hidden');    btn.setAttribute('aria-expanded','false'); };
-
-    btn.addEventListener('click', () => menu.classList.contains('hidden') ? open() : close());
-    menu.querySelectorAll('a').forEach(a => a.addEventListener('click', close));
-    return true;
-  }
-
-  onReady(() => {
-    if (initHamburger()) return;
-    // If header is injected later, try again when it appears.
-    const obs = new MutationObserver(() => { if (initHamburger()) obs.disconnect(); });
-    obs.observe(document.body, { childList: true, subtree: true });
-  });
-})();
-</script>
-
-
-
-<!-- Conditionally loaded libraries: kept here so they stay centralized -->
-<!-- Square: only inject on checkout page from main.js (see below) -->
-<!-- Any analytics: include here once -->
+<!-- Keep this file for future libraries (analytics, payment widgets, etc.). 
+     Intentionally left minimal to avoid double-loading /js/site.js. -->

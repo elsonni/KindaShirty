@@ -152,7 +152,7 @@ article.product img { width: 100%; height: auto; }
 }
 .qty-btn:hover { background: var(--accent-light); }
 
-/* === Responsive Themes (original mobile behavior) === */
+/* === Responsive Themes (original behavior) === */
 @media (max-width: 768px) {
   #themes .products {
     display: flex;
@@ -172,7 +172,7 @@ article.product img { width: 100%; height: auto; }
 .contact-form h2 { font-size: 2rem; text-align: center; margin-bottom: 2rem; color: var(--text); }
 .contact-form form {
   background: #fff; padding: 2rem; border-radius: 10px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.05);
   max-width: 600px; margin: auto;
 }
 .contact-form label { display: block; margin-top: 1rem; font-weight: 600; color: var(--text); }
@@ -219,7 +219,7 @@ footer a { color: var(--accent); text-decoration: underline; }
 .floating-cart {
   position: fixed; bottom: 1rem; right: 1rem; z-index: 999;
   padding: 0.75rem 1.5rem; background: var(--accent); color: white;
-  border-radius: 100px; text-decoration: none; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  border-radius: 100px; text-decoration: none; box-shadow: 0 4px 12px rgba(0,0,0,0.3);
   font-weight: bold;
 }
 .floating-cart.hidden { display: none; }
