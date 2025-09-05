@@ -17,6 +17,56 @@
         "Athletic Grey",
         "Vintage White"
       ]
+    },
+    {
+      "image": "/img/ts/Fire Swamp.png",
+      "name": "Fire Swamp",
+      "alt": "Fire Swamp",
+      "sizes": {
+        "xs": "25",
+        "s": "25",
+        "m": "25",
+        "l": "25",
+        "xl": "30",
+        "xxl": "30"
+      },
+      "colors": [
+        "Black"
+      ]
+    },
+    {
+      "image": "/img/ts/Battle of Wits T-Shirt Design.png",
+      "name": "The Battle of Wits",
+      "alt": "The Battle of Wits",
+      "sizes": {
+        "xs": "25",
+        "s": "25",
+        "m": "25",
+        "l": "25",
+        "xl": "30",
+        "xxl": "30"
+      },
+      "colors": [
+        "Athletic Grey",
+        "Black",
+        "Military Green"
+      ]
+    },
+    {
+      "image": "/img/ts/Blessing in Shadows.png",
+      "name": "The Jerusalem",
+      "alt": "The Jerusalem",
+      "sizes": {
+        "xs": "25",
+        "s": "25",
+        "m": "25",
+        "l": "25",
+        "xl": "30",
+        "xxl": "30"
+      },
+      "colors": [
+        "Black"
+      ]
     }
   ]
 }
