@@ -25,6 +25,7 @@ body {
   gap: 0.5rem;
   margin: 0.5rem 0;
 }
+
 .color-swatch {
   width: 28px;
   height: 28px;
@@ -36,6 +37,7 @@ body {
   background-size: cover;
   background-position: center;
 }
+
 .color-swatch.selected {
   border: 2px solid var(--accent);
   box-shadow: 0 0 0 2px #fff, 0 0 4px rgba(0, 0, 0, 0.3);
@@ -54,7 +56,9 @@ header {
   top: 0;
   z-index: 999;
 }
-header h1 { font-size: 1.5rem; }
+header h1 {
+  font-size: 1.5rem;
+}
 nav a {
   color: var(--primary);
   margin-left: 1.5rem;
@@ -72,10 +76,17 @@ nav a {
   border-radius: 10px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
-.hero h1 { font-size: 2.5rem; margin-bottom: 1rem; }
+.hero h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
 
 /* === Sections === */
-.section { padding: 4rem 2rem; max-width: 1200px; margin: auto; }
+.section {
+  padding: 4rem 2rem;
+  max-width: 1200px;
+  margin: auto;
+}
 
 /* === Products === */
 .products {
@@ -83,162 +94,349 @@ nav a {
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 2rem;
 }
-.products.grid-layout { overflow: visible; }
+.products.grid-layout {
+  overflow: visible;
+}
 article.product {
-  background: #fff;
+  background: white;
   border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-  transition: transform .3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease;
   cursor: pointer;
 }
-article.product:hover { transform: translateY(-5px); }
-article.product img { width: 100%; height: auto; }
-#themes .product img {
-  height: 200px; width: 100%; object-fit: contain; background:#fff; padding: 1rem;
+article.product:hover {
+  transform: translateY(-5px);
 }
-.product-details { padding: 1rem; text-align: center; }
-.product-details h3 { font-size: 1.1rem; margin: 0.5rem 0; }
-.product-details p { color: #888; font-style: italic; font-size: 0.9rem; }
+article.product img {
+  width: 100%;
+  height: auto;
+}
+#themes .product img {
+  height: 200px;
+  width: 100%;
+  object-fit: contain;
+  background-color: #fff;
+  padding: 1rem;
+}
+.product-details {
+  padding: 1rem;
+  text-align: center;
+}
+.product-details h3 {
+  font-size: 1.1rem;
+  margin: 0.5rem 0;
+}
+.product-details p {
+  color: #888;
+  font-style: italic;
+  font-size: 0.9rem;
+}
 
 /* === Modal === */
 .modal {
-  display: none; position: fixed; z-index: 1000; left: 0; top: 0;
-  width: 100%; height: 100%; overflow: auto; background: rgba(0,0,0,0.8);
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.8);
 }
 .modal-content {
-  background: #fff; margin: 10% auto; padding: 2rem; border-radius: 10px;
-  max-width: 500px; position: relative;
+  background: white;
+  margin: 10% auto;
+  padding: 2rem;
+  border-radius: 10px;
+  max-width: 500px;
+  position: relative;
 }
-.close { position: absolute; top: 1rem; right: 1rem; font-size: 1.5rem; color: #000; cursor: pointer; }
+.close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-size: 1.5rem;
+  color: #000;
+  cursor: pointer;
+}
 
 /* === Modal Image === */
 #modalImg {
-  position: absolute; top: 20%; left: 50%; max-width: 36%; width: 100%;
-  height: auto; transform: translateX(-50%); pointer-events: none;
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  max-width: 36%;
+  width: 100%;
+  height: auto;
+  transform: translateX(-50%);
+  pointer-events: none;
 }
 
 /* === Buttons === */
 .button {
-  display: inline-block; background: var(--accent); color: #fff;
-  padding: 0.75rem 1.5rem; border: 0; border-radius: 5px;
-  font-weight: 700; text-decoration: none; margin-top: 1rem;
-  transition: background .3s ease;
+  display: inline-block;
+  background: var(--accent);
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  text-decoration: none;
+  margin-top: 1rem;
+  transition: background 0.3s ease;
 }
-.button:hover { background: var(--accent-light); }
+.button:hover {
+  background: var(--accent-light);
+}
 
 /* === Quantity Controls === */
-.qty-controls { display: flex; align-items: center; gap: .5rem; margin-top: .5rem; }
-.qty-btn {
-  background: var(--accent); color: #fff; border: 0; padding: .3rem .75rem;
-  font-size: 1rem; border-radius: 5px; cursor: pointer; font-weight: 700;
+.qty-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
 }
-.qty-btn:hover { background: var(--accent-light); }
+.qty-btn {
+  background: var(--accent);
+  color: white;
+  border: none;
+  padding: 0.3rem 0.75rem;
+  font-size: 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+.qty-btn:hover {
+  background: var(--accent-light);
+}
 
-/* === Responsive Themes (mobile only tweaks below) === */
+/* === Responsive Themes (original behavior) === */
 @media (max-width: 768px) {
-  /* Replace the horizontal carousel with the same 2‑up grid on phones */
   #themes .products {
-    display: grid !important;
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    gap: 1rem !important;
-    overflow: visible !important;
-    scroll-snap-type: none !important;
-    -webkit-overflow-scrolling: auto !important;
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    gap: 1rem;
   }
   #themes .product {
-    flex: unset !important;
-    scroll-snap-align: unset !important;
-    min-width: 0 !important;
+    flex: 0 0 auto;
+    scroll-snap-align: start;
+    min-width: 75%;
   }
+
+  /* Removed modal image override for height consistency */
+  /* #modalImg {
+    max-width: 50%;
+    top: 30%;
+  } */
 }
 
 /* === Contact Form === */
-.contact-form h2 { font-size: 2rem; text-align: center; margin-bottom: 2rem; color: var(--text); }
+.contact-form h2 {
+  font-size: 2rem;
+  text-align: center;
+  margin-bottom: 2rem;
+  color: var(--text);
+}
 .contact-form form {
-  background:#fff; padding:2rem; border-radius:10px; box-shadow:0 4px 16px rgba(0,0,0,.05);
-  max-width:600px; margin:auto;
+  background: #fff;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+  max-width: 600px;
+  margin: auto;
 }
-.contact-form label { display:block; margin-top:1rem; font-weight:600; color:var(--text); }
-.contact-form input, .contact-form textarea {
-  width:100%; padding:.75rem; margin-top:.25rem; border:1px solid #ccc; border-radius:6px;
-  background: var(--primary); color: var(--text); font-size:1rem;
+.contact-form label {
+  display: block;
+  margin-top: 1rem;
+  font-weight: 600;
+  color: var(--text);
 }
-.contact-form textarea { resize: vertical; }
-.contact-form .hidden { display:none; }
+.contact-form input,
+.contact-form textarea {
+  width: 100%;
+  padding: 0.75rem;
+  margin-top: 0.25rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background: var(--primary);
+  color: var(--text);
+  font-size: 1rem;
+}
+.contact-form textarea {
+  resize: vertical;
+}
+.contact-form .hidden {
+  display: none;
+}
 
 /* === Footer === */
-footer { background: var(--secondary); color: var(--primary); text-align:center; padding:2rem; margin-top:4rem; }
-footer a { color: var(--accent); text-decoration: underline; }
+footer {
+  background: var(--secondary);
+  color: var(--primary);
+  text-align: center;
+  padding: 2rem;
+  margin-top: 4rem;
+}
+footer a {
+  color: var(--accent);
+  text-decoration: underline;
+}
 
-/* === Mobile UX === */
+/* === Mobile UX (existing) === */
 #hamburger {
-  display: none; background: none; font-size: 1.5rem; border: none; color: white; cursor: pointer;
+  display: none;
+  background: none;
+  font-size: 1.5rem;
+  border: none;
+  color: white;
+  cursor: pointer;
 }
 .mobile-nav {
-  display: none; flex-direction: column; background: #121212;
-  position: absolute; top: 100%; left: 0; width: 100%; padding: 1rem 0; z-index: 998;
+  display: none;
+  flex-direction: column;
+  background: #121212;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  padding: 1rem 0;
+  z-index: 998;
 }
-.mobile-nav a { padding: 1rem; color: white; text-decoration: none; border-top: 1px solid #2c2c2c; }
-.mobile-nav a:hover { background: #1f1f1f; }
-.mobile-nav.hidden { display: none !important; }
+.mobile-nav a {
+  padding: 1rem;
+  color: white;
+  text-decoration: none;
+  border-top: 1px solid #2c2c2c;
+}
+.mobile-nav a:hover {
+  background: #1f1f1f;
+}
+.mobile-nav.hidden {
+  display: none !important;
+}
 @media (max-width: 768px) {
-  #hamburger { display: block; }
-  /* Hide desktop nav on phones (keeps chevron on desktop) */
-  header nav:not(.mobile-nav) { display: none !important; }
+  #hamburger {
+    display: block;
+  }
+  header nav:not(.mobile-nav) {
+    display: none;
+  }
 }
 
 /* === Floating Cart Button === */
 .floating-cart {
-  position: fixed; bottom: 1rem; right: 1rem; z-index: 999;
-  padding: .75rem 1.5rem; background: var(--accent); color: #fff;
-  border-radius: 100px; text-decoration: none; box-shadow: 0 4px 12px rgba(0,0,0,.3);
-  font-weight: 700;
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+  z-index: 999;
+  padding: 0.75rem 1.5rem;
+  background: var(--accent);
+  color: white;
+  border-radius: 100px;
+  text-decoration: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  font-weight: bold;
 }
-.floating-cart.hidden { display: none; }
+.floating-cart.hidden {
+  display: none;
+}
 
 /* Uniform product thumbnails — no cropping */
 .products .product > img {
-  display:block; width:100%; aspect-ratio: 1 / 1; object-fit: contain; background:#fff;
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 1;     /* all tiles are squares; change to 4/5 if you prefer */
+  object-fit: contain;      /* show full art, potentially letterboxed */
+  background: #fff;         /* behind transparent PNGs */
 }
 
-/* Title row height consistent */
+/* (Optional but nice) ensure title row height feels consistent */
 .products .product .product-details {
-  padding: 12px 14px; min-height: 56px; display: flex; align-items: center;
+  padding: 12px 14px;
+  min-height: 56px;         /* anchors title area */
+  display: flex;
+  align-items: center;
 }
-.products .product .product-details h3 { margin: 0; }
+.products .product .product-details h3 {
+  margin: 0;
+}
 
 /* Desktop: two columns (left = form, right = summary) */
 @media (min-width: 900px) {
+  /* make sure grid columns can shrink and never clip horizontally */
   #checkout-form.checkout-grid {
-    display: grid; grid-template-columns: minmax(0,1fr) 360px; gap: 24px 28px; align-items:start; overflow:visible;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 360px; /* left | right */
+    gap: 24px 28px;
+    align-items: start;
+    overflow: visible; /* prevent clipping of sticky child */
   }
   #checkout-form.checkout-grid > .checkout-main,
-  #checkout-form.checkout-grid > #summary { min-width:0; }
   #checkout-form.checkout-grid > #summary {
-    grid-column:2; position:sticky; top:calc(var(--header-height,64px) + 14px); align-self:start;
-    margin-top:0; border-top:0; background:#fff; border:1px solid var(--gray-border,#e1e4e8);
-    border-radius:10px; padding:16px; box-shadow:0 2px 10px rgba(0,0,0,.04);
+    min-width: 0;      /* critical for Chrome/Safari with long content */
+  }
+
+  /* keep the summary below the sticky header; JS will set --header-height */
+  #checkout-form.checkout-grid > #summary {
+    grid-column: 2;
+    position: sticky;
+    top: calc(var(--header-height, 64px) + 14px);
+    align-self: start;
+
+    /* card look */
+    margin-top: 0;
+    border-top: 0;
+    background: #fff;
+    border: 1px solid var(--gray-border, #e1e4e8);
+    border-radius: 10px;
+    padding: 16px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.04);
   }
 }
-@media (max-height:700px) and (min-width:900px){ #checkout-form.checkout-grid > #summary { position: static; } }
+
+/* if the viewport height is short, disable sticky to avoid awkward cropping */
+@media (max-height: 700px) and (min-width: 900px) {
+  #checkout-form.checkout-grid > #summary { position: static; }
+}
+
+/* optional: small screens just stack; keep this in case any previous rule lingers */
 @media (max-width: 899.98px) {
-  #checkout-form.checkout-grid { display:block; }
+  #checkout-form.checkout-grid { display: block; }
   #checkout-form.checkout-grid > #summary { position: static; margin-top: 24px; }
 }
+
+/* optional: ensure the container never clips content at the bottom */
 .checkout-container { overflow: visible; }
 
-/* === Product MODAL thumbnails — captions centered/darker === */
+/* ===============================
+   Product MODAL thumbnails only
+   Center caption under image + darker text
+   (Safe: does NOT change theme tiles or Add to Cart)
+   =============================== */
 #productModal figure,
 #productModal .thumb,
 #productModal .thumbnail,
 #productModal .gallery-item,
-#productModal .variant-thumb { display:flex; flex-direction:column; align-items:center; text-align:center; }
+#productModal .variant-thumb {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
 #productModal figure > img,
 #productModal .thumb > img,
 #productModal .thumbnail > img,
 #productModal .gallery-item > img,
-#productModal .variant-thumb > img { display:block; width:100%; height:auto; }
+#productModal .variant-thumb > img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
 #productModal figure > figcaption,
 #productModal .thumb > .label,
 #productModal .thumbnail > .label,
@@ -247,22 +445,71 @@ footer a { color: var(--accent); text-decoration: underline; }
 #productModal .thumb > span,
 #productModal .thumbnail > span,
 #productModal .gallery-item > span,
-#productModal .variant-thumb > span { margin-top:.4rem; color:#111; font-weight:600; line-height:1.2; }
+#productModal .variant-thumb > span {
+  margin-top: .4rem;
+  color: #111;
+  font-weight: 600;
+  line-height: 1.2;
+}
 #productModal :is(.thumb,.thumbnail,.gallery-item,.variant-thumb) > a.button {
-  background:none; border:0; padding:0; border-radius:0; color:#111; font-weight:700; text-decoration:none;
+  background: none;
+  border: 0;
+  padding: 0;
+  border-radius: 0;
+  color: #111;
+  font-weight: 700;
+  text-decoration: none;
 }
 #productModal :is(.thumb,.thumbnail,.gallery-item,.variant-thumb) > a.button:hover,
-#productModal :is(.thumb,.thumbnail,.gallery-item,.variant-thumb) > a.button:focus-visible { text-decoration: underline; }
+#productModal :is(.thumb,.thumbnail,.gallery-item,.variant-thumb) > a.button:focus-visible {
+  text-decoration: underline;
+}
 
-/* === New Arrivals list — first line centered/darker === */
+/* === New Arrivals (product-list) — center title under image, darker text === */
 #product-list .product .product-details {
-  display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;   /* uses the min-height as a centered caption row */
+  text-align: center;
 }
-#product-list .product .product-details > :is(p,h3,a,.title,.name):first-child {
-  color:#111; font-style:normal; margin:0;
+#product-list .product .product-details > :is(p, h3, a, .title, .name):first-child {
+  color: #111;
+  font-style: normal;
+  margin: 0;
 }
 
-/* === Two‑column product grids on phones (site‑wide) === */
+/* =========================================================
+   MOBILE‑ONLY FIXES (desktop untouched)
+   - hide desktop nav on phones (beats inline display:flex)
+   - show mobile drawer when not .hidden
+   - force 2‑up product grids on all pages
+   - switch Themes to the same 2‑up grid
+   ========================================================= */
 @media (max-width: 768px) {
-  .products { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 1rem; }
+  /* 1) Hide desktop nav on phones; inline styles can't win against !important */
+  header nav:not(.mobile-nav) { display: none !important; }
+
+  /* 2) Ensure hamburger is visible and drawer shows when not .hidden */
+  #hamburger { display: block !important; }
+  .mobile-nav:not(.hidden) { display: flex !important; }
+
+  /* 3) Two columns site‑wide for product grids */
+  .products {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 1rem !important;
+  }
+
+  /* 4) Themes: stop the horizontal scroller; use the same 2‑up grid */
+  #themes .products {
+    display: grid !important;
+    overflow: visible !important;
+    scroll-snap-type: none !important;
+    -webkit-overflow-scrolling: auto !important;
+  }
+  #themes .product {
+    flex: unset !important;
+    min-width: 0 !important;
+    scroll-snap-align: unset !important;
+  }
 }
