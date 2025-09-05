@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -160,13 +161,6 @@
         <p>Shipping: <strong id="shipping">$0.00</strong></p>
         <small style="color:#666;">Standard (10–14 Days)<br/>Time includes creating + shipping combined.</small>
 
-		<!-- Local Pickup (removes shipping) -->
-		<div class="pickup-row">
-		  <input type="checkbox" id="pickupToggle">
-		  <label for="pickupToggle">Local Pickup — remove shipping</label>
-		</div>
-		<small id="pickupHelp" style="color:#666; display:none;">Shipping removed. We’ll email pickup details after checkout.</small>
-
         <p><strong>Total: <span id="total">$0.00</span></strong></p>
         <!-- pay-section moves to here on mobile -->
       </div>
@@ -261,10 +255,6 @@
         }catch(e){ console.warn('Totals calc fallback (local):', e); }
       }
 
-      /* Local Pickup override: zero out shipping when selected */
-      const pickup = document.getElementById('pickupToggle')?.checked;
-      if (pickup) { total -= shipping; shipping = 0; }
-
       subtotal.textContent = formatMoney(itemsGross);
       tax.textContent      = formatMoney(tax);
       shipping.textContent = formatMoney(shipping);
@@ -280,13 +270,10 @@
       const note = document.getElementById('tax-note');
       if (note){
         if (!hasAddress) note.textContent = 'Enter your state & ZIP to see tax and shipping.';
-        else if (pickup) note.textContent = 'Local pickup selected; shipping removed.';
         else note.textContent = (window.__lastCalc?.isCA
           ? 'CA sales tax applies (calculated by Square).'
           : 'No sales tax for this destination.');
       }
-      const pickupHelp = document.getElementById('pickupHelp');
-      if (pickupHelp) pickupHelp.style.display = pickup ? 'block' : 'none';
 
       return { estimatedTax:tax, total, shipping, discount };
     }
@@ -466,10 +453,6 @@
       stateEl?.addEventListener('input', refreshSummary);
       stateEl?.addEventListener('change', refreshSummary);
       zipInput?.addEventListener('input', refreshSummary);
-
-      // Recalc when Local Pickup toggles
-      const pickupToggle = document.getElementById('pickupToggle');
-      pickupToggle?.addEventListener('change', refreshSummary);
 
       refreshSummary();
       initializeCardForm();
