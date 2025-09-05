@@ -1,71 +1,69 @@
-<header>
-  <div style="display: flex; align-items: center; justify-content: space-between; gap: 2rem; flex-wrap: wrap; position: relative;">
-    <div style="display: flex; align-items: center; gap: 1rem;">
-      <img src="/img/logos/MainLogo.png" alt="KindaShirty Logo" style="height: 60px;">
-      <h1><a href="/" style="text-decoration: none; color: inherit;">KindaShirty</a></h1>
+<!-- Optional promo bar (like your screenshot). Remove if not needed. -->
+<div class="promo-bar" role="region" aria-label="Promotion">
+  <span>BUY 1 TEE, GET 1 30% OFF</span>
+  <strong>PROMO CODE: B1G1</strong>
+</div>
+
+<header class="site-header" role="banner">
+  <div class="site-header__inner">
+    <!-- Hamburger (mobile only) -->
+    <button id="hamburger" class="icon-btn" aria-label="Open menu" aria-controls="mobileNav" aria-expanded="false">
+      <!-- menu icon -->
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </button>
+
+    <!-- Logo (center) -->
+    <a href="/" class="logo" aria-label="KindaShirty home">
+      <img src="/img/logos/MainLogo.png" alt="KindaShirty Logo" height="36">
+    </a>
+
+    <!-- Icon row (right) -->
+    <div class="header-icons" aria-label="Quick actions">
+      <a href="/search" class="icon-btn" aria-label="Search">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/>
+          <path d="M20 20l-3.5-3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </a>
+      <a href="/account" class="icon-btn" aria-label="Account">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="2"/>
+          <path d="M4 20c2.2-3.5 5.1-5 8-5s5.8 1.5 8 5" stroke="currentColor" stroke-width="2" fill="none"/>
+        </svg>
+      </a>
+      <a href="/cart.html" class="icon-btn cart-link" aria-label="View your cart" style="position:relative">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M6 6h14l-2 9H8L6 6Z" stroke="currentColor" stroke-width="2" fill="none"/>
+          <circle cx="9" cy="20" r="1.75" fill="currentColor"/>
+          <circle cx="17" cy="20" r="1.75" fill="currentColor"/>
+        </svg>
+        <span id="cartCount" class="cart-bubble" aria-hidden="true" style="display:none">0</span>
+      </a>
     </div>
 
-    <!-- Hamburger toggle button for mobile -->
-    <button id="hamburger" aria-label="Menu">☰</button>
-
-    <!-- Desktop navigation -->
-    <nav style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: center; position: relative;">
-      <div class="dropdown" style="position: relative;">
-        <a href="#" class="dropbtn" style="text-decoration: none; color: inherit; padding: 0.75rem 1rem; display: inline-block;">Shop <span style="font-size: 0.8em;">▼</span></a>
-        <div class="dropdown-content" style="
-          display: none;
-          position: absolute;
-          top: 100%;
-          left: 0;
-          background-color: white;
-          border: 1px solid #ccc;
-          min-width: 160px;
-          box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-          z-index: 1000;
-        ">
-          <a href="/themes/arcade.html" style="display: block; padding: 0.5rem 1rem; text-decoration: none; color: black;">Kinda Arcadey</a>
-          <a href="/themes/4th-of-july.html" style="display: block; padding: 0.5rem 1rem; text-decoration: none; color: black;">Kinda Patriotic</a>
-          <a href="/themes/pop-culture.html" style="display: block; padding: 0.5rem 1rem; text-decoration: none; color: black;">Kinda Hip</a>
-        </div>
-      </div>
-      <a href="/#custom" aria-label="Custom section">Custom</a>
-      <a href="/about.html" aria-label="About section">About</a>
-      <a href="/contact.html" aria-label="Contact section">Contact</a>
-      <a href="/cart.html" aria-label="View your cart" style="position: relative; display: flex; align-items: center; gap: 0.3rem;">
-        Cart
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
-          <path d="M7 18c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zm10 0c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zM7.107 14h9.986c.771 0 1.451-.442 1.793-1.14l3.103-6.342a1 1 0 0 0-.9-1.443H6.451L5.724 2.447A1 1 0 0 0 4.75 1.75H1v2h2.597l2.862 9.557A2.004 2.004 0 0 0 7.107 14z"/>
-        </svg>
-        <span id="cartCount" style="
-          position: absolute;
-          top: -8px;
-          right: -8px;
-          background: red;
-          color: white;
-          font-size: 0.7rem;
-          font-weight: bold;
-          border-radius: 50%;
-          padding: 2px 6px;
-          display: none;
-        ">0</span>
-      </a>
-    </nav>
-
-    <!-- Mobile navigation drawer -->
-    <nav id="mobileNav" class="mobile-nav hidden">
-      <a href="/themes/arcade.html">Kinda Gamey</a>
-      <a href="/themes/4th-of-july.html">Kinda Patriotic</a>
-      <a href="/themes/pop-culture.html">Kinda Hip</a>
+    <!-- Desktop navigation (no dropdown; chevron removed) -->
+    <nav class="desktop-nav" aria-label="Primary">
+      <a href="/#collection">Shop</a>
       <a href="/#custom">Custom</a>
       <a href="/about.html">About</a>
       <a href="/contact.html">Contact</a>
-      <a href="/cart.html">Cart</a>
     </nav>
   </div>
+
+  <!-- Mobile navigation drawer (kept your existing links) -->
+  <nav id="mobileNav" class="mobile-nav hidden" aria-label="Mobile" aria-hidden="true">
+    <a href="/#collection">Shop</a>
+    <a href="/themes/arcade.html">Kinda Gamey</a>
+    <a href="/themes/4th-of-july.html">Kinda Patriotic</a>
+    <a href="/themes/pop-culture.html">Kinda Hip</a>
+    <a href="/#custom">Custom</a>
+    <a href="/about.html">About</a>
+    <a href="/contact.html">Contact</a>
+    <a href="/cart.html">Cart</a>
+  </nav>
 </header>
 
-<style>
-  .dropdown:hover .dropdown-content {
-    display: block !important;
-  }
-</style>
+<!-- Screen overlay for when the mobile menu is open -->
+<div id="navOverlay" class="nav-overlay hidden" tabindex="-1" aria-hidden="true"></div>

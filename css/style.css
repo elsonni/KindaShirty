@@ -511,3 +511,80 @@ footer a {
   font-style: normal;
   margin: 0;
 }
+/* ===== Promo bar (optional) ===== */
+.promo-bar{
+  background: #ff3b6b; color:#fff; text-align:center;
+  padding: 8px 12px; font-weight:700; letter-spacing:.02em;
+}
+.promo-bar strong{ margin-left:.5rem }
+
+/* ===== Header layout ===== */
+.site-header__inner{
+  display:flex; align-items:center; justify-content:space-between;
+  gap: 1rem; padding: 10px 16px; position: relative;
+}
+.logo img{ display:block; height:36px; width:auto }
+.header-icons{ display:flex; gap:.35rem; align-items:center }
+.icon-btn{
+  display:inline-flex; align-items:center; justify-content:center;
+  width:44px; height:44px; color:#fff; background:transparent; border:0; padding:0;
+  border-radius:8px; cursor:pointer;
+}
+
+/* Desktop nav styles (inherit your header colors) */
+.desktop-nav{ display:flex; gap:1rem; align-items:center }
+.desktop-nav a{ color: var(--primary); text-decoration:none; font-weight:600; padding: .25rem .5rem }
+
+/* Mobile behavior — your CSS already hides desktop nav on small screens */
+@media (max-width:768px){
+  .site-header__inner{ padding: 10px 12px }
+  .desktop-nav{ display:none }
+}
+
+/* ===== Mobile menu drawer + overlay ===== */
+.nav-overlay{
+  position: fixed; inset: 0; background: rgba(0,0,0,.35);
+  z-index: 998;
+}
+.nav-overlay.hidden{ display:none }
+
+.mobile-nav{
+  display: none; flex-direction: column;
+  position: fixed; top: 64px; left: 0; right: 0; z-index: 999;
+  background: #121212; padding: 10px 0; border-top: 1px solid #2c2c2c;
+}
+.mobile-nav a{
+  padding: 14px 16px; color: #fff; text-decoration: none;
+  border-top: 1px solid #2c2c2c; font-weight:600;
+}
+.mobile-nav.hidden{ display:none !important }
+.no-scroll{ overflow:hidden }
+
+/* ===== Cart bubble on icon ===== */
+.cart-bubble{
+  position: absolute; transform: translate(9px,-8px);
+  background: #ff3b6b; color:#fff; border-radius: 999px; font-size: 11px;
+  padding: 2px 6px; line-height: 1; min-width: 18px; text-align:center;
+}
+
+/* ===== Product grid: mobile 2‑up (matches your reference) ===== */
+@media (max-width:768px){
+  #product-list{
+    grid-template-columns: repeat(2, minmax(0,1fr));
+    gap: 1.1rem;
+  }
+  #product-list .product .product-details{
+    min-height:auto; padding:10px 8px;
+    display:flex; flex-direction:column; align-items:center; text-align:center;
+  }
+  #product-list .product .product-details > :first-child{
+    font-size:.96rem; line-height:1.25;
+  }
+  #product-list .product .product-details .price{
+    margin-top:.15rem; font-size:.9rem; color:#6b7280; font-weight:600;
+  }
+}
+
+/* Hide any built-in chevron markers if a <details> lives elsewhere */
+details > summary::-webkit-details-marker { display:none }
+details > summary::marker { content:'' }
