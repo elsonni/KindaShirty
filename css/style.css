@@ -492,3 +492,22 @@ footer a {
   gap: .75rem;
   margin-top: 0.75rem;
 }
+
+/* === New Arrivals (product-list) — center title under image, darker text === */
+/* Only affects the grid rendered into #product-list (New Arrivals). */
+#product-list .product .product-details {
+  /* Override the generic flex row: stack below the image and center */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;   /* uses the min-height as a centered caption row */
+  text-align: center;
+}
+
+/* First line (title) becomes darker and non-italic.
+   Supports p, h3, anchor, or named title classes. */
+#product-list .product .product-details > :is(p, h3, a, .title, .name):first-child {
+  color: #111;
+  font-style: normal;
+  margin: 0;
+}
