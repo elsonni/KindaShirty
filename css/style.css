@@ -228,11 +228,6 @@ article.product img {
     min-width: 75%;
   }
 
-  /* Removed modal image override for height consistency */
-  /* #modalImg {
-    max-width: 50%;
-    top: 30%;
-  } */
 }
 
 /* === Contact Form === */
@@ -412,3 +407,28 @@ footer a {
 
 /* optional: ensure the container never clips content at the bottom */
 .checkout-container { overflow: visible; }
+
+/* === Thumbnail captions (Themes) — centered, black === */
+/* Scope: only theme tiles that use <a class="button"> inside .product-details */
+#themes .product .product-details { 
+  text-align: center;            /* ensure centered text */
+  padding-top: 0.5rem; 
+}
+
+#themes .product .product-details > a.button {
+  background: none;              /* remove pill background */
+  border: 0;
+  padding: 0;                    /* remove pill padding */
+  margin: 0;
+  border-radius: 0;              /* remove rounded pill */
+  color: #000;                   /* black font */
+  font-weight: 700;
+  line-height: 1.2;
+  text-decoration: none;         /* caption look */
+  display: inline-block;
+}
+
+#themes .product .product-details > a.button:hover,
+#themes .product .product-details > a.button:focus-visible {
+  text-decoration: underline;    /* subtle affordance */
+}
