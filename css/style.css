@@ -168,3 +168,18 @@ footer a { color: var(--accent); text-decoration: underline; }
   .mobile-actions { display: flex; margin-left: auto; }
   .mobile-cart-link { display: inline-flex; }
 }
+
+/* Local Pickup row: inline checkbox + text, left-aligned */
+#summary .pickup-row{
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  margin: .35rem 0 .25rem;
+  text-align: left;
+}
+#summary .pickup-row label{
+  display: inline;   /* override global block label */
+  margin: 0;         /* remove the big top margin from global rule */
+  font-weight: 600;
+}
+#summary .pickup-row input[type="checkbox"]{ margin: 0; }
